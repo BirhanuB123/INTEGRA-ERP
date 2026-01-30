@@ -2,6 +2,7 @@
   opacity: 0;
   color: #fff;
 }
+
 .centerAbsolute {
   position: absolute;
   left: 50%;
@@ -11,6 +12,7 @@
   margin-left: -16px;
   margin-top: -19px;
 }
+
 .whiteBox {
   background: #fff;
   width: 100%;
@@ -18,12 +20,15 @@
   overflow: hidden;
   transition: all 0.3s ease-in-out;
 }
+
 .shadow {
   border: 1px solid #e0e0e0;
 }
+
 .shadow:hover {
   border: 1px solid #bdbdbd;
 }
+
 .line {
   border-top: 1px solid #edf0f5;
   width: 100%;
@@ -33,6 +38,7 @@
 .left {
   float: left;
 }
+
 .right {
   float: right;
 }
@@ -40,24 +46,31 @@
 .pad5 {
   padding: 5px;
 }
+
 .pad10 {
   padding: 10px;
 }
+
 .pad15 {
   padding: 15px;
 }
+
 .pad20 {
   padding: 20px;
 }
+
 .pad25 {
   padding: 25px;
 }
+
 .pad30 {
   padding: 30px;
 }
+
 .pad33 {
   padding: 35px;
 }
+
 .pad40 {
   padding: 40px;
 }
@@ -65,18 +78,23 @@
 .mrg5 {
   margin: 5px;
 }
+
 .mrg10 {
   margin: 10px;
 }
+
 .mrg15 {
   margin: 15px;
 }
+
 .mrg20 {
   margin: 20px;
 }
+
 .mrg25 {
   margin: 20px;
 }
+
 .mrg30 {
   margin: 20px;
 }
@@ -102,36 +120,43 @@
   width: 100%;
   display: block;
 }
+
 .space10 {
   height: 10px;
   width: 100%;
   display: block;
 }
+
 .space20 {
   height: 20px;
   width: 100%;
   display: block;
 }
+
 .space30 {
   height: 30px;
   width: 100%;
   display: block;
 }
+
 .space40 {
   height: 40px;
   width: 100%;
   display: block;
 }
+
 .space50 {
   height: 50px;
   width: 100%;
   display: block;
 }
+
 .space60 {
   height: 60px;
   width: 100%;
   display: block;
 }
+
 .space70 {
   height: 70px;
   width: 100%;
