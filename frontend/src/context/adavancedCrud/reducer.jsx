@@ -11,7 +11,7 @@ export const initialState = {
     isOpen: false,
   },
   recordPayment: {
-    isOpen: false,
+    isOpen: true,
   },
   deleteModal: {
     isOpen: false,
