@@ -1,5 +1,5 @@
 <div align="center">
-    <h1>Open Source ERP / CRM Accounting Invoice Quote</h1>
+    <h1>INTEGRA ERP / CRM Accounting Invoice Quote</h1>
     <p align="center">
         <p>Integra ERP CRM | Simple To Use</p>
     </p>
