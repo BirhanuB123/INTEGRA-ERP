@@ -19,7 +19,7 @@ This security policy covers the security of this repository and its code. If you
 
 #### Option 1: Reporting via Github Security Advisors
 
-1. **Contact Us**: Submit your report to [https://github.com/idurar/idurar-erp-crm/security](https://github.com/idurar/idurar-erp-crm/security) with details of the vulnerability. Please provide a clear and concise description of the issue, any potential impact, and a step-by-step demonstration if possible. Please do not include sensitive information in your initial email.
+1. **Contact Us**: Please provide a clear and concise description of the issue, any potential impact, and a step-by-step demonstration if possible. Please do not include sensitive information in your initial email.
 
 2. **Confirmation**: We will acknowledge receipt of your report within [X] business days and provide an estimated timeline for when you can expect a response.
 
@@ -32,8 +32,6 @@ This security policy covers the security of this repository and its code. If you
 6. **Credit**: If you report a vulnerability that is successfully fixed, we will credit you for your responsible disclosure in the security advisory unless you prefer to remain anonymous.
 
 #### Option 2: Reporting via Huntr.dev
-
-Alternatively, you can report vulnerabilities through [Huntr.dev](https://huntr.dev). Follow these steps:
 
 1. **Submit Report**: Create a report for this repository on Huntr.dev, providing details of the vulnerability. Include a link to this repository in your report.
 
