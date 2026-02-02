@@ -5,7 +5,7 @@ import { Layout, Col, Divider, Typography } from 'antd';
 import AuthLayout from '@/layout/AuthLayout';
 import SideContent from './SideContent';
 
-import logo from '@/style/images/idurar-crm-erp.svg';
+import logo from '@/style/images/integra-erp-logo.svg';
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -28,9 +28,10 @@ const AuthModule = ({ authContent, AUTH_TITLE, isForRegistre = false }) => {
             style={{
               margin: '0px auto 20px',
               display: 'block',
+              maxWidth: '220px'
             }}
             height={63}
-            width={220}
+            width={'auto'}
           />
           <div className="space10" />
         </Col>

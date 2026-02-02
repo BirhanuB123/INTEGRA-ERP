@@ -1,5 +1,5 @@
 import { Space, Layout, Divider, Typography } from 'antd';
-import logo from '@/style/images/idurar-crm-erp.svg';
+import logo from '@/style/images/integra-erp-logo.svg';
 import useLanguage from '@/locale/useLanguage';
 import { useSelector } from 'react-redux';
 
@@ -22,17 +22,17 @@ export default function SideContent() {
       <div style={{ width: '100%' }}>
         <img
           src={logo}
-          alt="IDURAR ERP CRM"
-          style={{ margin: '0 0 40px', display: 'block' }}
+          alt="INTEGRA ERP SOLUTIONS"
+          style={{ margin: '0 0 40px', display: 'block', maxWidth: '220px' }}
           height={63}
-          width={220}
+          width={'auto'}
         />
 
         <Title level={1} style={{ fontSize: 28 }}>
-          Free Open Source ERP / CRM
+          INTEGRA ERP SOLUTIONS
         </Title>
         <Text>
-          Accounting / Invoicing / Quote App <b /> based on Node.js React.js Ant Design
+          Accounting / Invoicing / Quote App <b /> based on your company needs
         </Text>
 
         <div className="space20"></div>
