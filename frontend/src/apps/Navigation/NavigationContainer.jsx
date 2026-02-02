@@ -12,6 +12,7 @@ import useResponsive from '@/hooks/useResponsive';
 import {
   SettingOutlined,
   CustomerServiceOutlined,
+  ProductOutlined,
   ContainerOutlined,
   FileSyncOutlined,
   DashboardOutlined,
@@ -52,6 +53,11 @@ function Sidebar({ collapsible, isMobile = false }) {
       key: 'dashboard',
       icon: <DashboardOutlined />,
       label: <Link to={'/'}>{translate('dashboard')}</Link>,
+    },
+    {
+      key: 'product',
+      icon: <ProductOutlined />,
+      label: <Link to={'/product'}>{translate('inventory')}</Link>,
     },
     {
       key: 'customer',
