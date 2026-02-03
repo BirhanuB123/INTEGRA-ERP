@@ -46,9 +46,28 @@ const create = async (req, res) => {
 
   body['paymentStatus'] = paymentStatus;
   body['createdBy'] = req.admin._id;
+  body['approvalStatus'] = 'pending';
 
   // Creating a new document in the collection
   const result = await new Model(body).save();
+
+  // Create approval request for invoice
+  const Approval = mongoose.model('Approval');
+  await new Approval({
+    entityType: 'Invoice',
+    entityId: result._id,
+    requestedBy: req.admin._id,
+    approvalType: 'finance_approval',
+    priority: total > 20000 ? 'high' : 'medium', // Example: high priority for large invoices
+    metadata: {
+      total: total,
+      client: body.client,
+      number: body.number,
+      year: body.year,
+    },
+    removed: false,
+  }).save();
+
   const fileId = 'invoice-' + result._id + '.pdf';
   const updateResult = await Model.findOneAndUpdate(
     { _id: result._id },
@@ -67,7 +86,7 @@ const create = async (req, res) => {
   return res.status(200).json({
     success: true,
     result: updateResult,
-    message: 'Invoice created successfully',
+    message: 'Invoice created successfully. Pending Finance approval.',
   });
 };
 

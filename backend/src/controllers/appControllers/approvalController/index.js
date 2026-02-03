@@ -70,7 +70,8 @@ const list = async (req, res) => {
         const approvals = await Approval.find(filter)
             .skip(skip)
             .limit(limit)
-            .sort({ created: -1 });
+            .sort({ created: -1 })
+            .populate('requestedBy', 'name surname');
 
         return res.status(200).json({
             success: true,
@@ -107,7 +108,9 @@ const myApprovals = async (req, res) => {
             });
         }
 
-        const approvals = await Approval.find(filter).sort({ created: -1 });
+        const approvals = await Approval.find(filter)
+            .sort({ created: -1 })
+            .populate('requestedBy', 'name surname');
 
         return res.status(200).json({
             success: true,
