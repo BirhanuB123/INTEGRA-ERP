@@ -3,6 +3,7 @@ import useLanguage from '@/locale/useLanguage';
 import PaymentDataTableModule from '@/modules/PaymentModule/PaymentDataTableModule';
 
 import { useMoney, useDate } from '@/settings';
+import ApprovalStatusBadge from '@/components/ApprovalStatusBadge';
 
 export default function Payment() {
   const translate = useLanguage();
@@ -59,6 +60,11 @@ export default function Payment() {
     {
       title: translate('Payment Mode'),
       dataIndex: ['paymentMode', 'name'],
+    },
+    {
+      title: translate('Status'),
+      dataIndex: 'approvalStatus',
+      render: (status) => <ApprovalStatusBadge status={status} />,
     },
   ];
 

@@ -193,20 +193,26 @@ const request = {
     }
   },
 
-  post: async ({ entity, jsonData }) => {
+  post: async ({ entity, jsonData, id, options = {} }) => {
     try {
       includeToken();
-      const response = await axios.post(entity, jsonData);
+      let url = entity;
+      if (options.endpoint) url += '/' + options.endpoint;
+      if (id) url += '/' + id;
+      const response = await axios.post(url, jsonData);
 
       return response.data;
     } catch (error) {
       return errorHandler(error);
     }
   },
-  get: async ({ entity }) => {
+  get: async ({ entity, id, options = {} }) => {
     try {
       includeToken();
-      const response = await axios.get(entity);
+      let url = entity;
+      if (options.endpoint) url += '/' + options.endpoint;
+      if (id) url += '/' + id;
+      const response = await axios.get(url);
       return response.data;
     } catch (error) {
       return errorHandler(error);

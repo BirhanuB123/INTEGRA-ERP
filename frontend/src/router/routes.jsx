@@ -30,6 +30,8 @@ const Taxes = lazy(() => import('@/pages/Taxes'));
 const Profile = lazy(() => import('@/pages/Profile'));
 
 const About = lazy(() => import('@/pages/About'));
+const ApprovalDashboard = lazy(() => import('@/pages/Approval/ApprovalDashboard'));
+const Admin = lazy(() => import('@/pages/Admin'));
 
 let routes = {
   expense: [],
@@ -61,6 +63,14 @@ let routes = {
     {
       path: '/employee',
       element: <Employee />,
+    },
+    {
+      path: '/approval',
+      element: <ApprovalDashboard />,
+    },
+    {
+      path: '/admin',
+      element: <Admin />,
     },
 
     {

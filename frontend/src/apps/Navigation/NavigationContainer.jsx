@@ -26,6 +26,8 @@ import {
   FilterOutlined,
   WalletOutlined,
   ReconciliationOutlined,
+  CheckCircleOutlined,
+  TeamOutlined,
 } from '@ant-design/icons';
 
 const { Sider } = Layout;
@@ -100,6 +102,16 @@ function Sidebar({ collapsible, isMobile = false }) {
       key: 'employee',
       icon: <UserOutlined />,
       label: <Link to={'/employee'}>{translate('Employees')}</Link>,
+    },
+    {
+      key: 'admin',
+      icon: <TeamOutlined />,
+      label: <Link to={'/admin'}>{translate('Staff Management')}</Link>,
+    },
+    {
+      key: 'approval',
+      icon: <CheckCircleOutlined />,
+      label: <Link to={'/approval'}>{translate('Approvals')}</Link>,
     },
     {
       key: 'about',

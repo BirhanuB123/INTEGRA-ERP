@@ -27,9 +27,10 @@ const create = async (req, res) => {
     credit: previousCredit,
   } = currentInvoice;
 
+  const { amount } = req.body;
   const maxAmount = calculate.sub(calculate.sub(previousTotal, previousDiscount), previousCredit);
 
-  if (req.body.amount > maxAmount) {
+  if (amount > maxAmount) {
     return res.status(202).json({
       success: false,
       result: null,
@@ -37,8 +38,25 @@ const create = async (req, res) => {
     });
   }
   req.body['createdBy'] = req.admin._id;
+  req.body['approvalStatus'] = 'pending';
 
   const result = await Model.create(req.body);
+
+  // Create approval request for payment
+  const Approval = mongoose.model('Approval');
+  await new Approval({
+    entityType: 'Payment',
+    entityId: result._id,
+    requestedBy: req.admin._id,
+    approvalType: 'finance_approval',
+    priority: amount > 10000 ? 'high' : 'medium',
+    metadata: {
+      amount: amount,
+      invoiceId: req.body.invoice,
+      paymentMode: req.body.paymentMode,
+    },
+    removed: false,
+  }).save();
 
   const fileId = 'payment-' + result._id + '.pdf';
   const updatePath = await Model.findOneAndUpdate(
@@ -51,35 +69,11 @@ const create = async (req, res) => {
       new: true,
     }
   ).exec();
-  // Returning successfull response
-
-  const { _id: paymentId, amount } = result;
-  const { id: invoiceId, total, discount, credit } = currentInvoice;
-
-  let paymentStatus =
-    calculate.sub(total, discount) === calculate.add(credit, amount)
-      ? 'paid'
-      : calculate.add(credit, amount) > 0
-      ? 'partially'
-      : 'unpaid';
-
-  const invoiceUpdate = await Invoice.findOneAndUpdate(
-    { _id: req.body.invoice },
-    {
-      $push: { payment: paymentId.toString() },
-      $inc: { credit: amount },
-      $set: { paymentStatus: paymentStatus },
-    },
-    {
-      new: true, // return the new result instead of the old one
-      runValidators: true,
-    }
-  ).exec();
 
   return res.status(200).json({
     success: true,
     result: updatePath,
-    message: 'Payment Invoice created successfully',
+    message: 'Payment created successfully. Pending Finance approval.',
   });
 };
 

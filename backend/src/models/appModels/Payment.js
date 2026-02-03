@@ -49,6 +49,22 @@ const paymentSchema = new mongoose.Schema({
   description: {
     type: String,
   },
+  approvalStatus: {
+    type: String,
+    default: 'pending',
+    enum: ['pending', 'approved', 'rejected'],
+  },
+  approvedBy: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Admin',
+    autopopulate: true,
+  },
+  approvalDate: {
+    type: Date,
+  },
+  rejectionReason: {
+    type: String,
+  },
   updated: {
     type: Date,
     default: Date.now,

@@ -142,6 +142,21 @@ const invoiceSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  approvalStatus: {
+    type: String,
+    default: 'pending',
+    enum: ['pending', 'approved', 'rejected'],
+  },
+  approvedBy: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Admin',
+  },
+  approvalDate: {
+    type: Date,
+  },
+  rejectionReason: {
+    type: String,
+  },
   notes: {
     type: String,
   },

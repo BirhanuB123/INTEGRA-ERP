@@ -20,9 +20,7 @@ export const localStorageHealthCheck = async () => {
       }
     } catch (error) {
       window.localStorage.clear();
-      // Handle the exception here
       console.error('window.localStorage Exception occurred:', error);
-      // You can choose to ignore certain exceptions or take other appropriate actions
     }
   }
 };

@@ -5,7 +5,27 @@ const router = express.Router();
 const appControllers = require('@/controllers/appControllers');
 const { routesList } = require('@/models/utils');
 
+// Add approval routes FIRST
+const approvalController = require('@/controllers/appControllers/approvalController');
+console.log('Registering manual approval routes...');
+router.route('/approval/create').post(catchErrors(approvalController['create']));
+router.route('/approval/list').get(catchErrors(approvalController['list']));
+router.route('/approval/myApprovals').get(catchErrors(approvalController['myApprovals'])).post(catchErrors(approvalController['myApprovals']));
+router.route('/approval/approve/:id').post(catchErrors(approvalController['approve']));
+router.route('/approval/reject/:id').post(catchErrors(approvalController['reject']));
+router.route('/approval/history').get(catchErrors(approvalController['history'])).post(catchErrors(approvalController['history']));
+router.route('/approval/summary').get(catchErrors(approvalController['summary'])).post(catchErrors(approvalController['summary']));
+router.route('/approval/read/:id').get(catchErrors(approvalController['read']));
+console.log('Manual approval routes registered.');
+
 const routerApp = (entity, controller) => {
+  if (!controller) {
+    console.warn(`No controller found for entity: ${entity}`);
+    return;
+  }
+  // Skip manual routes if already registered
+  if (entity === 'approval') return;
+
   router.route(`/${entity}/create`).post(catchErrors(controller['create']));
   router.route(`/${entity}/read/:id`).get(catchErrors(controller['read']));
   router.route(`/${entity}/update/:id`).patch(catchErrors(controller['update']));

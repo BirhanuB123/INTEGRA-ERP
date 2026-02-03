@@ -41,10 +41,9 @@ const update = async (req, res) => {
     calculate.sub(total, discount) === calculate.add(previousCredit, changedAmount)
       ? 'paid'
       : calculate.add(previousCredit, changedAmount) > 0
-      ? 'partially'
-      : 'unpaid';
+        ? 'partially'
+        : 'unpaid';
 
-  const updatedDate = new Date();
   const updates = {
     number: req.body.number,
     date: req.body.date,
@@ -52,6 +51,7 @@ const update = async (req, res) => {
     paymentMode: req.body.paymentMode,
     ref: req.body.ref,
     description: req.body.description,
+    approvalStatus: 'pending',
     updated: updatedDate,
   };
 
@@ -63,23 +63,27 @@ const update = async (req, res) => {
     }
   ).exec();
 
-  const updateInvoice = await Invoice.findOneAndUpdate(
-    { _id: result.invoice._id.toString() },
-    {
-      $inc: { credit: changedAmount },
-      $set: {
-        paymentStatus: paymentStatus,
-      },
+  // Create approval request for the update
+  const Approval = mongoose.model('Approval');
+  await new Approval({
+    entityType: 'Payment',
+    entityId: result._id,
+    requestedBy: req.admin._id,
+    approvalType: 'finance_approval',
+    priority: result.amount > 10000 ? 'high' : 'medium',
+    metadata: {
+      amount: result.amount,
+      previousAmount: previousAmount,
+      invoiceId: result.invoice._id,
+      note: 'Payment update requires re-approval',
     },
-    {
-      new: true, // return the new result instead of the old one
-    }
-  ).exec();
+    removed: false,
+  }).save();
 
   return res.status(200).json({
     success: true,
     result,
-    message: 'Successfully updated the Payment ',
+    message: 'Successfully updated the Payment. Pending Finance re-approval. Invoice will be updated after approval.',
   });
 };
 

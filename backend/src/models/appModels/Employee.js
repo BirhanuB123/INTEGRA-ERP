@@ -33,6 +33,25 @@ const schema = new mongoose.Schema({
         default: Date.now,
     },
     createdBy: { type: mongoose.Schema.ObjectId, ref: 'Admin' },
+    approvalStatus: {
+        type: String,
+        default: 'pending',
+        enum: ['pending', 'approved', 'rejected'],
+    },
+    approvedBy: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Admin',
+    },
+    approvalDate: {
+        type: Date,
+    },
+    rejectionReason: {
+        type: String,
+    },
+    requiresFinanceApproval: {
+        type: Boolean,
+        default: false,
+    },
     created: {
         type: Date,
         default: Date.now,
