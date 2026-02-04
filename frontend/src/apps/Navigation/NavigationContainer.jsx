@@ -158,10 +158,8 @@ function Sidebar({ collapsible, isMobile = false }) {
         position: isMobile ? 'absolute' : 'relative',
         bottom: '20px',
         ...(!isMobile && {
-          // border: 'none',
           ['left']: '20px',
           top: '20px',
-          // borderRadius: '8px',
         }),
       }}
       theme={'light'}

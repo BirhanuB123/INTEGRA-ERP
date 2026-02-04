@@ -31,6 +31,6 @@ export default function UpgradeButton() {
   );
 }
 
-console.log(
-  '🚀 Welcome to INTEGRA ERP CRM! Did you know that we also offer commercial customization services? Contact us at info@gebetatech.com for more information.'
-);
+// console.log(
+//   '🚀 Welcome to INTEGRA ERP! Did you know that we also offer commercial customization services? Contact us at info@gebetatech.com for more information.'
+// );
