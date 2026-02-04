@@ -94,11 +94,6 @@ function Sidebar({ collapsible, isMobile = false }) {
       icon: <ShopOutlined />,
     },
     {
-      key: 'generalSettings',
-      label: <Link to={'/settings'}>{translate('settings')}</Link>,
-      icon: <SettingOutlined />,
-    },
-    {
       key: 'employee',
       icon: <UserOutlined />,
       label: <Link to={'/employee'}>{translate('Employees')}</Link>,
@@ -112,6 +107,11 @@ function Sidebar({ collapsible, isMobile = false }) {
       key: 'approval',
       icon: <CheckCircleOutlined />,
       label: <Link to={'/approval'}>{translate('Approvals')}</Link>,
+    },
+    {
+      key: 'generalSettings',
+      label: <Link to={'/settings'}>{translate('settings')}</Link>,
+      icon: <SettingOutlined />,
     },
     {
       key: 'about',

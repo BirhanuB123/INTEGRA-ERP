@@ -75,8 +75,15 @@ export default function ReadItem({ config, selectedItem }) {
 
   const { moneyFormatter } = useMoney();
   const { send, isLoading: mailInProgress } = useMail({ entity });
+  const { isLoading: convertInProgress, isSuccess: convertSuccess } = useSelector(selectConvertedItem);
 
   const { result: currentResult } = useSelector(selectCurrentItem);
+
+  useEffect(() => {
+    if (convertSuccess) {
+      navigate(`/invoice/read/${currentResult._id}`);
+    }
+  }, [convertSuccess]);
 
   const resetErp = {
     status: '',
@@ -173,6 +180,7 @@ export default function ReadItem({ config, selectedItem }) {
           </Button>,
           <Button
             key={`${uniqueId()}`}
+            loading={convertInProgress}
             onClick={() => {
               dispatch(erp.convert({ entity, id: currentErp._id }));
             }}

@@ -20,3 +20,4 @@ export const selectDeletedItem = createSelector([selectErp], (erp) => erp.delete
 
 export const selectSearchedItems = createSelector([selectErp], (erp) => erp.search);
 export const selectMailItem = createSelector([selectErp], (erp) => erp.mail);
+export const selectConvertedItem = createSelector([selectErp], (erp) => erp.convert);

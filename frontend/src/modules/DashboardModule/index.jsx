@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { Tag, Row, Col } from 'antd';
+import { motion } from 'framer-motion';
 import useLanguage from '@/locale/useLanguage';
 
 import { useMoney } from '@/settings';
@@ -124,9 +125,26 @@ export default function DashboardModule() {
     );
   });
 
+  const containerVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0 },
+  };
+
   if (money_format_settings) {
     return (
-      <>
+      <motion.div initial="hidden" animate="visible" variants={containerVariants}>
         <Row gutter={[32, 32]}>
           <SummaryCard
             title={translate('Invoices')}
@@ -173,8 +191,8 @@ export default function DashboardModule() {
         <div className="space30"></div>
         <Row gutter={[32, 32]}>
           <Col className="gutter-row w-full" sm={{ span: 24 }} lg={{ span: 12 }}>
-            <div className="whiteBox shadow pad20" style={{ height: '100%' }}>
-              <h3 style={{ color: '#22075e', marginBottom: 5, padding: '0 20px 20px' }}>
+            <div className="whiteBox shadow pad20" style={{ height: '100%', minHeight: '400px' }}>
+              <h3 className="gradient-text" style={{ marginBottom: 5, padding: '10px 20px 20px', fontSize: '1.25rem' }}>
                 {translate('Recent Invoices')}
               </h3>
 
@@ -183,15 +201,15 @@ export default function DashboardModule() {
           </Col>
 
           <Col className="gutter-row w-full" sm={{ span: 24 }} lg={{ span: 12 }}>
-            <div className="whiteBox shadow pad20" style={{ height: '100%' }}>
-              <h3 style={{ color: '#22075e', marginBottom: 5, padding: '0 20px 20px' }}>
+            <div className="whiteBox shadow pad20" style={{ height: '100%', minHeight: '400px' }}>
+              <h3 className="gradient-text" style={{ marginBottom: 5, padding: '10px 20px 20px', fontSize: '1.25rem' }}>
                 {translate('Recent Quotes')}
               </h3>
               <RecentTable entity={'quote'} dataTableColumns={dataTableColumns} />
             </div>
           </Col>
         </Row>
-      </>
+      </motion.div>
     );
   } else {
     return <></>;

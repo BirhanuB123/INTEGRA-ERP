@@ -1,29 +1,96 @@
 .ant-layout {
-  background: #ffffff !important;
+  background: var(--bg-color) !important;
 }
 
 .site-layout .site-layout-background {
-  background: #fff;
+  background: transparent;
 }
 
-[data-theme='dark'] .site-layout .site-layout-background {
-  background: #141414;
+.ant-btn {
+  border-radius: 8px;
+  font-weight: 600;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+}
+
+.ant-btn-primary {
+  background: var(--primary-gradient) !important;
+  border: none !important;
+}
+
+.ant-btn-primary:hover {
+  opacity: 0.9 !important;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.ant-card {
+  border-radius: 16px;
+  border: 1px solid rgba(226, 232, 240, 0.8) !important;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  background: var(--card-bg) !important;
+  backdrop-filter: blur(10px);
+}
+
+.ant-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.ant-table {
+  background: transparent !important;
+}
+
+.ant-table-thead>tr>th {
+  background: rgba(241, 245, 249, 0.5) !important;
+  font-weight: 700;
+  color: var(--text-muted);
+  border-bottom: 2px solid #f1f5f9 !important;
+}
+
+.ant-table-tbody>tr>td {
+  border-bottom: 1px solid #f1f5f9 !important;
+  transition: var(--transition);
+}
+
+.ant-table-tbody>tr:hover>td {
+  background: rgba(99, 102, 241, 0.05) !important;
+}
+
+.ant-input,
+.ant-input-password,
+.ant-select-selector {
+  border-radius: 8px !important;
+  border: 1px solid #e2e8f0 !important;
+  padding: 8px 12px !important;
+  transition: var(--transition) !important;
+}
+
+.ant-input:focus,
+.ant-input-focused,
+.ant-select-focused .ant-select-selector {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2) !important;
 }
 
 .headerIcon .ant-dropdown-menu {
+  border-radius: 12px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  padding: 8px;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--glass-border);
+}
+
+.ant-dropdown-menu-item {
   border-radius: 6px;
-  background: none;
-  padding: 0;
-  box-shadow: none;
+  margin: 4px 0;
+  transition: var(--transition);
 }
 
-.headerIcon .ant-dropdown-menu-item:hover,
-.headerIcon .ant-dropdown-menu-item.ant-dropdown-menu-item-active {
-  background: none;
-}
-
-.App {
-  text-align: center;
+.ant-dropdown-menu-item:hover {
+  background: rgba(99, 102, 241, 0.1) !important;
+  color: var(--primary-color) !important;
 }
 
 .App-logo {
@@ -33,18 +100,7 @@
 
 .login-form button[type='submit'] {
   margin-bottom: 20px;
-}
-
-.login-form-forgot {
-  float: right;
-}
-
-.login-form-button {
-  width: 100%;
-}
-
-.ant-table-thead>tr>th {
-  font-weight: 700;
+  height: 45px;
 }
 
 .ant-typography strong {
@@ -57,43 +113,40 @@ h3,
 h4,
 h5,
 h6 {
-  font-weight: 700 !important;
+  font-weight: 800 !important;
+  color: var(--text-main);
+  letter-spacing: -0.025em;
 }
 
 .ant-menu-inline {
   padding-bottom: 70px;
-}
-
-.tabContent .ant-tabs-right>.ant-tabs-content-holder,
-.tabContent .ant-tabs-right>div>.ant-tabs-content-holder {
-  border-right: none;
-}
-
-.tabContent .ant-tabs .ant-tabs-tab+.ant-tabs-tab {
-  margin: 0;
-}
-
-.ant-select-show-search:where(.css-dev-only-do-not-override-2q8sxy).ant-select:not(.ant-select-customize-input) .ant-select-selector {
-  cursor: pointer;
+  background: transparent !important;
+  border-right: none !important;
 }
 
 .ant-menu-item {
-  height: 36px !important;
+  border-radius: 8px !important;
+  margin: 4px 8px !important;
+  width: calc(100% - 16px) !important;
+  transition: var(--transition) !important;
+  display: flex !important;
+  align-items: center !important;
 }
 
-@media (max-width: 768px) {
-  .tabContent .ant-tabs-right>.ant-tabs-content-holder>.ant-tabs-content>.ant-tabs-tabpane {
-    padding-right: 0;
-    margin-top: 30px;
-  }
-
-  .tabContent .ant-tabs {
-    display: block;
-  }
+.ant-menu-item-selected {
+  background: var(--primary-gradient) !important;
+  color: white !important;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.ant-menu-item:hover:not(.ant-menu-item-selected) {
+  background: rgba(99, 102, 241, 0.1) !important;
+  color: var(--primary-color) !important;
+}
+
+.ant-menu-item-selected .ant-menu-title-content {
+  color: white !important;
+}
+
+.ant-menu-item-selected .anticon {
+  color: white !important;
 }
