@@ -9,6 +9,15 @@ methods.create = async (req, res) => {
         const Employee = mongoose.model('Employee');
         const Approval = mongoose.model('Approval');
 
+        // Check if user has permission to create (only admin and owner)
+        const { role } = req.admin;
+        if (role !== 'admin' && role !== 'owner') {
+            return res.status(403).json({
+                success: false,
+                message: 'You do not have permission to create employees. Restricted to System Admin.',
+            });
+        }
+
         // Set approval status to pending
         req.body.approvalStatus = 'pending';
         req.body.removed = false;

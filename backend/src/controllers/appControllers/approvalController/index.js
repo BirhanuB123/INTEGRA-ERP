@@ -150,10 +150,18 @@ const approve = async (req, res) => {
         }
 
         // Check if user can approve this type
-        const canApprove =
-            approver.role === 'owner' ||
-            (approver.role === 'hr_head' && approval.approvalType === 'hr_approval') ||
-            (approver.role === 'finance_head' && approval.approvalType === 'finance_approval');
+        let canApprove = false;
+
+        if (approval.approvalType === 'hr_approval') {
+            canApprove = approver.role === 'hr_head';
+        } else if (approval.approvalType === 'finance_approval') {
+            canApprove = approver.role === 'finance_head';
+        } else if (approval.approvalType === 'general_approval') {
+            canApprove = approver.role === 'owner' || approver.role === 'admin';
+        } else {
+            // Default fallback (should not happen if types are enforced)
+            canApprove = approver.role === 'owner';
+        }
 
         if (!canApprove) {
             return res.status(403).json({
@@ -263,10 +271,18 @@ const reject = async (req, res) => {
         }
 
         // Check if user can reject this type
-        const canReject =
-            approver.role === 'owner' ||
-            (approver.role === 'hr_head' && approval.approvalType === 'hr_approval') ||
-            (approver.role === 'finance_head' && approval.approvalType === 'finance_approval');
+        // Check if user can reject this type
+        let canReject = false;
+
+        if (approval.approvalType === 'hr_approval') {
+            canReject = approver.role === 'hr_head';
+        } else if (approval.approvalType === 'finance_approval') {
+            canReject = approver.role === 'finance_head';
+        } else if (approval.approvalType === 'general_approval') {
+            canReject = approver.role === 'owner' || approver.role === 'admin';
+        } else {
+            canReject = approver.role === 'owner';
+        }
 
         if (!canReject) {
             return res.status(403).json({

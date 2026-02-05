@@ -8,6 +8,16 @@ const { calculate } = require('@/helpers');
 
 const create = async (req, res) => {
   // Creating a new document in the collection
+
+  // Check if user has permission to create (only admin and owner)
+  const { role } = req.admin;
+  if (role !== 'admin' && role !== 'owner') {
+    return res.status(403).json({
+      success: false,
+      message: 'You do not have permission to create payments. Restricted to System Admin.',
+    });
+  }
+
   if (req.body.amount === 0) {
     return res.status(202).json({
       success: false,

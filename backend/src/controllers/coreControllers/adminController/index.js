@@ -13,6 +13,16 @@ crudMethods.create = async (req, res) => {
         const Admin = mongoose.model('Admin');
         const AdminPassword = mongoose.model('AdminPassword');
 
+        // Check if user has permission to create (only admin and owner)
+        // Note: req.admin is populated by the checkAuth middleware
+        const { role } = req.admin;
+        if (role !== 'admin' && role !== 'owner') {
+            return res.status(403).json({
+                success: false,
+                message: 'You do not have permission to create staff members. Restricted to System Admin.',
+            });
+        }
+
         // Check if admin with same email exists
         const { email } = req.body;
         const existingAdmin = await Admin.findOne({ email, removed: false });
