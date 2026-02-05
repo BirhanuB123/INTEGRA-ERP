@@ -460,7 +460,12 @@ const lang = {
   proforma_invoices: 'quote',
   search: 'search',
   add_new_employee: 'Add New Employee',
-  update_employee: 'Update Employee',
+  employee: 'Employee',
+  hr_head: 'HR Head',
+  finance_head: 'Finance Head',
+  department_manager: 'Department Manager',
+  regular_admin: 'Regular Admin',
+  account_owner: 'Account Owner',
 };
 
 export default lang;

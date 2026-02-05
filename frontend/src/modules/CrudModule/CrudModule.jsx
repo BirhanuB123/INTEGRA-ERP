@@ -12,6 +12,7 @@ import DataTable from '@/components/DataTable/DataTable';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { selectCurrentItem } from '@/redux/crud/selectors';
+import { selectCurrentAdmin } from '@/redux/auth/selectors';
 import useLanguage from '@/locale/useLanguage';
 import { crud } from '@/redux/crud/actions';
 import { useCrudContext } from '@/context/crud';
@@ -26,6 +27,7 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
 
   const { isReadBoxOpen, isEditBoxOpen } = state;
   const { result: currentItem } = useSelector(selectCurrentItem);
+  const currentAdmin = useSelector(selectCurrentAdmin);
   const dispatch = useDispatch();
 
   const [labels, setLabels] = useState('');
@@ -54,24 +56,28 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
           <p style={{ marginBottom: '10px' }}>{labels}</p>
         </Col>
         <Col span={14}>
-          <Button
-            onClick={removeItem}
-            type="text"
-            icon={<DeleteOutlined />}
-            size="small"
-            style={{ float: 'right', marginLeft: '5px', marginTop: '10px' }}
-          >
-            {translate('remove')}
-          </Button>
-          <Button
-            onClick={editItem}
-            type="text"
-            icon={<EditOutlined />}
-            size="small"
-            style={{ float: 'right', marginLeft: '0px', marginTop: '10px' }}
-          >
-            {translate('edit')}
-          </Button>
+          {currentAdmin?.role !== 'employee' && (
+            <>
+              <Button
+                onClick={removeItem}
+                type="text"
+                icon={<DeleteOutlined />}
+                size="small"
+                style={{ float: 'right', marginLeft: '5px', marginTop: '10px' }}
+              >
+                {translate('remove')}
+              </Button>
+              <Button
+                onClick={editItem}
+                type="text"
+                icon={<EditOutlined />}
+                size="small"
+                style={{ float: 'right', marginLeft: '0px', marginTop: '10px' }}
+              >
+                {translate('edit')}
+              </Button>
+            </>
+          )}
         </Col>
 
         <Col span={24}>
@@ -87,6 +93,7 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
 
 function FixHeaderPanel({ config }) {
   const { crudContextAction } = useCrudContext();
+  const currentAdmin = useSelector(selectCurrentAdmin);
 
   const { collapsedBox } = crudContextAction;
 
@@ -100,7 +107,9 @@ function FixHeaderPanel({ config }) {
         <SearchItem config={config} />
       </Col>
       <Col className="gutter-row" span={3}>
-        <Button onClick={addNewItem} block={true} icon={<PlusOutlined />}></Button>
+        {currentAdmin?.role !== 'employee' && (
+          <Button onClick={addNewItem} block={true} icon={<PlusOutlined />}></Button>
+        )}
       </Col>
     </Row>
   );

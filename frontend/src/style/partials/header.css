@@ -13,10 +13,22 @@
   transition: var(--transition);
 }
 
+.headerIcon.ant-layout-header {
+  height: 80px;
+  line-height: 80px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  z-index: 100;
+}
+
+@media only screen and (max-width: 768px) {
+  .ant-layout-header {
+    height: 64px;
+    line-height: 64px;
+    padding: 0 15px !important;
+  }
+}
+
 .headerIcon.ant-avatar {
-  float: right;
-  margin-left: 16px;
-  margin-top: 12px;
   color: var(--text-main);
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
@@ -34,6 +46,23 @@
 
 .headerIcon .last {
   margin-right: 24px;
+}
+
+.headerContent {
+  padding: 0 40px;
+  width: 100%;
+}
+
+@media only screen and (max-width: 992px) {
+  .headerContent {
+    padding: 0 24px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .headerContent {
+    padding: 0 16px;
+  }
 }
 
 .profileDropdown {

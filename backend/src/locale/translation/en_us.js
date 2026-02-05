@@ -449,4 +449,9 @@ module.exports = {
   enter_code: 'Enter Code',
   offers: 'Offers',
   proforma_invoices: 'quote',
+  hr_head: 'HR Head',
+  finance_head: 'Finance Head',
+  department_manager: 'Department Manager',
+  employee: 'Employee',
+  regular_admin: 'Regular Admin',
 };

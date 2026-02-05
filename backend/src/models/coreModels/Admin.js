@@ -30,7 +30,7 @@ const adminSchema = new Schema({
   role: {
     type: String,
     default: 'admin',
-    enum: ['owner', 'admin', 'hr_head', 'finance_head', 'department_manager'],
+    enum: ['owner', 'admin', 'hr_head', 'finance_head', 'department_manager', 'employee'],
   },
   department: {
     type: String,

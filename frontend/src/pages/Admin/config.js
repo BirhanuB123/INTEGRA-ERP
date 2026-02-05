@@ -24,6 +24,7 @@ export const fields = {
             { value: 'hr_head', label: 'HR Head' },
             { value: 'finance_head', label: 'Finance Head' },
             { value: 'department_manager', label: 'Department Manager' },
+            { value: 'employee', label: 'Employee' },
             { value: 'owner', label: 'Owner' },
         ],
     },

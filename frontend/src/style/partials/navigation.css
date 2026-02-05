@@ -52,9 +52,14 @@
 
   .navigation {
     height: 100%;
+    width: 100% !important;
   }
 
   .mobile-sidebar-wraper {
     display: block;
+  }
+
+  .mobile-sidebar-btn {
+    margin-left: 10px !important;
   }
 }

@@ -52,6 +52,26 @@ crudMethods.create = async (req, res) => {
             emailVerified: true,
         }).save();
 
+        // Auto-create Employee record if role is employee
+        if (admin.role === 'employee') {
+            const Employee = mongoose.model('Employee');
+            const existingEmployee = await Employee.findOne({ email: admin.email, removed: false });
+
+            if (!existingEmployee) {
+                await new Employee({
+                    name: admin.name,
+                    surname: admin.surname,
+                    email: admin.email,
+                    enabled: true,
+                    approvalStatus: 'approved',
+                    approvalDate: Date.now(),
+                    approvedBy: req.admin._id,
+                    createdBy: req.admin._id,
+                }).save();
+                console.log(`✅ Auto-created Employee record for: ${admin.email}`);
+            }
+        }
+
         return res.status(200).json({
             success: true,
             result: admin,

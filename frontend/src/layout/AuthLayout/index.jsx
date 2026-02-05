@@ -24,7 +24,7 @@ export default function AuthLayout({ sideContent, children }) {
           sm={{ span: 24, order: 1 }}
           md={{ span: 13, order: 2 }}
           lg={{ span: 12, order: 2 }}
-          style={{ background: '#FFF', minHeight: '100vh' }}
+          style={{ minHeight: '100vh' }}
         >
           {children}
         </Col>

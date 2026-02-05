@@ -15,30 +15,38 @@ const AuthModule = ({ authContent, AUTH_TITLE, isForRegistre = false }) => {
   return (
     <AuthLayout sideContent={<SideContent />}>
       <Content
+        className="auth-container"
         style={{
-          padding: isForRegistre ? '40px 30px 30px' : '100px 30px 30px',
-          maxWidth: '440px',
-          margin: '0 auto',
+          padding: isForRegistre ? '40px 30px' : '60px 30px',
         }}
       >
-        <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 0 }} span={0}>
-          <img
-            src={logo}
-            alt="Logo"
-            style={{
-              margin: '0px auto 20px',
-              display: 'block',
-              maxWidth: '220px'
-            }}
-            height={63}
-            width={'auto'}
-          />
-          <div className="space10" />
-        </Col>
-        <Title level={1}>{translate(AUTH_TITLE)}</Title>
+        <div
+          className="glass-morphism"
+          style={{
+            maxWidth: '440px',
+            width: '100%',
+            margin: '0 auto',
+          }}
+        >
+          <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 0 }} span={0}>
+            <img
+              src={logo}
+              alt="Logo"
+              style={{
+                margin: '0px auto 20px',
+                display: 'block',
+                maxWidth: '220px'
+              }}
+              height={63}
+              width={'auto'}
+            />
+            <div className="space10" />
+          </Col>
+          <Title level={1} className="auth-header-title">{translate(AUTH_TITLE)}</Title>
 
-        <Divider />
-        <div className="site-layout-content">{authContent}</div>
+          <Divider style={{ margin: '12px 0 24px' }} />
+          <div className="site-layout-content">{authContent}</div>
+        </div>
       </Content>
     </AuthLayout>
   );

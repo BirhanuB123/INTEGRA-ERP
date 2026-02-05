@@ -9,6 +9,7 @@ import { selectCurrentAdmin } from '@/redux/auth/selectors';
 import { FILE_BASE_URL } from '@/config/serverApiConfig';
 
 import useLanguage from '@/locale/useLanguage';
+import useResponsive from '@/hooks/useResponsive';
 
 import UpgradeButton from './UpgradeButton';
 
@@ -82,15 +83,17 @@ export default function HeaderContent() {
     },
   ];
 
+  const { isMobile } = useResponsive();
+
   return (
     <Header
       style={{
-        padding: '20px',
+        padding: isMobile ? '0 15px' : '0 20px',
         background: '#ffffff',
         display: 'flex',
         flexDirection: 'row-reverse',
         justifyContent: 'flex-start',
-        gap: ' 15px',
+        gap: isMobile ? '10px' : '15px',
       }}
     >
       <Dropdown

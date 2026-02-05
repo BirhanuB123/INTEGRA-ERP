@@ -191,7 +191,7 @@ function Sidebar({ collapsible, isMobile = false }) {
         theme={'light'}
         selectedKeys={[currentPath]}
         style={{
-          width: 256,
+          width: isMobile ? '100%' : 256,
         }}
       />
     </Sider>

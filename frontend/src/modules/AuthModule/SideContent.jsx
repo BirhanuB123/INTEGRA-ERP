@@ -11,28 +11,25 @@ export default function SideContent() {
 
   return (
     <Content
-      style={{
-        padding: '150px 30px 30px',
-        width: '100%',
-        maxWidth: '450px',
-        margin: '0 auto',
-      }}
-      className="sideContent"
+      className="sideContent animate-entrance"
     >
-      <div style={{ width: '100%' }}>
+      <div className="side-content-wrapper">
         <img
           src={logo}
           alt="INTEGRA ERP SOLUTIONS"
-          style={{ margin: '0 0 40px', display: 'block', maxWidth: '220px' }}
-          height={63}
+          style={{ margin: '0 0 40px', display: 'block', maxWidth: '240px' }}
+          height={70}
           width={'auto'}
         />
 
-        <Title level={1} style={{ fontSize: 28 }}>
+        <Title level={1} className="side-content-title">
           INTEGRA ERP SOLUTIONS
         </Title>
-        <Text>
-          Accounting / Invoicing / Quote App <b /> based on your company needs
+        <Text style={{ fontSize: '18px', color: '#4a5568', display: 'block', marginBottom: '8px' }}>
+          {translate('Accounting / Invoicing / Quote App')}
+        </Text>
+        <Text style={{ fontSize: '16px', color: '#718096' }}>
+          {translate('Powerful solutions based on your company needs')}
         </Text>
 
         <div className="space20"></div>
