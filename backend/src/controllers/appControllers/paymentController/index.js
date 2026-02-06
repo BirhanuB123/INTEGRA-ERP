@@ -1,9 +1,12 @@
 const mongoose = require('mongoose');
 const createCRUDController = require('@/controllers/middlewaresControllers/createCRUDController');
+const summary = require('./summary');
 
 function customController() {
     const methods = createCRUDController('Payment');
     const Approval = mongoose.model('Approval');
+
+    methods.summary = (req, res) => summary(req, res);
 
     // Override create to handle spending thresholds for Finance Head approval
     methods.create = async (req, res) => {
@@ -11,10 +14,6 @@ function customController() {
             const Model = mongoose.model('Payment');
             const { amount } = req.body;
             const THRESHOLD = 50000; // ETB threshold
-
-            // For payments above threshold, we might want to flag them or require approval before processing
-            // In this system, we'll create the record but marking it as "pending_finance" or similar would be better
-            // For now, we'll create the approval request.
 
             const result = await new Model(req.body).save();
 

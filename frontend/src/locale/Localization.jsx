@@ -1,4 +1,5 @@
-import { ConfigProvider } from 'antd';
+import { ConfigProvider, App } from 'antd';
+import AntdGlobalConfig from '@/components/AntdGlobalConfig';
 
 export default function Localization({ children }) {
   return (
@@ -11,7 +12,10 @@ export default function Localization({ children }) {
         },
       }}
     >
-      {children}
+      <App>
+        <AntdGlobalConfig />
+        {children}
+      </App>
     </ConfigProvider>
   );
 }

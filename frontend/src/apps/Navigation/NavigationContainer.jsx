@@ -178,7 +178,7 @@ function Sidebar({ collapsible, isMobile = false }) {
       ],
     },
     {
-      key: 'settings',
+      key: 'settings_menu',
       label: translate('settings'),
       icon: <SettingOutlined />,
       role: ['owner', 'admin'],

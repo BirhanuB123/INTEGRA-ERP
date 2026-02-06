@@ -1,17 +1,20 @@
-import { notification } from 'antd';
+import * as antd from '@/utils/antdGlobal';
 import codeMessage from './codeMessage';
 
 const errorHandler = (error) => {
+  const notification = antd.notification || import('antd').then(m => m.notification); // Fallback
+
   if (!navigator.onLine) {
-    notification.config({
-      duration: 15,
-      maxCount: 1,
-    });
-    // Code to execute when there is internet connection
-    notification.error({
-      message: 'No internet connection',
-      description: 'Cannot connect to the Internet, Check your internet network',
-    });
+    if (notification.error) {
+      notification.config({
+        duration: 15,
+        maxCount: 1,
+      });
+      notification.error({
+        message: 'No internet connection',
+        description: 'Cannot connect to the Internet, Check your internet network',
+      });
+    }
     return {
       success: false,
       result: null,
@@ -22,15 +25,12 @@ const errorHandler = (error) => {
   const { response } = error;
 
   if (!response) {
-    notification.config({
-      duration: 20,
-      maxCount: 1,
-    });
-    // Code to execute when there is no internet connection
-    // notification.error({
-    //   message: 'Problem connecting to server',
-    //   description: 'Cannot connect to the server, Try again later',
-    // });
+    if (notification.config) {
+      notification.config({
+        duration: 20,
+        maxCount: 1,
+      });
+    }
     return {
       success: false,
       result: null,
@@ -54,14 +54,17 @@ const errorHandler = (error) => {
 
     const errorText = message || codeMessage[response.status];
     const { status, error } = response;
-    notification.config({
-      duration: 20,
-      maxCount: 2,
-    });
-    notification.error({
-      message: `Request error ${status}`,
-      description: errorText,
-    });
+
+    if (notification.error) {
+      notification.config({
+        duration: 20,
+        maxCount: 2,
+      });
+      notification.error({
+        message: `Request error ${status}`,
+        description: errorText,
+      });
+    }
 
     if (response?.data?.error?.name === 'JsonWebTokenError') {
       window.localStorage.removeItem('auth');
@@ -69,28 +72,32 @@ const errorHandler = (error) => {
       window.location.href = '/logout';
     } else return response.data;
   } else {
-    notification.config({
-      duration: 15,
-      maxCount: 1,
-    });
+    if (notification.error) {
+      notification.config({
+        duration: 15,
+        maxCount: 1,
+      });
+    }
 
     if (navigator.onLine) {
-      // Code to execute when there is internet connection
-      notification.error({
-        message: 'Problem connecting to server',
-        description: 'Cannot connect to the server, Try again later',
-      });
+      if (notification.error) {
+        notification.error({
+          message: 'Problem connecting to server',
+          description: 'Cannot connect to the server, Try again later',
+        });
+      }
       return {
         success: false,
         result: null,
         message: 'Cannot connect to the server, Contact your Account administrator',
       };
     } else {
-      // Code to execute when there is no internet connection
-      notification.error({
-        message: 'No internet connection',
-        description: 'Cannot connect to the Internet, Check your internet network',
-      });
+      if (notification.error) {
+        notification.error({
+          message: 'No internet connection',
+          description: 'Cannot connect to the Internet, Check your internet network',
+        });
+      }
       return {
         success: false,
         result: null,
