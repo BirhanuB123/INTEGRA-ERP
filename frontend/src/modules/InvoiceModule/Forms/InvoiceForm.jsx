@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import dayjs from 'dayjs';
-import { Form, Input, InputNumber, Button, Select, Divider, Row, Col } from 'antd';
+import { Form, Input, InputNumber, Button, Select, Divider, Row, Col, Modal } from 'antd';
 
 import { PlusOutlined } from '@ant-design/icons';
 
@@ -83,6 +83,14 @@ function LoadInvoiceForm({ subTotal = 0, current = null }) {
               redirectLabel={'Add New Client'}
               withRedirect
               urlToRedirect={'/customer'}
+              onChange={(value, option) => {
+                if (option && option.creditHold) {
+                  Modal.warning({
+                    title: translate('Credit Hold'),
+                    content: translate('This customer is on credit hold. You cannot create new invoices for them.'),
+                  });
+                }
+              }}
             />
           </Form.Item>
         </Col>

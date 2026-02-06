@@ -20,6 +20,14 @@ const schema = new mongoose.Schema({
     salary: {
         type: Number,
     },
+    taxableAllowance: {
+        type: Number,
+        default: 0,
+    },
+    nonTaxableAllowance: {
+        type: Number,
+        default: 0,
+    },
     address: String,
     gender: {
         type: String,
@@ -44,6 +52,19 @@ const schema = new mongoose.Schema({
     },
     approvalDate: {
         type: Date,
+    },
+    employmentStatus: {
+        type: String,
+        default: 'active',
+        enum: ['hired', 'probation', 'active', 'terminated'],
+    },
+    leaveBalance: {
+        type: Number,
+        default: 0,
+    },
+    overtimeRate: {
+        type: Number,
+        default: 1.25, // Standard overtime rate
     },
     rejectionReason: {
         type: String,

@@ -9,7 +9,7 @@ const approvalSchema = new mongoose.Schema({
     entityType: {
         type: String,
         required: true,
-        enum: ['Employee', 'Payment', 'Invoice', 'Quote', 'Client'],
+        enum: ['Employee', 'Payment', 'Invoice', 'Quote', 'Client', 'PurchaseOrder', 'Leave', 'Attendance'],
     },
 
     entityId: {

@@ -3,6 +3,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button, Drawer, Layout, Menu } from 'antd';
 
 import { useAppContext } from '@/context/appContext';
+import { useSelector } from 'react-redux';
+import { selectCurrentAdmin } from '@/redux/auth/selectors';
 
 import useLanguage from '@/locale/useLanguage';
 import logo from '@/style/images/integra-erp-logo.svg';
@@ -28,6 +30,10 @@ import {
   ReconciliationOutlined,
   CheckCircleOutlined,
   TeamOutlined,
+  HistoryOutlined,
+  ShoppingCartOutlined,
+  FileDoneOutlined,
+  BarcodeOutlined,
 } from '@ant-design/icons';
 
 const { Sider } = Layout;
@@ -44,90 +50,182 @@ function Sidebar({ collapsible, isMobile = false }) {
   const { state: stateApp, appContextAction } = useAppContext();
   const { isNavMenuClose } = stateApp;
   const { navMenu } = appContextAction;
+  const currentAdmin = useSelector(selectCurrentAdmin);
+  const { role } = currentAdmin;
+
   const [showLogoApp, setLogoApp] = useState(isNavMenuClose);
-  const [currentPath, setCurrentPath] = useState(location.pathname.slice(1));
+  const [currentPath, setCurrentPath] = useState(location.pathname.slice(1) || 'dashboard');
+  const [openKeys, setOpenKeys] = useState([]);
 
   const translate = useLanguage();
   const navigate = useNavigate();
 
-  const items = [
+  const allItems = [
     {
       key: 'dashboard',
       icon: <DashboardOutlined />,
       label: <Link to={'/'}>{translate('dashboard')}</Link>,
     },
     {
-      key: 'product',
+      key: 'inventory',
+      label: translate('inventory'),
       icon: <ProductOutlined />,
-      label: <Link to={'/product'}>{translate('inventory')}</Link>,
+      children: [
+        {
+          key: 'product',
+          label: <Link to={'/product'}>{translate('products')}</Link>,
+        },
+        {
+          key: 'product/category',
+          label: <Link to={'/product/category'}>{translate('product_category')}</Link>,
+        },
+        {
+          key: 'inventory/warehouse',
+          label: <Link to={'/inventory/warehouse'}>{translate('warehouse')}</Link>,
+        },
+        {
+          key: 'inventory/stock-movement',
+          label: <Link to={'/inventory/stock-movement'}>{translate('stock_movement')}</Link>,
+        },
+        {
+          key: 'inventory/batch',
+          label: <Link to={'/inventory/batch'}>{translate('batch')}</Link>,
+        },
+      ],
     },
     {
-      key: 'customer',
+      key: 'crm',
+      label: translate('crm'),
       icon: <CustomerServiceOutlined />,
-      label: <Link to={'/customer'}>{translate('customers')}</Link>,
-    },
-
-    {
-      key: 'invoice',
-      icon: <ContainerOutlined />,
-      label: <Link to={'/invoice'}>{translate('invoices')}</Link>,
-    },
-    {
-      key: 'quote',
-      icon: <FileSyncOutlined />,
-      label: <Link to={'/quote'}>{translate('quote')}</Link>,
+      children: [
+        {
+          key: 'customer',
+          label: <Link to={'/customer'}>{translate('customers')}</Link>,
+        },
+        {
+          key: 'lead',
+          label: <Link to={'/lead'}>{translate('leads')}</Link>,
+        },
+      ],
     },
     {
-      key: 'payment',
-      icon: <CreditCardOutlined />,
-      label: <Link to={'/payment'}>{translate('payments')}</Link>,
-    },
-
-    {
-      key: 'paymentMode',
-      label: <Link to={'/payment/mode'}>{translate('payments_mode')}</Link>,
-      icon: <WalletOutlined />,
-    },
-    {
-      key: 'taxes',
-      label: <Link to={'/taxes'}>{translate('taxes')}</Link>,
+      key: 'sales',
+      label: translate('sales'),
       icon: <ShopOutlined />,
+      children: [
+        {
+          key: 'invoice',
+          label: <Link to={'/invoice'}>{translate('invoices')}</Link>,
+        },
+        {
+          key: 'quote',
+          label: <Link to={'/quote'}>{translate('quote')}</Link>,
+        },
+        {
+          key: 'payment',
+          label: <Link to={'/payment'}>{translate('payments')}</Link>,
+        },
+      ],
     },
     {
-      key: 'employee',
+      key: 'staff',
+      label: translate('staff_hr'),
       icon: <UserOutlined />,
-      label: <Link to={'/employee'}>{translate('Employees')}</Link>,
+      role: ['owner', 'admin', 'hr_head'],
+      children: [
+        {
+          key: 'employee',
+          label: <Link to={'/employee'}>{translate('employees')}</Link>,
+        },
+        {
+          key: 'admin',
+          label: <Link to={'/admin'}>{translate('staff_management')}</Link>,
+          role: ['owner', 'admin'],
+        },
+        {
+          key: 'payroll',
+          label: <Link to={'/payroll'}>{translate('payroll')}</Link>,
+          role: ['owner', 'admin', 'hr_head', 'finance_head'],
+        },
+        {
+          key: 'attendance',
+          label: <Link to={'/attendance'}>{translate('attendance')}</Link>,
+        },
+        {
+          key: 'leave',
+          label: <Link to={'/leave'}>{translate('leave')}</Link>,
+        },
+        {
+          key: 'approval',
+          label: <Link to={'/approval'}>{translate('approvals')}</Link>,
+        },
+      ],
     },
     {
-      key: 'admin',
-      icon: <TeamOutlined />,
-      label: <Link to={'/admin'}>{translate('Staff Management')}</Link>,
+      key: 'finance',
+      label: translate('finance'),
+      icon: <WalletOutlined />,
+      role: ['owner', 'admin', 'finance_head'],
+      children: [
+        {
+          key: 'account',
+          label: <Link to={'/account'}>{translate('chart_of_accounts')}</Link>,
+        },
+        {
+          key: 'fiscal-period',
+          label: <Link to={'/fiscal-period'}>{translate('fiscal_period')}</Link>,
+        },
+      ],
     },
     {
-      key: 'approval',
-      icon: <CheckCircleOutlined />,
-      label: <Link to={'/approval'}>{translate('Approvals')}</Link>,
-    },
-    {
-      key: 'generalSettings',
-      label: <Link to={'/settings'}>{translate('settings')}</Link>,
+      key: 'settings',
+      label: translate('settings'),
       icon: <SettingOutlined />,
-    },
-    {
-      key: 'about',
-      label: <Link to={'/about'}>{translate('about')}</Link>,
-      icon: <ReconciliationOutlined />,
+      role: ['owner', 'admin'],
+      children: [
+        {
+          key: 'settings',
+          label: <Link to={'/settings'}>{translate('general_settings')}</Link>,
+        },
+        {
+          key: 'payment/mode',
+          label: <Link to={'/payment/mode'}>{translate('payments_mode')}</Link>,
+        },
+        {
+          key: 'taxes',
+          label: <Link to={'/taxes'}>{translate('taxes')}</Link>,
+        },
+        {
+          key: 'about',
+          label: <Link to={'/about'}>{translate('about')}</Link>,
+        },
+      ],
     },
   ];
 
+  const filterItems = (menuItems) => {
+    return menuItems
+      .filter((item) => !item.role || item.role.includes(role))
+      .map((item) => {
+        if (item.children) {
+          return { ...item, children: filterItems(item.children) };
+        }
+        return item;
+      });
+  };
+
+  const items = filterItems(allItems);
+
   useEffect(() => {
-    if (location)
-      if (currentPath !== location.pathname) {
-        if (location.pathname === '/') {
-          setCurrentPath('dashboard');
-        } else setCurrentPath(location.pathname.slice(1));
-      }
-  }, [location, currentPath]);
+    const path = location.pathname.slice(1) || 'dashboard';
+    setCurrentPath(path);
+
+    // Automatically open the parent menu
+    const parentKey = items.find((item) => item.children?.some((child) => child.key === path))?.key;
+    if (parentKey) {
+      setOpenKeys([parentKey]);
+    }
+  }, [location]);
 
   useEffect(() => {
     if (isNavMenuClose) {
@@ -140,6 +238,10 @@ function Sidebar({ collapsible, isMobile = false }) {
     }, 200);
     return () => clearTimeout(timer);
   }, [isNavMenuClose]);
+
+  const onOpenChange = (keys) => {
+    setOpenKeys(keys);
+  };
   const onCollapse = () => {
     navMenu.collapse();
   };
@@ -190,6 +292,8 @@ function Sidebar({ collapsible, isMobile = false }) {
         mode="inline"
         theme={'light'}
         selectedKeys={[currentPath]}
+        openKeys={openKeys}
+        onOpenChange={onOpenChange}
         style={{
           width: isMobile ? '100%' : 256,
         }}

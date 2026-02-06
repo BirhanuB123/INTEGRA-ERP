@@ -7,14 +7,30 @@ const checkApprovalPermission = (req, res, next) => {
         return next();
     }
 
-    // HR Head can only approve HR-related requests
-    if (userRole === 'hr_head' && approvalType === 'hr_approval') {
-        return next();
+    // STRICT GOVERNANCE RULES:
+    // 1. Employee related cases -> HR Head only
+    // 2. Total Payment / Financial cases -> Finance Head only
+
+    if (userRole === 'hr_head') {
+        if (approvalType === 'hr_approval') {
+            return next();
+        } else {
+            return res.status(403).json({
+                success: false,
+                message: 'HR Head can only approve employee-related cases.',
+            });
+        }
     }
 
-    // Finance Head can only approve finance-related requests
-    if (userRole === 'finance_head' && approvalType === 'finance_approval') {
-        return next();
+    if (userRole === 'finance_head') {
+        if (approvalType === 'finance_approval') {
+            return next();
+        } else {
+            return res.status(403).json({
+                success: false,
+                message: 'Finance Head can only approve financial/payment cases.',
+            });
+        }
     }
 
     // If none of the above conditions are met, deny access

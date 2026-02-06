@@ -14,6 +14,11 @@ const schema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  taxType: {
+    type: String,
+    enum: ['VAT', 'Withholding', 'IncomeTax', 'Other'],
+    default: 'VAT',
+  },
   taxValue: {
     type: Number,
     required: true,

@@ -4,6 +4,8 @@ const router = express.Router();
 
 const appControllers = require('@/controllers/appControllers');
 const { routesList } = require('@/models/utils');
+const checkFiscalPeriod = require('@/middlewares/checkFiscalPeriod');
+const checkAbility = require('@/middlewares/checkAbility');
 
 // Add approval routes FIRST
 const approvalController = require('@/controllers/appControllers/approvalController');
@@ -26,22 +28,36 @@ const routerApp = (entity, controller) => {
   // Skip manual routes if already registered
   if (entity === 'approval') return;
 
-  router.route(`/${entity}/create`).post(catchErrors(controller['create']));
-  router.route(`/${entity}/read/:id`).get(catchErrors(controller['read']));
-  router.route(`/${entity}/update/:id`).patch(catchErrors(controller['update']));
-  router.route(`/${entity}/delete/:id`).delete(catchErrors(controller['delete']));
-  router.route(`/${entity}/search`).get(catchErrors(controller['search']));
-  router.route(`/${entity}/list`).get(catchErrors(controller['list']));
-  router.route(`/${entity}/listAll`).get(catchErrors(controller['listAll']));
-  router.route(`/${entity}/filter`).get(catchErrors(controller['filter']));
-  router.route(`/${entity}/summary`).get(catchErrors(controller['summary']));
+  const ability = checkAbility(entity);
+
+  router.route(`/${entity}/create`).post(
+    ['invoice', 'quote', 'payment', 'payroll', 'payslip', 'expense', 'purchaseorder'].includes(entity)
+      ? [ability, checkFiscalPeriod, catchErrors(controller['create'])]
+      : [ability, catchErrors(controller['create'])]
+  );
+  router.route(`/${entity}/read/:id`).get([ability, catchErrors(controller['read'])]);
+  router.route(`/${entity}/update/:id`).patch(
+    ['invoice', 'quote', 'payment', 'payroll', 'payslip', 'expense', 'purchaseorder'].includes(entity)
+      ? [ability, checkFiscalPeriod, catchErrors(controller['update'])]
+      : [ability, catchErrors(controller['update'])]
+  );
+  router.route(`/${entity}/delete/:id`).delete(
+    ['invoice', 'quote', 'payment', 'payroll', 'payslip', 'expense', 'purchaseorder'].includes(entity)
+      ? [ability, checkFiscalPeriod, catchErrors(controller['delete'])]
+      : [ability, catchErrors(controller['delete'])]
+  );
+  router.route(`/${entity}/search`).get([ability, catchErrors(controller['search'])]);
+  router.route(`/${entity}/list`).get([ability, catchErrors(controller['list'])]);
+  router.route(`/${entity}/listAll`).get([ability, catchErrors(controller['listAll'])]);
+  router.route(`/${entity}/filter`).get([ability, catchErrors(controller['filter'])]);
+  router.route(`/${entity}/summary`).get([ability, catchErrors(controller['summary'])]);
 
   if (entity === 'invoice' || entity === 'quote' || entity === 'payment') {
-    router.route(`/${entity}/mail`).post(catchErrors(controller['mail']));
+    router.route(`/${entity}/mail`).post([ability, catchErrors(controller['mail'])]);
   }
 
   if (entity === 'quote') {
-    router.route(`/${entity}/convert/:id`).get(catchErrors(controller['convert']));
+    router.route(`/${entity}/convert/:id`).get([ability, catchErrors(controller['convert'])]);
   }
 };
 

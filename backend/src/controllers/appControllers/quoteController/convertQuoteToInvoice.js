@@ -78,13 +78,46 @@ const convertQuoteToInvoice = async (req, res) => {
       },
     }).save();
 
-    // 6. Update Quote
+    // 6. Update Inventory (Soft-deduction)
+    const StockMovementModel = mongoose.model('StockMovement');
+    const ProductModel = mongoose.model('Product');
+
+    for (const item of quote.items) {
+      if (item.product) {
+        const product = await ProductModel.findById(item.product);
+        if (product) {
+          const previousQuantity = product.quantity;
+          const newQuantity = previousQuantity - item.quantity;
+
+          // Record Stock Movement
+          await new StockMovementModel({
+            product: product._id,
+            warehouse: req.body.warehouse || product.warehouse || null, // Fallback if warehouse not specified
+            type: 'out',
+            quantity: item.quantity,
+            previousQuantity,
+            newQuantity,
+            reference: `INV-${nextInvoiceNumber}`,
+            description: `Stock reserved from Quote conversion (Quote #${quote.number})`,
+            user: req.admin._id,
+          }).save();
+
+          // Update Product Quantity
+          await ProductModel.findByIdAndUpdate(product._id, {
+            quantity: newQuantity,
+            $inc: { reservedQuantity: item.quantity },
+          });
+        }
+      }
+    }
+
+    // 7. Update Quote
     await QuoteModel.findByIdAndUpdate(quote._id, {
       converted: true,
       status: 'accepted',
     });
 
-    // 7. Increment Invoice Number in Settings
+    // 8. Increment Invoice Number in Settings
     await increaseBySettingKey({ settingKey: 'last_invoice_number' });
 
     return res.status(200).json({

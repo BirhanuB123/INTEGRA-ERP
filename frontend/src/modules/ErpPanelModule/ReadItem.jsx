@@ -17,7 +17,7 @@ import { erp } from '@/redux/erp/actions';
 
 import { generate as uniqueId } from 'shortid';
 
-import { selectCurrentItem } from '@/redux/erp/selectors';
+import { selectCurrentItem, selectConvertedItem } from '@/redux/erp/selectors';
 
 import { DOWNLOAD_BASE_URL } from '@/config/serverApiConfig';
 import { useMoney, useDate } from '@/settings';
@@ -40,7 +40,7 @@ const Item = ({ item, currentErp }) => {
             textAlign: 'right',
           }}
         >
-          {moneyFormatter({ amount: item.price, currency_code: currentErp.currency })}
+          {moneyFormatter({ amount: item.price, currency_code: currentErp?.currency })}
         </p>
       </Col>
       <Col className="gutter-row" span={4}>
@@ -59,7 +59,7 @@ const Item = ({ item, currentErp }) => {
             fontWeight: '700',
           }}
         >
-          {moneyFormatter({ amount: item.total, currency_code: currentErp.currency })}
+          {moneyFormatter({ amount: item.total, currency_code: currentErp?.currency })}
         </p>
       </Col>
       <Divider dashed style={{ marginTop: 0, marginBottom: 15 }} />
@@ -69,7 +69,7 @@ const Item = ({ item, currentErp }) => {
 
 export default function ReadItem({ config, selectedItem }) {
   const translate = useLanguage();
-  const { entity, ENTITY_NAME } = config;
+  const { entity, ENTITY_NAME } = config || {};
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -80,10 +80,10 @@ export default function ReadItem({ config, selectedItem }) {
   const { result: currentResult } = useSelector(selectCurrentItem);
 
   useEffect(() => {
-    if (convertSuccess) {
+    if (convertSuccess && currentResult?._id) {
       navigate(`/invoice/read/${currentResult._id}`);
     }
-  }, [convertSuccess]);
+  }, [convertSuccess, currentResult]);
 
   const resetErp = {
     status: '',
@@ -104,43 +104,47 @@ export default function ReadItem({ config, selectedItem }) {
 
   const [itemslist, setItemsList] = useState([]);
   const [currentErp, setCurrentErp] = useState(selectedItem ?? resetErp);
-  const [client, setClient] = useState({});
+  const [client, setClient] = useState(selectedItem?.client ?? resetErp.client);
+
+  useEffect(() => {
+    if (selectedItem) {
+      setCurrentErp(selectedItem);
+      if (selectedItem.client) {
+        setClient(selectedItem.client);
+      }
+      if (Array.isArray(selectedItem.items)) {
+        setItemsList(selectedItem.items);
+      } else if (Array.isArray(selectedItem.invoice?.items)) {
+        setItemsList(selectedItem.invoice.items);
+      }
+    }
+  }, [selectedItem]);
 
   useEffect(() => {
     if (currentResult) {
-      const { items, invoice, ...others } = currentResult;
+      const { items, invoice } = currentResult;
 
-      if (items) {
+      if (Array.isArray(items)) {
         setItemsList(items);
         setCurrentErp(currentResult);
-      } else if (invoice.items) {
+      } else if (Array.isArray(invoice?.items)) {
         setItemsList(invoice.items);
-        setCurrentErp({ ...invoice.items, ...others, ...invoice });
+        setCurrentErp({ ...currentResult, ...invoice });
       }
     }
-    return () => {
-      setItemsList([]);
-      setCurrentErp(resetErp);
-    };
   }, [currentResult]);
-
-  useEffect(() => {
-    if (currentErp?.client) {
-      setClient(currentErp.client);
-    }
-  }, [currentErp]);
 
   return (
     <>
       <PageHeader
         onBack={() => {
-          navigate(`/${entity.toLowerCase()}`);
+          if (entity) navigate(`/${entity.toLowerCase()}`);
         }}
-        title={`${ENTITY_NAME} # ${currentErp.number}/${currentErp.year || ''}`}
+        title={`${ENTITY_NAME || ''} # ${currentErp?.number || ''}/${currentErp?.year || ''}`}
         ghost={false}
         tags={[
-          <span key="status">{currentErp.status && translate(currentErp.status)}</span>,
-          currentErp.paymentStatus && (
+          <span key="status">{currentErp?.status && translate(currentErp.status)}</span>,
+          currentErp?.paymentStatus && (
             <span key="paymentStatus">
               {currentErp.paymentStatus && translate(currentErp.paymentStatus)}
             </span>
@@ -150,7 +154,7 @@ export default function ReadItem({ config, selectedItem }) {
           <Button
             key={`${uniqueId()}`}
             onClick={() => {
-              navigate(`/${entity.toLowerCase()}`);
+              if (entity) navigate(`/${entity.toLowerCase()}`);
             }}
             icon={<CloseCircleOutlined />}
           >
@@ -159,10 +163,9 @@ export default function ReadItem({ config, selectedItem }) {
           <Button
             key={`${uniqueId()}`}
             onClick={() => {
-              window.open(
-                `${DOWNLOAD_BASE_URL}${entity}/${entity}-${currentErp._id}.pdf`,
-                '_blank'
-              );
+              if (entity && currentErp?._id) {
+                window.open(`${DOWNLOAD_BASE_URL}${entity}/${entity}-${currentErp._id}.pdf`, '_blank');
+              }
             }}
             icon={<FilePdfOutlined />}
           >
@@ -172,7 +175,7 @@ export default function ReadItem({ config, selectedItem }) {
             key={`${uniqueId()}`}
             loading={mailInProgress}
             onClick={() => {
-              send(currentErp._id);
+              if (currentErp?._id) send(currentErp._id);
             }}
             icon={<MailOutlined />}
           >
@@ -182,7 +185,9 @@ export default function ReadItem({ config, selectedItem }) {
             key={`${uniqueId()}`}
             loading={convertInProgress}
             onClick={() => {
-              dispatch(erp.convert({ entity, id: currentErp._id }));
+              if (entity && currentErp?._id) {
+                dispatch(erp.convert({ entity, id: currentErp._id }));
+              }
             }}
             icon={<RetweetOutlined />}
             style={{ display: entity === 'quote' ? 'inline-block' : 'none' }}
@@ -193,13 +198,15 @@ export default function ReadItem({ config, selectedItem }) {
           <Button
             key={`${uniqueId()}`}
             onClick={() => {
-              dispatch(
-                erp.currentAction({
-                  actionType: 'update',
-                  data: currentErp,
-                })
-              );
-              navigate(`/${entity.toLowerCase()}/update/${currentErp._id}`);
+              if (entity && currentErp?._id) {
+                dispatch(
+                  erp.currentAction({
+                    actionType: 'update',
+                    data: currentErp,
+                  })
+                );
+                navigate(`/${entity.toLowerCase()}/update/${currentErp._id}`);
+              }
             }}
             type="primary"
             icon={<EditOutlined />}
@@ -212,12 +219,12 @@ export default function ReadItem({ config, selectedItem }) {
         }}
       >
         <Row>
-          <Statistic title="Status" value={currentErp.status} />
+          <Statistic title="Status" value={currentErp?.status || ''} />
           <Statistic
             title={translate('SubTotal')}
             value={moneyFormatter({
-              amount: currentErp.subTotal,
-              currency_code: currentErp.currency,
+              amount: currentErp?.subTotal || 0,
+              currency_code: currentErp?.currency,
             })}
             style={{
               margin: '0 32px',
@@ -225,7 +232,10 @@ export default function ReadItem({ config, selectedItem }) {
           />
           <Statistic
             title={translate('Total')}
-            value={moneyFormatter({ amount: currentErp.total, currency_code: currentErp.currency })}
+            value={moneyFormatter({
+              amount: currentErp?.total || 0,
+              currency_code: currentErp?.currency,
+            })}
             style={{
               margin: '0 32px',
             }}
@@ -233,8 +243,8 @@ export default function ReadItem({ config, selectedItem }) {
           <Statistic
             title={translate('Paid')}
             value={moneyFormatter({
-              amount: currentErp.credit,
-              currency_code: currentErp.currency,
+              amount: currentErp?.credit || 0,
+              currency_code: currentErp?.currency,
             })}
             style={{
               margin: '0 32px',
@@ -243,10 +253,10 @@ export default function ReadItem({ config, selectedItem }) {
         </Row>
       </PageHeader>
       <Divider dashed />
-      <Descriptions title={`Client : ${currentErp.client.name}`}>
-        <Descriptions.Item label={translate('Address')}>{client.address}</Descriptions.Item>
-        <Descriptions.Item label={translate('email')}>{client.email}</Descriptions.Item>
-        <Descriptions.Item label={translate('Phone')}>{client.phone}</Descriptions.Item>
+      <Descriptions title={`Client : ${client?.name || currentErp?.client?.name || ''}`}>
+        <Descriptions.Item label={translate('Address')}>{client?.address || ''}</Descriptions.Item>
+        <Descriptions.Item label={translate('email')}>{client?.email || ''}</Descriptions.Item>
+        <Descriptions.Item label={translate('Phone')}>{client?.phone || ''}</Descriptions.Item>
       </Descriptions>
       <Divider />
       <Row gutter={[12, 0]}>
@@ -277,6 +287,7 @@ export default function ReadItem({ config, selectedItem }) {
           <p
             style={{
               textAlign: 'right',
+              fontWeight: '700',
             }}
           >
             <strong>{translate('Total')}</strong>
@@ -284,9 +295,10 @@ export default function ReadItem({ config, selectedItem }) {
         </Col>
         <Divider />
       </Row>
-      {itemslist.map((item) => (
-        <Item key={item._id} item={item} currentErp={currentErp}></Item>
-      ))}
+      {Array.isArray(itemslist) &&
+        itemslist
+          .filter((item) => item !== null && item !== undefined)
+          .map((item) => <Item key={item._id || uniqueId()} item={item} currentErp={currentErp} />)}
       <div
         style={{
           width: '300px',
@@ -302,17 +314,23 @@ export default function ReadItem({ config, selectedItem }) {
 
           <Col className="gutter-row" span={12}>
             <p>
-              {moneyFormatter({ amount: currentErp.subTotal, currency_code: currentErp.currency })}
+              {moneyFormatter({
+                amount: currentErp?.subTotal || 0,
+                currency_code: currentErp?.currency,
+              })}
             </p>
           </Col>
           <Col className="gutter-row" span={12}>
             <p>
-              {translate('Tax Total')} ({currentErp.taxRate} %) :
+              {translate('Tax Total')} ({currentErp?.taxRate || 0} %) :
             </p>
           </Col>
           <Col className="gutter-row" span={12}>
             <p>
-              {moneyFormatter({ amount: currentErp.taxTotal, currency_code: currentErp.currency })}
+              {moneyFormatter({
+                amount: currentErp?.taxTotal || 0,
+                currency_code: currentErp?.currency,
+              })}
             </p>
           </Col>
           <Col className="gutter-row" span={12}>
@@ -320,7 +338,10 @@ export default function ReadItem({ config, selectedItem }) {
           </Col>
           <Col className="gutter-row" span={12}>
             <p>
-              {moneyFormatter({ amount: currentErp.total, currency_code: currentErp.currency })}
+              {moneyFormatter({
+                amount: currentErp?.total || 0,
+                currency_code: currentErp?.currency,
+              })}
             </p>
           </Col>
         </Row>

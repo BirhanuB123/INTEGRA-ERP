@@ -115,7 +115,7 @@ function FixHeaderPanel({ config }) {
   );
 }
 
-function CrudModule({ config, createForm, updateForm, withUpload = false }) {
+function CrudModule({ config, createForm, updateForm, extra = [], withUpload = false }) {
   const dispatch = useDispatch();
 
   useLayoutEffect(() => {
@@ -133,7 +133,7 @@ function CrudModule({ config, createForm, updateForm, withUpload = false }) {
         <SidePanelTopContent config={config} formElements={updateForm} withUpload={withUpload} />
       }
     >
-      <DataTable config={config} />
+      <DataTable config={config} extra={extra} />
       <DeleteModal config={config} />
     </CrudLayout>
   );

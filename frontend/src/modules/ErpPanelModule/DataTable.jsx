@@ -39,7 +39,7 @@ function AddNewItem({ config }) {
   );
 }
 
-export default function DataTable({ config, extra = [] }) {
+export default function DataTable({ config, extra = [], initialOptions = { page: 1, items: 10 } }) {
   const translate = useLanguage();
   let { entity, dataTableColumns, disableAdd = false, searchConfig } = config;
 
@@ -157,7 +157,7 @@ export default function DataTable({ config, extra = [] }) {
   };
 
   const dispatcher = () => {
-    dispatch(erp.list({ entity }));
+    dispatch(erp.list({ entity, options: initialOptions }));
   };
 
   useEffect(() => {
@@ -187,9 +187,9 @@ export default function DataTable({ config, extra = [] }) {
             displayLabels={['name']}
             searchFields={'name'}
             onChange={filterTable}
-            // redirectLabel={'Add New Client'}
-            // withRedirect
-            // urlToRedirect={'/customer'}
+          // redirectLabel={'Add New Client'}
+          // withRedirect
+          // urlToRedirect={'/customer'}
           />,
           <Button onClick={handelDataTableLoad} key={`${uniqueId()}`} icon={<RedoOutlined />}>
             {translate('Refresh')}

@@ -10,6 +10,7 @@ import {
   ArrowLeftOutlined,
 } from '@ant-design/icons';
 import { Dropdown, Table, Button, Input } from 'antd';
+import { useNavigate } from 'react-router-dom';
 import { PageHeader } from '@ant-design/pro-layout';
 
 import { useSelector, useDispatch } from 'react-redux';
@@ -70,11 +71,16 @@ export default function DataTable({ config, extra = [] }) {
     },
   ];
 
+  const navigate = useNavigate();
   const handleRead = (record) => {
     dispatch(crud.currentItem({ data: record }));
-    panel.open();
-    collapsedBox.open();
-    readBox.open();
+    if (config.handleRead) {
+      config.handleRead(record);
+    } else {
+      panel.open();
+      collapsedBox.open();
+      readBox.open();
+    }
   };
   function handleEdit(record) {
     dispatch(crud.currentItem({ data: record }));

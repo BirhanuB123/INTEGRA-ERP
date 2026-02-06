@@ -1,5 +1,7 @@
 import CrudModule from '@/modules/CrudModule/CrudModule';
 import DynamicForm from '@/forms/DynamicForm';
+import { EyeOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 import { fields } from './config';
 
 import useLanguage from '@/locale/useLanguage';
@@ -7,6 +9,7 @@ import useLanguage from '@/locale/useLanguage';
 export default function Customer() {
   const translate = useLanguage();
   const entity = 'client';
+  const navigate = useNavigate();
   const searchConfig = {
     displayLabels: ['name'],
     searchFields: 'name',
@@ -28,12 +31,22 @@ export default function Customer() {
     fields,
     searchConfig,
     deleteModalLabels,
+    handleRead: (record) => {
+      navigate(`/customer/read/${record._id}`);
+    },
   };
   return (
     <CrudModule
       createForm={<DynamicForm fields={fields} />}
       updateForm={<DynamicForm fields={fields} />}
       config={config}
+      extra={[
+        {
+          label: translate('Show'),
+          key: 'read',
+          icon: <EyeOutlined />,
+        },
+      ]}
     />
   );
 }
