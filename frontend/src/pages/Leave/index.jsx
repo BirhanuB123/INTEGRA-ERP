@@ -7,7 +7,10 @@ export const fields = {
         type: 'select',
         entity: 'employee',
         displayLabels: ['name'],
+        searchFields: 'name',
+        dataIndex: ['employee', 'name'],
         required: true,
+        feedback: 'employee',
     },
     type: {
         type: 'select',
@@ -35,6 +38,8 @@ export const fields = {
             { value: 'approved', label: 'Approved' },
             { value: 'rejected', label: 'Rejected' },
         ],
+        default: 'pending',
+        disableForForm: true, // Status should be managed by system/approval, not user creation
     },
     daysCount: {
         type: 'number',

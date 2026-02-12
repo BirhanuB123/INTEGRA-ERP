@@ -14,20 +14,8 @@ const AuthModule = ({ authContent, AUTH_TITLE, isForRegistre = false }) => {
   const translate = useLanguage();
   return (
     <AuthLayout sideContent={<SideContent />}>
-      <Content
-        className="auth-container"
-        style={{
-          padding: isForRegistre ? '40px 30px' : '60px 30px',
-        }}
-      >
-        <div
-          className="glass-morphism"
-          style={{
-            maxWidth: '440px',
-            width: '100%',
-            margin: '0 auto',
-          }}
-        >
+      <div className="auth-container">
+        <div className="auth-form-card animate-entrance">
           <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 0 }} span={0}>
             <img
               src={logo}
@@ -35,19 +23,21 @@ const AuthModule = ({ authContent, AUTH_TITLE, isForRegistre = false }) => {
               style={{
                 margin: '0px auto 20px',
                 display: 'block',
-                maxWidth: '220px'
+                maxWidth: '180px'
               }}
-              height={63}
+              height={50}
               width={'auto'}
             />
             <div className="space10" />
           </Col>
-          <Title level={1} className="auth-header-title">{translate(AUTH_TITLE)}</Title>
 
-          <Divider style={{ margin: '12px 0 24px' }} />
+          <Title level={1} className="auth-header-title">{translate(AUTH_TITLE)}</Title>
+          <span className="auth-header-subtitle">Welcome back! Please enter your details.</span>
+
+          <Divider style={{ margin: '12px 0 30px' }} />
           <div className="site-layout-content">{authContent}</div>
         </div>
-      </Content>
+      </div>
     </AuthLayout>
   );
 };

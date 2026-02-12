@@ -9,6 +9,15 @@ function customController() {
     methods.create = async (req, res) => {
         try {
             const Model = mongoose.model('Leave');
+            const { startDate, endDate } = req.body;
+
+            // Validation
+            if (new Date(startDate) > new Date(endDate)) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Start date cannot be after end date.',
+                });
+            }
 
             // 1. Create the Leave request
             // Force status to pending for new requests

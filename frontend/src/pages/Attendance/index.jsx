@@ -7,7 +7,10 @@ export const fields = {
         type: 'select',
         entity: 'employee',
         displayLabels: ['name'],
+        searchFields: 'name',
+        dataIndex: ['employee', 'name'],
         required: true,
+        feedback: 'employee',
     },
     date: {
         type: 'date',
@@ -28,6 +31,7 @@ export const fields = {
             { value: 'on_leave', label: 'On Leave' },
         ],
         required: true,
+        default: 'present',
     },
     overtimeHours: {
         type: 'number',

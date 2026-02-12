@@ -40,6 +40,40 @@ function customController() {
         }
     };
 
+    // Handle manual attendance creation
+    methods.create = async (req, res) => {
+        try {
+            const Model = mongoose.model('Attendance');
+
+            // Standard creation
+            const result = await new Model(req.body).save();
+
+            // If status is 'late' or 'absent' or has overtime, log it for HR (optional, but consistent with update)
+            if (req.body.overtimeHours > 0 || req.body.status === 'absent') {
+                await new Approval({
+                    entityType: 'Attendance',
+                    entityId: result._id,
+                    requestedBy: req.admin._id,
+                    approvalType: 'hr_approval',
+                    status: 'pending',
+                    priority: 'low',
+                    comments: `New Attendance record: ${result.date.toDateString()}. Status: ${result.status}, Overtime: ${result.overtimeHours}h.`,
+                }).save();
+            }
+
+            return res.status(200).json({
+                success: true,
+                result,
+                message: 'Attendance created successfully.',
+            });
+        } catch (err) {
+            return res.status(500).json({
+                success: false,
+                message: err.message,
+            });
+        }
+    };
+
     return methods;
 }
 
