@@ -7,6 +7,8 @@ import { generate as uniqueId } from 'shortid';
 import color from '@/utils/color';
 import useLanguage from '@/locale/useLanguage';
 
+const EMPTY_OPTION_VALUE = '';
+
 const SelectAsync = ({
   entity,
   displayLabels = ['name'],
@@ -17,6 +19,8 @@ const SelectAsync = ({
   placeholder = 'select',
   value,
   onChange,
+  allowEmptyOption = false,
+  emptyOptionLabel = 'No parent (top-level)',
 }) => {
   const translate = useLanguage();
   const [selectOptions, setOptions] = useState([]);
@@ -25,12 +29,12 @@ const SelectAsync = ({
   const navigate = useNavigate();
 
   const asyncList = () => {
-    return request.list({ entity });
+    return request.list({ entity, options: { items: 500 } });
   };
   const { result, isLoading: fetchIsLoading, isSuccess } = useFetch(asyncList);
   useEffect(() => {
-    isSuccess && setOptions(result);
-  }, [isSuccess]);
+    isSuccess && setOptions(Array.isArray(result) ? result : []);
+  }, [isSuccess, result]);
 
   const labels = (optionField) => {
     return displayLabels.map((x) => optionField[x]).join(' ');
@@ -47,21 +51,18 @@ const SelectAsync = ({
     if (newValue === 'redirectURL') {
       navigate(urlToRedirect);
     } else {
-      const val = newValue?.[outputValue] ?? newValue;
-      setCurrentValue(newValue);
+      const val = newValue === EMPTY_OPTION_VALUE ? undefined : (newValue?.[outputValue] ?? newValue);
+      setCurrentValue(newValue === EMPTY_OPTION_VALUE ? undefined : newValue);
       onChange(val);
     }
   };
 
   const optionsList = () => {
     const list = [];
-
-    // if (selectOptions.length === 0 && withRedirect) {
-    //   const value = 'redirectURL';
-    //   const label = `+ ${translate(redirectLabel)}`;
-    //   list.push({ value, label });
-    // }
-    selectOptions.map((optionField) => {
+    if (allowEmptyOption) {
+      list.push({ value: EMPTY_OPTION_VALUE, label: translate(emptyOptionLabel), color: undefined });
+    }
+    (selectOptions || []).map((optionField) => {
       const value = optionField[outputValue] ?? optionField;
       const label = labels(optionField);
       const currentColor = optionField[outputValue]?.color ?? optionField?.color;
@@ -76,9 +77,10 @@ const SelectAsync = ({
     <Select
       loading={fetchIsLoading}
       disabled={fetchIsLoading}
-      value={currentValue}
+      value={currentValue === null || currentValue === EMPTY_OPTION_VALUE ? undefined : currentValue}
       onChange={handleSelectChange}
-      placeholder={placeholder}
+      placeholder={translate(placeholder)}
+      allowClear
     >
       {optionsList()?.map((option) => {
         return (

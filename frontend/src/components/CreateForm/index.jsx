@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import dayjs from 'dayjs';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { crud } from '@/redux/crud/actions';
@@ -10,6 +11,17 @@ import useLanguage from '@/locale/useLanguage';
 import { Button, Form } from 'antd';
 import Loading from '@/components/Loading';
 
+function normalizeDatesForSubmit(values) {
+  const out = { ...values };
+  for (const key of Object.keys(out)) {
+    const v = out[key];
+    if (v != null && typeof v === 'object' && (dayjs.isDayjs(v) || v instanceof Date)) {
+      out[key] = dayjs(v).toISOString?.() || dayjs(v).format('YYYY-MM-DDTHH:mm:ss.SSSZ');
+    }
+  }
+  return out;
+}
+
 export default function CreateForm({ config, formElements, withUpload = false }) {
   let { entity } = config;
   const dispatch = useDispatch();
@@ -19,18 +31,11 @@ export default function CreateForm({ config, formElements, withUpload = false })
   const [form] = Form.useForm();
   const translate = useLanguage();
   const onSubmit = (fieldsValue) => {
-    // Manually trim values before submission
-
     if (fieldsValue.file && withUpload) {
       fieldsValue.file = fieldsValue.file[0].originFileObj;
     }
-
-    // const trimmedValues = Object.keys(fieldsValue).reduce((acc, key) => {
-    //   acc[key] = typeof fieldsValue[key] === 'string' ? fieldsValue[key].trim() : fieldsValue[key];
-    //   return acc;
-    // }, {});
-
-    dispatch(crud.create({ entity, jsonData: fieldsValue, withUpload }));
+    const jsonData = normalizeDatesForSubmit(fieldsValue);
+    dispatch(crud.create({ entity, jsonData, withUpload }));
   };
 
   useEffect(() => {

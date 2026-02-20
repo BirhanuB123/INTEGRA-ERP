@@ -1,13 +1,40 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Tag, Space, Modal, Input, message, Tabs, Badge, Card, Row, Col, Statistic } from 'antd';
-import { CheckOutlined, CloseOutlined, EyeOutlined, ClockCircleOutlined } from '@ant-design/icons';
+import {
+    Table,
+    Button,
+    Tag,
+    Space,
+    Modal,
+    Input,
+    message,
+    Tabs,
+    Badge,
+    Card,
+    Row,
+    Col,
+    Statistic,
+    Grid,
+} from 'antd';
+import {
+    CheckOutlined,
+    CloseOutlined,
+    EyeOutlined,
+    ClockCircleOutlined,
+    FileDoneOutlined,
+    CheckCircleFilled,
+    CloseCircleFilled,
+    UnorderedListOutlined,
+} from '@ant-design/icons';
 import { request } from '@/request';
 import dayjs from 'dayjs';
 
 const { TextArea } = Input;
 const { TabPane } = Tabs;
+const { useBreakpoint } = Grid;
 
 export default function ApprovalDashboard() {
+    const screens = useBreakpoint();
+    const gutter = screens.lg ? [20, 20] : screens.sm ? [16, 16] : [12, 12];
     const [approvals, setApprovals] = useState([]);
     const [loading, setLoading] = useState(false);
     const [selectedApproval, setSelectedApproval] = useState(null);
@@ -189,53 +216,81 @@ export default function ApprovalDashboard() {
     ];
 
     return (
-        <div style={{ padding: '24px' }}>
-            <h1>Approval Dashboard</h1>
+        <div className="dashboard-container approval-dashboard">
+            <header className="dashboard-page-header">
+                <h1 className="dashboard-title">Approval Dashboard</h1>
+                <p className="dashboard-subtitle">
+                    Review and manage pending approval requests
+                </p>
+            </header>
 
-            <Row gutter={16} style={{ marginBottom: '24px' }}>
-                <Col span={6}>
-                    <Card>
-                        <Statistic
-                            title="Pending Approvals"
-                            value={summary.pending}
-                            prefix={<ClockCircleOutlined />}
-                            valueStyle={{ color: '#faad14' }}
-                        />
+            <Row gutter={gutter} className="approval-stats-row">
+                <Col xs={24} sm={12} md={12} lg={6}>
+                    <Card className="approval-stat-card approval-stat-pending" hoverable>
+                        <div className="approval-stat-content">
+                            <div className="approval-stat-icon-wrap approval-stat-icon-pending">
+                                <ClockCircleOutlined />
+                            </div>
+                            <Statistic
+                                title="Pending Approvals"
+                                value={summary.pending}
+                                valueStyle={{ color: '#d97706', fontWeight: 700 }}
+                            />
+                        </div>
                     </Card>
                 </Col>
-                <Col span={6}>
-                    <Card>
-                        <Statistic
-                            title="Approved"
-                            value={summary.approved}
-                            prefix={<CheckOutlined />}
-                            valueStyle={{ color: '#52c41a' }}
-                        />
+                <Col xs={24} sm={12} md={12} lg={6}>
+                    <Card className="approval-stat-card approval-stat-approved" hoverable>
+                        <div className="approval-stat-content">
+                            <div className="approval-stat-icon-wrap approval-stat-icon-approved">
+                                <CheckCircleFilled />
+                            </div>
+                            <Statistic
+                                title="Approved"
+                                value={summary.approved}
+                                valueStyle={{ color: '#059669', fontWeight: 700 }}
+                            />
+                        </div>
                     </Card>
                 </Col>
-                <Col span={6}>
-                    <Card>
-                        <Statistic
-                            title="Rejected"
-                            value={summary.rejected}
-                            prefix={<CloseOutlined />}
-                            valueStyle={{ color: '#ff4d4f' }}
-                        />
+                <Col xs={24} sm={12} md={12} lg={6}>
+                    <Card className="approval-stat-card approval-stat-rejected" hoverable>
+                        <div className="approval-stat-content">
+                            <div className="approval-stat-icon-wrap approval-stat-icon-rejected">
+                                <CloseCircleFilled />
+                            </div>
+                            <Statistic
+                                title="Rejected"
+                                value={summary.rejected}
+                                valueStyle={{ color: '#dc2626', fontWeight: 700 }}
+                            />
+                        </div>
                     </Card>
                 </Col>
-                <Col span={6}>
-                    <Card>
-                        <Statistic title="Total" value={summary.total} />
+                <Col xs={24} sm={12} md={12} lg={6}>
+                    <Card className="approval-stat-card approval-stat-total" hoverable>
+                        <div className="approval-stat-content">
+                            <div className="approval-stat-icon-wrap approval-stat-icon-total">
+                                <UnorderedListOutlined />
+                            </div>
+                            <Statistic title="Total" value={summary.total} valueStyle={{ fontWeight: 700 }} />
+                        </div>
                     </Card>
                 </Col>
             </Row>
 
-            <Card>
-                <Tabs activeKey={activeTab} onChange={setActiveTab}>
+            <Card className="approval-table-card premium-card">
+                <Tabs
+                    activeKey={activeTab}
+                    onChange={setActiveTab}
+                    className="approval-tabs"
+                    size={screens.md ? 'large' : 'middle'}
+                >
                     <TabPane
                         tab={
-                            <span>
-                                <Badge count={summary.pending} offset={[10, 0]}>
+                            <span className="approval-tab-label">
+                                <ClockCircleOutlined style={{ marginRight: 6 }} />
+                                <Badge count={summary.pending} offset={[8, 0]} size="small">
                                     Pending Approvals
                                 </Badge>
                             </span>
@@ -248,15 +303,27 @@ export default function ApprovalDashboard() {
                             loading={loading}
                             rowKey="_id"
                             pagination={{ pageSize: 10 }}
+                            className="approval-table"
+                            scroll={{ x: 'max-content' }}
                         />
                     </TabPane>
-                    <TabPane tab="All Approvals" key="all">
+                    <TabPane
+                        tab={
+                            <span className="approval-tab-label">
+                                <FileDoneOutlined style={{ marginRight: 6 }} />
+                                All Approvals
+                            </span>
+                        }
+                        key="all"
+                    >
                         <Table
                             columns={columns}
                             dataSource={approvals}
                             loading={loading}
                             rowKey="_id"
                             pagination={{ pageSize: 10 }}
+                            className="approval-table"
+                            scroll={{ x: 'max-content' }}
                         />
                     </TabPane>
                 </Tabs>
@@ -264,7 +331,7 @@ export default function ApprovalDashboard() {
 
             <Modal
                 title={`${actionType === 'approve' ? 'Approve' : 'Reject'} Request`}
-                visible={modalVisible}
+                open={modalVisible}
                 onOk={handleSubmitAction}
                 onCancel={() => {
                     setModalVisible(false);
@@ -272,36 +339,38 @@ export default function ApprovalDashboard() {
                 }}
                 okText={actionType === 'approve' ? 'Approve' : 'Reject'}
                 okButtonProps={{ danger: actionType === 'reject' }}
+                className="approval-action-modal"
             >
                 {selectedApproval && (
-                    <div>
-                        <p>
+                    <div className="approval-modal-body">
+                        <div className="approval-modal-field">
                             <strong>Entity Type:</strong> {selectedApproval.entityType}
-                        </p>
-                        <p>
+                        </div>
+                        <div className="approval-modal-field">
                             <strong>Approval Type:</strong> {getApprovalTypeTag(selectedApproval.approvalType)}
-                        </p>
-                        <p>
+                        </div>
+                        <div className="approval-modal-field">
                             <strong>Requested By:</strong> {selectedApproval.requestedBy?.name}
-                        </p>
-                        <p>
+                        </div>
+                        <div className="approval-modal-field">
                             <strong>Priority:</strong> {getPriorityTag(selectedApproval.priority)}
-                        </p>
+                        </div>
                         {selectedApproval.metadata && Object.keys(selectedApproval.metadata).length > 0 && (
-                            <div>
+                            <div className="approval-modal-field">
                                 <strong>Details:</strong>
-                                <pre style={{ background: '#f5f5f5', padding: '8px', borderRadius: '4px' }}>
+                                <pre className="approval-modal-pre">
                                     {JSON.stringify(selectedApproval.metadata, null, 2)}
                                 </pre>
                             </div>
                         )}
-                        <div style={{ marginTop: '16px' }}>
+                        <div className="approval-modal-field" style={{ marginTop: 16 }}>
                             <strong>Comments:</strong>
                             <TextArea
                                 rows={4}
                                 value={comments}
                                 onChange={(e) => setComments(e.target.value)}
                                 placeholder="Add your comments here (optional)"
+                                style={{ marginTop: 8 }}
                             />
                         </div>
                     </div>

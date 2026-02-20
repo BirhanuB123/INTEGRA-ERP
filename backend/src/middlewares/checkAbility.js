@@ -12,9 +12,9 @@ const checkAbility = (entity) => {
             // HR specific
             payroll: ['owner', 'admin', 'hr_head', 'finance_head'],
             payslip: ['owner', 'admin', 'hr_head', 'finance_head'],
-            employee: ['owner', 'admin', 'hr_head'],
-            attendance: ['owner', 'admin', 'hr_head'],
-            leave: ['owner', 'admin', 'hr_head'],
+            employee: ['owner', 'admin', 'hr_head', 'department_manager'],
+            attendance: ['owner', 'admin', 'hr_head', 'department_manager'],
+            leave: ['owner', 'admin', 'hr_head', 'department_manager'],
 
             // General
             invoice: ['owner', 'admin', 'finance_head', 'department_manager', 'employee'], // Employees might see their own or shared
@@ -22,6 +22,10 @@ const checkAbility = (entity) => {
             payment: ['owner', 'admin', 'finance_head'],
             client: ['owner', 'admin', 'hr_head', 'finance_head', 'department_manager', 'employee'],
             product: ['owner', 'admin', 'hr_head', 'finance_head', 'department_manager', 'employee'],
+            productcategory: ['owner', 'admin', 'hr_head', 'finance_head', 'department_manager', 'employee'],
+            warehouse: ['owner', 'admin', 'hr_head', 'finance_head', 'department_manager', 'employee'],
+            stockmovement: ['owner', 'admin', 'hr_head', 'finance_head', 'department_manager', 'employee'],
+            batch: ['owner', 'admin', 'hr_head', 'finance_head', 'department_manager', 'employee'],
         };
 
         const allowedRoles = permissions[entity.toLowerCase()];

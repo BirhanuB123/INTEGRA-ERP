@@ -7,12 +7,19 @@ function customController() {
 
     methods.create = async (req, res) => {
         try {
-            const { product, type, quantity } = req.body;
+            req.body.removed = false;
+            const { product, warehouse, type, quantity } = req.body;
 
-            if (!product || !type || !quantity) {
+            if (!product || !type || quantity == null || quantity === '') {
                 return res.status(400).json({
                     success: false,
                     message: 'Missing required fields: product, type, quantity',
+                });
+            }
+            if (!warehouse) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Warehouse is required',
                 });
             }
 
@@ -25,36 +32,53 @@ function customController() {
                 });
             }
 
+            const qty = Number(quantity);
+            if (isNaN(qty) || qty < 0) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Quantity must be a positive number',
+                });
+            }
             const previousQuantity = currentProduct.quantity || 0;
             let newQuantity = previousQuantity;
 
             if (type === 'in') {
-                newQuantity += quantity;
+                newQuantity += qty;
             } else if (type === 'out') {
-                newQuantity -= quantity;
+                newQuantity -= qty;
+                if (newQuantity < 0) {
+                    return res.status(400).json({
+                        success: false,
+                        message: `Insufficient stock. Available: ${previousQuantity}`,
+                    });
+                }
             } else if (type === 'adjustment') {
-                newQuantity = quantity; // In adjustment, we set the new total
+                newQuantity = qty; // In adjustment, we set the new total
             } else if (type === 'transfer') {
-                // Transfer logic might need source/destination warehouses
-                // For now, simple movement
+                // Transfer: record the movement; full transfer logic (source/dest warehouses) can be added later
+                newQuantity = previousQuantity;
             }
 
             // Add previous and new quantity to the movement record
             req.body.previousQuantity = previousQuantity;
             req.body.newQuantity = newQuantity;
+            req.body.quantity = qty;
             req.body.user = req.admin._id;
 
             // Create the stock movement
             const Model = mongoose.model('StockMovement');
-            const result = await new Model(req.body).save();
+            const movementBody = { ...req.body, removed: false };
+            const result = await new Model(movementBody).save();
 
-            // Update the product quantity
-            await Product.findByIdAndUpdate(product, { quantity: newQuantity });
+            // Update the product quantity (skip for transfer - would need source/dest warehouse logic)
+            if (type !== 'transfer') {
+                await Product.findByIdAndUpdate(product, { quantity: newQuantity });
+            }
 
             // Create General Ledger Entry (Finance Integration)
             const GeneralLedgerModel = mongoose.model('GeneralLedger');
             const productPrice = currentProduct.cost || currentProduct.price || 0;
-            const movementValue = quantity * productPrice;
+            const movementValue = qty * productPrice;
 
             if (type === 'in' || (type === 'adjustment' && newQuantity > previousQuantity)) {
                 // Debit Inventory, Credit Accounts Payable (or Cash)

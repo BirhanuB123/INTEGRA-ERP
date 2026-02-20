@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { Tag, Row, Col } from 'antd';
+import { Tag, Row, Col, Grid } from 'antd';
 import { motion } from 'framer-motion';
 import useLanguage from '@/locale/useLanguage';
 
@@ -19,10 +19,14 @@ import CustomerPreviewCard from './components/CustomerPreviewCard';
 import { selectMoneyFormat } from '@/redux/settings/selectors';
 import { useSelector } from 'react-redux';
 
+const { useBreakpoint } = Grid;
+
 export default function DashboardModule() {
   const translate = useLanguage();
   const { moneyFormatter } = useMoney();
   const money_format_settings = useSelector(selectMoneyFormat);
+  const screens = useBreakpoint();
+  const gutter = screens.lg ? [24, 24] : screens.sm ? [16, 16] : [12, 12];
 
   const getStatsData = async ({ entity, currency }) => {
     return await request.summary({
@@ -144,72 +148,75 @@ export default function DashboardModule() {
 
   if (money_format_settings) {
     return (
-      <motion.div initial="hidden" animate="visible" variants={containerVariants}>
-        <Row gutter={[32, 32]}>
-          <SummaryCard
-            title={translate('Invoices')}
-            prefix={translate('This month')}
-            isLoading={invoiceLoading}
-            data={invoiceResult?.total}
-          />
-          <SummaryCard
-            title={translate('Quote')}
-            prefix={translate('This month')}
-            isLoading={quoteLoading}
-            data={quoteResult?.total}
-          />
-          <SummaryCard
-            title={translate('paid')}
-            prefix={translate('This month')}
-            isLoading={paymentLoading}
-            data={paymentResult?.total}
-          />
-          <SummaryCard
-            title={translate('Unpaid')}
-            prefix={translate('Not Paid')}
-            isLoading={invoiceLoading}
-            data={invoiceResult?.total_undue}
-          />
-        </Row>
-        <div className="space30"></div>
-        <Row gutter={[32, 32]}>
-          <Col className="gutter-row w-full" sm={{ span: 24 }} md={{ span: 24 }} lg={{ span: 18 }}>
-            <div className="whiteBox shadow" style={{ height: 458 }}>
-              <Row className="pad20" gutter={[0, 0]}>
-                {statisticCards}
-              </Row>
-            </div>
-          </Col>
-          <Col className="gutter-row w-full" sm={{ span: 24 }} md={{ span: 24 }} lg={{ span: 6 }}>
-            <CustomerPreviewCard
-              isLoading={clientLoading}
-              activeCustomer={clientResult?.active}
-              newCustomer={clientResult?.new}
+      <div className="dashboard-container">
+        <motion.div initial="hidden" animate="visible" variants={containerVariants}>
+          <header className="dashboard-page-header">
+            <h1 className="dashboard-title">{translate('dashboard')}</h1>
+            <p className="dashboard-subtitle">
+              {translate('dashboard_subtitle')}
+            </p>
+          </header>
+
+          <Row gutter={gutter}>
+            <SummaryCard
+              title={translate('Invoices')}
+              prefix={translate('This month')}
+              isLoading={invoiceLoading}
+              data={invoiceResult?.total}
             />
-          </Col>
-        </Row>
-        <div className="space30"></div>
-        <Row gutter={[32, 32]}>
-          <Col className="gutter-row w-full" sm={{ span: 24 }} lg={{ span: 12 }}>
-            <div className="whiteBox shadow pad20" style={{ height: '100%', minHeight: '400px' }}>
-              <h3 className="gradient-text" style={{ marginBottom: 5, padding: '10px 20px 20px', fontSize: '1.25rem' }}>
-                {translate('Recent Invoices')}
-              </h3>
-
-              <RecentTable entity={'invoice'} dataTableColumns={dataTableColumns} />
-            </div>
-          </Col>
-
-          <Col className="gutter-row w-full" sm={{ span: 24 }} lg={{ span: 12 }}>
-            <div className="whiteBox shadow pad20" style={{ height: '100%', minHeight: '400px' }}>
-              <h3 className="gradient-text" style={{ marginBottom: 5, padding: '10px 20px 20px', fontSize: '1.25rem' }}>
-                {translate('Recent Quotes')}
-              </h3>
-              <RecentTable entity={'quote'} dataTableColumns={dataTableColumns} />
-            </div>
-          </Col>
-        </Row>
-      </motion.div>
+            <SummaryCard
+              title={translate('Quote')}
+              prefix={translate('This month')}
+              isLoading={quoteLoading}
+              data={quoteResult?.total}
+            />
+            <SummaryCard
+              title={translate('paid')}
+              prefix={translate('This month')}
+              isLoading={paymentLoading}
+              data={paymentResult?.total}
+            />
+            <SummaryCard
+              title={translate('Unpaid')}
+              prefix={translate('Not Paid')}
+              isLoading={invoiceLoading}
+              data={invoiceResult?.total_undue}
+            />
+          </Row>
+          <div className="space30" />
+          <Row gutter={gutter}>
+            <Col className="gutter-row w-full" xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 24 }} lg={{ span: 18 }}>
+              <div className="whiteBox shadow premium-card dashboard-stats-box">
+                <Row className="pad20" gutter={[0, 0]}>
+                  {statisticCards}
+                </Row>
+              </div>
+            </Col>
+            <Col className="gutter-row w-full" xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 24 }} lg={{ span: 6 }}>
+              <CustomerPreviewCard
+                isLoading={clientLoading}
+                activeCustomer={clientResult?.active}
+                newCustomer={clientResult?.new}
+              />
+            </Col>
+          </Row>
+          <div className="space30" />
+          <Row gutter={gutter}>
+            <Col className="gutter-row w-full" xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 24 }} lg={{ span: 12 }}>
+              <div className="whiteBox shadow premium-card recent-activity-card pad20 dashboard-recent-card">
+                <h3 className="dashboard-section-title">{translate('Recent Invoices')}</h3>
+                <RecentTable entity={'invoice'} dataTableColumns={dataTableColumns} />
+              </div>
+            </Col>
+            <Col className="gutter-row w-full" xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 24 }} lg={{ span: 12 }}>
+              <div className="whiteBox shadow premium-card recent-activity-card pad20 dashboard-recent-card">
+                <h3 className="dashboard-section-title">{translate('Recent Quotes')}</h3>
+                <RecentTable entity={'quote'} dataTableColumns={dataTableColumns} />
+              </div>
+            </Col>
+          </Row>
+        </motion.div>
+      </div>
     );
   } else {
     return <></>;

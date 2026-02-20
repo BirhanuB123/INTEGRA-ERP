@@ -158,10 +158,13 @@ export default function DataTable({ config, extra = [] }) {
 
   const dispatch = useDispatch();
 
-  const handelDataTableLoad = useCallback((pagination) => {
-    const options = { page: pagination.current || 1, items: pagination.pageSize || 10 };
-    dispatch(crud.list({ entity, options }));
-  }, []);
+  const handelDataTableLoad = useCallback(
+    (pagination) => {
+      const options = { page: pagination.current || 1, items: pagination.pageSize || 10 };
+      dispatch(crud.list({ entity, options }));
+    },
+    [entity, dispatch]
+  );
 
   const filterTable = (e) => {
     const value = e.target.value;

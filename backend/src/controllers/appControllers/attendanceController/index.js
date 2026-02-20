@@ -11,8 +11,18 @@ function customController() {
             const Model = mongoose.model('Attendance');
             const { id } = req.params;
 
-            // Update the record
-            const result = await Model.findByIdAndUpdate(id, req.body, { new: true });
+            req.body.removed = false;
+            const result = await Model.findOneAndUpdate(
+                { _id: id, removed: false },
+                req.body,
+                { new: true, runValidators: true }
+            );
+            if (!result) {
+                return res.status(404).json({
+                    success: false,
+                    message: 'Attendance record not found.',
+                });
+            }
 
             // If status changed to 'late' or 'absent' manually, or overtime adjusted, notify HR
             if (req.body.overtimeHours > 0 || req.body.status === 'absent') {
@@ -45,7 +55,7 @@ function customController() {
         try {
             const Model = mongoose.model('Attendance');
 
-            // Standard creation
+            req.body.removed = false;
             const result = await new Model(req.body).save();
 
             // If status is 'late' or 'absent' or has overtime, log it for HR (optional, but consistent with update)

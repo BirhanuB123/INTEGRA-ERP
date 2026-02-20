@@ -30,50 +30,46 @@ export default function UpdateForm({ config, formElements, withUpload = false })
   /////
   const [form] = Form.useForm();
 
+  const normalizeDatesForSubmit = (values) => {
+    const out = { ...values };
+    for (const key of Object.keys(out)) {
+      const v = out[key];
+      if (v != null && typeof v === 'object' && (dayjs.isDayjs(v) || v instanceof Date)) {
+        out[key] = dayjs(v).toISOString?.() || dayjs(v).format('YYYY-MM-DDTHH:mm:ss.SSSZ');
+      }
+    }
+    return out;
+  };
+
   const onSubmit = (fieldsValue) => {
     const id = current._id;
 
     if (fieldsValue.file && withUpload) {
       fieldsValue.file = fieldsValue.file[0].originFileObj;
     }
-    // const trimmedValues = Object.keys(fieldsValue).reduce((acc, key) => {
-    //   acc[key] = typeof fieldsValue[key] === 'string' ? fieldsValue[key].trim() : fieldsValue[key];
-    //   return acc;
-    // }, {});
-    dispatch(crud.update({ entity, id, jsonData: fieldsValue, withUpload }));
+    const jsonData = normalizeDatesForSubmit(fieldsValue);
+    dispatch(crud.update({ entity, id, jsonData, withUpload }));
   };
   useEffect(() => {
     if (current) {
       let newValues = { ...current };
-      if (newValues.birthday) {
-        newValues = {
-          ...newValues,
-          birthday: dayjs(newValues['birthday']).format('YYYY-MM-DDTHH:mm:ss.SSSZ'),
-        };
-      }
-      if (newValues.date) {
-        newValues = {
-          ...newValues,
-          date: dayjs(newValues['date']).format('YYYY-MM-DDTHH:mm:ss.SSSZ'),
-        };
-      }
-      if (newValues.expiredDate) {
-        newValues = {
-          ...newValues,
-          expiredDate: dayjs(newValues['expiredDate']).format('YYYY-MM-DDTHH:mm:ss.SSSZ'),
-        };
-      }
-      if (newValues.created) {
-        newValues = {
-          ...newValues,
-          created: dayjs(newValues['created']).format('YYYY-MM-DDTHH:mm:ss.SSSZ'),
-        };
-      }
-      if (newValues.updated) {
-        newValues = {
-          ...newValues,
-          updated: dayjs(newValues['updated']).format('YYYY-MM-DDTHH:mm:ss.SSSZ'),
-        };
+      const dateFields = [
+        'birthday',
+        'date',
+        'expiredDate',
+        'created',
+        'updated',
+        'checkIn',
+        'checkOut',
+        'startDate',
+        'endDate',
+      ];
+      for (const key of dateFields) {
+        if (newValues[key]) {
+          newValues[key] = dayjs(newValues[key]).isValid()
+            ? dayjs(newValues[key])
+            : newValues[key];
+        }
       }
       form.resetFields();
       form.setFieldsValue(newValues);

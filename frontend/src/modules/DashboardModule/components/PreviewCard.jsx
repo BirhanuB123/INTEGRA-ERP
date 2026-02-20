@@ -71,19 +71,22 @@ const defaultInvoiceStatistics = [
   },
 ];
 
-const PreviewState = ({ tag, value }) => {
+const PreviewState = ({ tag, value, color }) => {
   const translate = useLanguage();
+  const strokeColor = color || colours[tag] || '#6366f1';
   return (
-    <div style={{ color: '#595959', marginBottom: 5 }}>
-      <div className="left alignLeft capitalize">{translate(tag)}</div>
-      <div className="right alignRight">{value} %</div>
+    <div className="preview-stat-item">
+      <div className="preview-stat-header">
+        <span className="capitalize">{translate(tag)}</span>
+        <span>{value}%</span>
+      </div>
       <Progress
         percent={value}
         showInfo={false}
-        strokeColor={{
-          '0%': '#333',
-          '100%': '#333',
-        }}
+        strokeColor={strokeColor}
+        trailColor="rgba(226, 232, 240, 0.8)"
+        strokeWidth={10}
+        style={{ marginBottom: 0 }}
       />
     </div>
   );
@@ -127,26 +130,21 @@ export default function PreviewCard({
       md={{ span: 12 }}
       lg={{ span: 12 }}
     >
-      <div className="pad20">
-        <h3
-          style={{
-            color: '#22075e',
-            fontSize: 'large',
-            marginBottom: 40,
-            marginTop: 0,
-          }}
-        >
-          {title}
-        </h3>
+      <div className="pad20 preview-card-inner">
+        <h3 className="preview-card-title">{title}</h3>
         {isLoading ? (
-          <div style={{ textAlign: 'center' }}>
+          <div style={{ textAlign: 'center', padding: '2rem 0' }}>
             <Spin />
           </div>
         ) : (
           statisticsMap
             ?.map((status, index) => (
-              <PreviewState key={index} tag={status.tag} value={status?.value} />
-              // sort by colours
+              <PreviewState
+                key={index}
+                tag={status.tag}
+                value={status?.value ?? 0}
+                color={colours[status.tag]}
+              />
             ))
             .sort(customSort)
         )}

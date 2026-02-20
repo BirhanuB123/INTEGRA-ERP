@@ -4,11 +4,12 @@ import useLanguage from '@/locale/useLanguage';
 
 export const fields = {
     employee: {
-        type: 'select',
+        type: 'async',
         entity: 'employee',
         displayLabels: ['name'],
         searchFields: 'name',
         dataIndex: ['employee', 'name'],
+        outputValue: '_id',
         required: true,
         feedback: 'employee',
     },

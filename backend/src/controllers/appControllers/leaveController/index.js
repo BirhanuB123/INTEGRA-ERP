@@ -9,19 +9,29 @@ function customController() {
     methods.create = async (req, res) => {
         try {
             const Model = mongoose.model('Leave');
-            const { startDate, endDate } = req.body;
+            const { startDate, endDate, daysCount } = req.body;
 
             // Validation
-            if (new Date(startDate) > new Date(endDate)) {
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            if (start > end) {
                 return res.status(400).json({
                     success: false,
                     message: 'Start date cannot be after end date.',
                 });
             }
 
+            // Auto-calculate daysCount from start/end if not provided or invalid
+            let days = daysCount;
+            if (days == null || isNaN(Number(days)) || Number(days) < 1) {
+                const diffTime = Math.abs(end - start);
+                days = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+            }
+            req.body.daysCount = Number(days);
+
             // 1. Create the Leave request
-            // Force status to pending for new requests
             req.body.status = 'pending';
+            req.body.removed = false;
             const result = await new Model(req.body).save();
 
             // 2. Trigger an automated HR Approval request

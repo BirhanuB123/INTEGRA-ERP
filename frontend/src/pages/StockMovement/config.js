@@ -1,18 +1,20 @@
 export const fields = {
     product: {
-        type: 'selectAsync',
+        type: 'async',
         label: 'Product',
         entity: 'product',
         displayLabels: ['name'],
         outputValue: '_id',
+        dataIndex: ['product', 'name'],
         required: true,
     },
     warehouse: {
-        type: 'selectAsync',
+        type: 'async',
         label: 'Warehouse',
         entity: 'warehouse',
         displayLabels: ['name'],
         outputValue: '_id',
+        dataIndex: ['warehouse', 'name'],
         required: true,
     },
     type: {

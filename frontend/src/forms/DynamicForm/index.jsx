@@ -317,6 +317,14 @@ function FormElement({ field, feedback, setFeedback }) {
         format={dateFormat}
       />
     ),
+    datetime: (
+      <DatePicker
+        showTime
+        placeholder={translate('select_date')}
+        style={{ width: '100%' }}
+        format={dateFormat ? `${dateFormat} HH:mm` : 'YYYY-MM-DD HH:mm'}
+      />
+    ),
     async: (
       <SelectAsync
         entity={field.entity}
@@ -326,6 +334,9 @@ function FormElement({ field, feedback, setFeedback }) {
         withRedirect={field.withRedirect}
         urlToRedirect={field.urlToRedirect}
         redirectLabel={field.redirectLabel}
+        allowEmptyOption={field.allowEmptyOption}
+        emptyOptionLabel={field.emptyOptionLabel}
+        placeholder={field.placeholder}
       ></SelectAsync>
     ),
 
