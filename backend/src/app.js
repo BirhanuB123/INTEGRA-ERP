@@ -34,6 +34,18 @@ app.use(compression());
 // // default options
 // app.use(fileUpload());
 
+// Health check (for Render and monitoring) – no 502 when instance is up
+app.get('/health', (req, res) => {
+  res.status(200).json({ ok: true, message: 'INTEGRA ERP API is running' });
+});
+app.get('/', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'INTEGRA ERP API',
+    docs: 'Use /api/ for authentication and data (e.g. POST /api/login)',
+  });
+});
+
 // Here our API Routes
 
 app.use('/api', coreAuthRouter);

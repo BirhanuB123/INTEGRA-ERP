@@ -98,3 +98,9 @@ Use [MongoDB Atlas](https://www.mongodb.com/atlas):
 - **Blank page or 404 on refresh:** `frontend/vercel.json` rewrites should send all routes to `index.html`. Ensure Root Directory is `frontend` so Vercel uses that file.
 - **API calls fail / CORS:** In the backend, allow your Vercel origin (e.g. `https://your-app.vercel.app`) in CORS config.
 - **Wrong API URL:** In Vercel, `VITE_BACKEND_SERVER` must be the full backend base URL with trailing slash (e.g. `https://integra-erp.onrender.com/`). Redeploy after changing env vars.
+
+### Render backend: 502 Bad Gateway
+
+- **Free tier spin-down:** On the free plan, Render **stops your service after ~15 minutes of no traffic**. The first request after that can return **502** while the instance starts (often **50 seconds or more**). **Fix:** Wait about 1 minute and try again, or open `https://integra-erp.onrender.com/health` and refresh until you see `{"ok":true,...}`. After that the main URL and login will work until the next spin-down.
+- **Missing env vars:** In Render → your service → **Environment**, ensure **`DATABASE`** is set to your MongoDB connection string (e.g. from MongoDB Atlas). Without it the app can crash on startup and Render will show 502.
+- **Build/start:** Build command `npm install`, Start command `npm start`. Root Directory `backend` if the repo contains both frontend and backend.
