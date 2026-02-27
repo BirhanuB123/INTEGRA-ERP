@@ -1,20 +1,23 @@
-import * as antd from '@/utils/antdGlobal';
+import { notification } from 'antd';
 import codeMessage from './codeMessage';
 
 const errorHandler = (error) => {
-  const notification = antd.notification || import('antd').then(m => m.notification); // Fallback
+  const showNotification = (msg, desc, duration = 15, maxCount = 1) => {
+    try {
+      if (typeof notification?.config === 'function') {
+        notification.config({ duration, maxCount });
+      }
+      if (typeof notification?.error === 'function') {
+        notification.error({ message: msg, description: desc });
+      }
+    } catch (_) {
+      // fallback if notification not ready
+      console.error(msg, desc);
+    }
+  };
 
   if (!navigator.onLine) {
-    if (notification.error) {
-      notification.config({
-        duration: 15,
-        maxCount: 1,
-      });
-      notification.error({
-        message: 'No internet connection',
-        description: 'Cannot connect to the Internet, Check your internet network',
-      });
-    }
+    showNotification('No internet connection', 'Cannot connect to the Internet, Check your internet network');
     return {
       success: false,
       result: null,
@@ -25,12 +28,7 @@ const errorHandler = (error) => {
   const { response } = error;
 
   if (!response) {
-    if (notification.config) {
-      notification.config({
-        duration: 20,
-        maxCount: 1,
-      });
-    }
+    showNotification('Cannot connect to the server', 'Contact your Account administrator', 20, 1);
     return {
       success: false,
       result: null,
@@ -51,60 +49,24 @@ const errorHandler = (error) => {
 
   if (response && response.status) {
     const message = response.data && response.data.message;
-
     const errorText = message || codeMessage[response.status];
-    const { status, error } = response;
+    const { status } = response;
 
-    if (notification.error) {
-      notification.config({
-        duration: 20,
-        maxCount: 2,
-      });
-      notification.error({
-        message: `Request error ${status}`,
-        description: errorText,
-      });
-    }
+    showNotification(`Request error ${status}`, errorText, 20, 2);
 
     if (response?.data?.error?.name === 'JsonWebTokenError') {
       window.localStorage.removeItem('auth');
       window.localStorage.removeItem('isLogout');
       window.location.href = '/logout';
     } else return response.data;
-  } else {
-    if (notification.error) {
-      notification.config({
-        duration: 15,
-        maxCount: 1,
-      });
-    }
-
-    if (navigator.onLine) {
-      if (notification.error) {
-        notification.error({
-          message: 'Problem connecting to server',
-          description: 'Cannot connect to the server, Try again later',
-        });
-      }
-      return {
-        success: false,
-        result: null,
-        message: 'Cannot connect to the server, Contact your Account administrator',
-      };
-    } else {
-      if (notification.error) {
-        notification.error({
-          message: 'No internet connection',
-          description: 'Cannot connect to the Internet, Check your internet network',
-        });
-      }
-      return {
-        success: false,
-        result: null,
-        message: 'Cannot connect to the server, Check your internet network',
-      };
-    }
   }
+
+  showNotification('Problem connecting to server', 'Cannot connect to the server, Try again later', 15, 1);
+  return {
+    success: false,
+    result: null,
+    message: 'Cannot connect to the server, Contact your Account administrator',
+  };
 };
 
 export default errorHandler;

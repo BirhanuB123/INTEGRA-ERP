@@ -18,10 +18,24 @@ const fileUpload = require('express-fileupload');
 // create our Express app
 const app = express();
 
+// CORS: allow Vercel frontend and local dev; optional ALLOWED_ORIGINS (comma-separated) in env
+const allowedOrigins = [
+  'https://integra-erp.vercel.app',
+  'http://localhost:3000',
+  'http://localhost:5173',
+  'http://127.0.0.1:3000',
+  'http://127.0.0.1:5173',
+  ...(process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',').map((o) => o.trim()) : []),
+];
 app.use(
   cors({
-    origin: true,
+    origin: (origin, cb) => {
+      if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
+      return cb(null, false);
+    },
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-auth-token'],
   })
 );
 

@@ -11,12 +11,21 @@ const authUser = async (req, res, { user, databasePassword, password, UserPasswo
       message: 'Invalid credentials.',
     });
 
+  const jwtSecret = process.env.JWT_SECRET ? process.env.JWT_SECRET.trim() : null;
+  if (!jwtSecret) {
+    return res.status(500).json({
+      success: false,
+      result: null,
+      message: 'Server misconfiguration: JWT_SECRET is not set. Add JWT_SECRET in Render Environment Variables.',
+    });
+  }
+
   if (isMatch === true) {
     const token = jwt.sign(
       {
         id: user._id,
       },
-      process.env.JWT_SECRET,
+      jwtSecret,
       { expiresIn: req.body.remember ? 365 * 24 + 'h' : '24h' }
     );
 

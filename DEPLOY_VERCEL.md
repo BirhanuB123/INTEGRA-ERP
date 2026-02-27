@@ -96,11 +96,13 @@ Use [MongoDB Atlas](https://www.mongodb.com/atlas):
 
 - **Login button does nothing or "Cannot connect to the server":** You must set `VITE_BACKEND_SERVER` in Vercel. In the Vercel dashboard: your project → **Settings** → **Environment Variables** → add `VITE_BACKEND_SERVER` = `https://integra-erp.onrender.com/` (your Render URL with trailing slash). Then **redeploy** (Deployments → ⋯ → Redeploy). Without this, the app calls the wrong URL and login fails.
 - **Blank page or 404 on refresh:** `frontend/vercel.json` rewrites should send all routes to `index.html`. Ensure Root Directory is `frontend` so Vercel uses that file.
-- **API calls fail / CORS:** In the backend, allow your Vercel origin (e.g. `https://your-app.vercel.app`) in CORS config.
+- **API calls fail / CORS:** The backend allows `https://integra-erp.vercel.app` by default. If you use a custom Vercel domain or another frontend URL, add it in Render → Environment as **`ALLOWED_ORIGINS`** = `https://your-custom-domain.vercel.app` (comma-separated for multiple). Then redeploy the backend.
 - **Wrong API URL:** In Vercel, `VITE_BACKEND_SERVER` must be the full backend base URL with trailing slash (e.g. `https://integra-erp.onrender.com/`). Redeploy after changing env vars.
 
 ### Render backend: 502 Bad Gateway
 
 - **Free tier spin-down:** On the free plan, Render **stops your service after ~15 minutes of no traffic**. The first request after that can return **502** while the instance starts (often **50 seconds or more**). **Fix:** Wait about 1 minute and try again, or open `https://integra-erp.onrender.com/health` and refresh until you see `{"ok":true,...}`. After that the main URL and login will work until the next spin-down.
-- **Missing env vars:** In Render → your service → **Environment**, ensure **`DATABASE`** is set to your MongoDB connection string (e.g. from MongoDB Atlas). Without it the app can crash on startup and Render will show 502.
+- **Missing env vars:** In Render → your service → **Environment**, ensure:
+  - **`DATABASE`** = your MongoDB connection string (e.g. from MongoDB Atlas). Without it the app can crash on startup.
+  - **`JWT_SECRET`** = a long random string (e.g. `your-secret-key-at-least-32-chars`). Without it **login returns 500** and the frontend may show a console error.
 - **Build/start:** Build command `npm install`, Start command `npm start`. Root Directory `backend` if the repo contains both frontend and backend.
