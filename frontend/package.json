@@ -2,8 +2,8 @@
   "name": "integra-erp",
   "version": "4.1.0",
   "engines": {
-    "node": "20.9.0",
-    "npm": "10.2.4"
+    "node": ">=20",
+    "npm": ">=10"
   },
   "type": "module",
   "dependencies": {
