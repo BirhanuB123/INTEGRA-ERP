@@ -185,8 +185,9 @@ export default function DataTable({ config, extra = [] }) {
   }, []);
 
   return (
-    <>
+    <div className="data-table-responsive">
       <PageHeader
+        className="data-table-header"
         onBack={() => window.history.back()}
         backIcon={<ArrowLeftOutlined />}
         title={DATATABLE_TITLE}
@@ -197,27 +198,28 @@ export default function DataTable({ config, extra = [] }) {
             onChange={filterTable}
             placeholder={translate('search')}
             allowClear
+            className="data-table-search"
           />,
           <Button onClick={handelDataTableLoad} key={`${uniqueId()}`} icon={<RedoOutlined />}>
             {translate('Refresh')}
           </Button>,
-
           <AddNewItem key={`${uniqueId()}`} config={config} />,
         ]}
         style={{
           padding: '20px 0px',
         }}
-      ></PageHeader>
-
-      <Table
-        columns={dataTableColumns}
-        rowKey={(item) => item._id}
-        dataSource={dataSource}
-        pagination={pagination}
-        loading={listIsLoading}
-        onChange={handelDataTableLoad}
-        scroll={{ x: true }}
       />
-    </>
+      <div className="responsive-table-wrapper">
+        <Table
+          columns={dataTableColumns}
+          rowKey={(item) => item._id}
+          dataSource={dataSource}
+          pagination={pagination}
+          loading={listIsLoading}
+          onChange={handelDataTableLoad}
+          scroll={{ x: 'max-content' }}
+        />
+      </div>
+    </div>
   );
 }

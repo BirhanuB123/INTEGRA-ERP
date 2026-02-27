@@ -15,9 +15,9 @@ const About = () => {
             Website : <a href="https://www.gebetatech.com">www.gebetatech.com</a>{' '}
           </p>
           <p>
-            GitHub :{' '}
-            <a href="https://github.com/BirhanuB123/integra-erp">
-              https://github.com/BirhanuB123/integra-erp
+            Email :{' '}
+            <a href="info@gebetatech.com">
+              info@gebetatech.com
             </a>
           </p>
           <Button

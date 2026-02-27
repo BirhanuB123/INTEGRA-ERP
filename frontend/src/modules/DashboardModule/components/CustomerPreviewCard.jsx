@@ -33,7 +33,7 @@ export default function CustomerPreviewCard({
                   type="dashboard"
                   percent={Math.min(newCustomer, 100)}
                   size={progressSize}
-                  strokeColor={{ '0%': '#6366f1', '100%': '#a855f7' }}
+                  strokeColor={{ '0%': 'var(--primary-color)', '100%': 'var(--primary-color-light)' }}
                   trailColor="rgba(226, 232, 240, 0.8)"
                 />
                 <p className="customer-stat-label" style={{ marginTop: 12, marginBottom: 0 }}>

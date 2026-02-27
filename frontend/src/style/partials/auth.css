@@ -106,6 +106,25 @@
   }
 }
 
+@media (max-width: 575px) {
+  .auth-content {
+    padding: 16px 12px;
+  }
+  .auth-form-card {
+    padding: 24px 20px;
+  }
+  .auth-header-title {
+    font-size: 26px !important;
+  }
+  .auth-header-subtitle {
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+  .auth-container {
+    padding: 0 8px;
+  }
+}
+
 /* Typography & Elements */
 .auth-header-title {
   font-weight: 800 !important;

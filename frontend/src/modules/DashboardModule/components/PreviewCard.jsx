@@ -3,18 +3,18 @@ import { Col, Progress, Spin } from 'antd';
 import useLanguage from '@/locale/useLanguage';
 
 const colours = {
-  draft: '#595959',
-  sent: '#1890ff',
-  pending: '#1890ff',
-  unpaid: '#ffa940',
-  overdue: '#ff4d4f',
-  partially: '#13c2c2',
-  paid: '#95de64',
-  declined: '#ff4d4f',
-  accepted: '#95de64',
-  cyan: '#13c2c2',
+  draft: '#64748b',
+  sent: '#0077b6',
+  pending: '#ffc107',
+  unpaid: '#fd7e14',
+  overdue: '#dc2626',
+  partially: '#00b4d8',
+  paid: '#28a745',
+  declined: '#dc2626',
+  accepted: '#28a745',
+  cyan: '#00b4d8',
   purple: '#722ed1',
-  expired: '#614700',
+  expired: '#64748b',
 };
 
 const defaultStatistics = [
@@ -73,7 +73,7 @@ const defaultInvoiceStatistics = [
 
 const PreviewState = ({ tag, value, color }) => {
   const translate = useLanguage();
-  const strokeColor = color || colours[tag] || '#6366f1';
+  const strokeColor = color || colours[tag] || 'var(--primary-color)';
   return (
     <div className="preview-stat-item">
       <div className="preview-stat-header">

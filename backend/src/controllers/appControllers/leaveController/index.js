@@ -1,9 +1,30 @@
 const mongoose = require('mongoose');
 const createCRUDController = require('@/controllers/middlewaresControllers/createCRUDController');
+const paginatedList = require('@/controllers/middlewaresControllers/createCRUDController/paginatedList');
 
 function customController() {
+    const Model = mongoose.model('Leave');
     const methods = createCRUDController('Leave');
     const Approval = mongoose.model('Approval');
+    const Employee = mongoose.model('Employee');
+
+    // For employee role: list only leave records for the current user's employee profile (matched by email)
+    methods.list = async (req, res) => {
+        if (req.admin && req.admin.role === 'employee' && req.admin.email) {
+            const employee = await Employee.findOne({ email: req.admin.email, removed: false }).select('_id');
+            if (!employee) {
+                return res.status(200).json({
+                    success: true,
+                    result: [],
+                    pagination: { page: 1, pages: 0, count: 0 },
+                    message: 'No employee record linked to your account.',
+                });
+            }
+            req.query.filter = 'employee';
+            req.query.equal = employee._id.toString();
+        }
+        return paginatedList(Model, req, res);
+    };
 
     // Override create to handle automated HR approval
     methods.create = async (req, res) => {

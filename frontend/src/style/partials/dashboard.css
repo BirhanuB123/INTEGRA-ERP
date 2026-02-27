@@ -15,7 +15,7 @@
     font-size: 2rem;
     font-weight: 800;
     margin-bottom: 0.35rem;
-    background: var(--primary-gradient, linear-gradient(135deg, #667eea 0%, #764ba2 100%));
+    background: var(--primary-gradient);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -29,12 +29,127 @@
     font-weight: 500;
 }
 
+/* Greeting header – Hello, Name / Role (image style) */
+.dashboard-greeting {
+    margin-bottom: 1.5rem;
+}
+.dashboard-greeting-title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--text-main);
+    margin: 0 0 0.25rem 0;
+    letter-spacing: -0.025em;
+}
+.dashboard-greeting-role {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+/* Works Overview / section block (image style) */
+.dashboard-overview-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin: 0 0 1.25rem 0;
+    padding: 0;
+}
+
+/* Stat card icon variants – blue, yellow, green (image palette) */
+.summary-icon-container.erp-icon-blue {
+    background: var(--erp-blue-bg) !important;
+    color: var(--erp-blue) !important;
+}
+.premium-card:hover .summary-icon-container.erp-icon-blue {
+    background: var(--erp-blue) !important;
+    color: #fff !important;
+}
+.summary-icon-container.erp-icon-yellow {
+    background: var(--erp-yellow-bg) !important;
+    color: var(--erp-yellow) !important;
+}
+.premium-card:hover .summary-icon-container.erp-icon-yellow {
+    background: var(--erp-yellow) !important;
+    color: #fff !important;
+}
+.summary-icon-container.erp-icon-green {
+    background: var(--erp-green-bg) !important;
+    color: var(--erp-green) !important;
+}
+.premium-card:hover .summary-icon-container.erp-icon-green {
+    background: var(--erp-green) !important;
+    color: #fff !important;
+}
+.summary-icon-container.erp-icon-orange {
+    background: var(--erp-orange-bg) !important;
+    color: var(--erp-orange) !important;
+}
+.premium-card:hover .summary-icon-container.erp-icon-orange {
+    background: var(--erp-orange) !important;
+    color: #fff !important;
+}
+
+/* Trend badge (e.g. "2.7% higher" / "27% completed") */
+.summary-card-trend {
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-top: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+.summary-card-trend.up {
+    color: var(--erp-green);
+}
+.summary-card-trend.down {
+    color: var(--erp-danger);
+}
+
+/* Status pills – New (light blue), Estimated (soft orange) */
+.erp-status-pill {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+.erp-status-pill.new {
+    background: var(--erp-status-new-bg);
+    color: var(--erp-status-new);
+}
+.erp-status-pill.estimated {
+    background: var(--erp-status-estimated-bg);
+    color: var(--erp-status-estimated);
+}
+.erp-status-pill.approved {
+    background: var(--erp-green-bg);
+    color: var(--erp-green);
+}
+.erp-status-pill.pending {
+    background: var(--erp-yellow-bg);
+    color: #b38600;
+}
+
+/* Secondary button – orange (Modify Estimate style) */
+.ant-btn-erp-secondary {
+    background: var(--erp-orange) !important;
+    border-color: var(--erp-orange) !important;
+    color: #fff !important;
+}
+.ant-btn-erp-secondary:hover {
+    background: #e96b00 !important;
+    border-color: #e96b00 !important;
+    color: #fff !important;
+    opacity: 0.95;
+}
+
 .dashboard-section-title {
     margin: 0 0 1rem 0;
     padding: 0 0 0.75rem 0;
     font-size: 1.15rem;
     font-weight: 700;
-    color: #1e293b;
+    color: var(--text-main);
     border-bottom: 2px solid #f1f5f9;
     background: var(--primary-gradient);
     -webkit-background-clip: text;
@@ -65,7 +180,7 @@
 .premium-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-    border-color: rgba(99, 102, 241, 0.2);
+    border-color: rgba(0, 119, 182, 0.25);
 }
 
 .premium-card::before {
@@ -75,7 +190,7 @@
     left: 0;
     right: 0;
     height: 4px;
-    background: var(--primary-gradient, linear-gradient(to right, #6366f1, #a855f7));
+    background: var(--primary-gradient);
     opacity: 0;
     transition: opacity 0.3s ease;
 }
@@ -100,13 +215,13 @@
     align-items: center;
     justify-content: center;
     font-size: 24px;
-    background: rgba(99, 102, 241, 0.1);
-    color: var(--primary-color, #6366f1);
+    background: var(--erp-blue-bg);
+    color: var(--primary-color);
     transition: all 0.3s ease;
 }
 
 .premium-card:hover .summary-icon-container {
-    background: var(--primary-color, #6366f1);
+    background: var(--primary-color) !important;
     color: #fff;
     transform: rotate(10deg) scale(1.1);
 }
@@ -265,7 +380,7 @@
 .customer-stat-value {
     font-size: 2rem;
     font-weight: 800;
-    color: var(--primary-color, #6366f1);
+    color: var(--primary-color);
     margin-bottom: 4px;
 }
 
@@ -277,7 +392,7 @@
 
 /* Gradient Text Helper */
 .text-gradient {
-    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    background: var(--primary-gradient);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -346,8 +461,8 @@
 }
 
 .approval-stat-icon-total {
-    background: rgba(99, 102, 241, 0.12);
-    color: var(--primary-color, #6366f1);
+    background: var(--erp-blue-bg);
+    color: var(--primary-color);
 }
 
 .approval-stat-content .ant-statistic-title {
@@ -394,7 +509,7 @@
 }
 
 .approval-tabs .ant-tabs-tab-active .approval-tab-label {
-    color: var(--primary-color);
+    color: var(--primary-color) !important;
 }
 
 .approval-table {

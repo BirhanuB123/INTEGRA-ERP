@@ -54,7 +54,7 @@
 }
 
 .ant-table-tbody>tr:hover>td {
-  background: rgba(99, 102, 241, 0.05) !important;
+  background: var(--erp-blue-bg) !important;
 }
 
 .ant-input,
@@ -70,7 +70,7 @@
 .ant-input-focused,
 .ant-select-focused .ant-select-selector {
   border-color: var(--primary-color) !important;
-  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2) !important;
+  box-shadow: 0 0 0 2px rgba(0, 119, 182, 0.2) !important;
 }
 
 .headerIcon .ant-dropdown-menu {
@@ -89,7 +89,7 @@
 }
 
 .ant-dropdown-menu-item:hover {
-  background: rgba(99, 102, 241, 0.1) !important;
+  background: var(--erp-blue-bg) !important;
   color: var(--primary-color) !important;
 }
 
@@ -139,7 +139,7 @@ h6 {
 }
 
 .ant-menu-item:hover:not(.ant-menu-item-selected) {
-  background: rgba(99, 102, 241, 0.1) !important;
+  background: var(--erp-blue-bg) !important;
   color: var(--primary-color) !important;
 }
 
@@ -149,4 +149,31 @@ h6 {
 
 .ant-menu-item-selected .anticon {
   color: white !important;
+}
+
+/* Status tags – ERP palette (New=light blue, Estimated=orange, Approved=green, Pending=yellow) */
+.ant-tag {
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+.ant-tag-blue {
+  background: var(--erp-status-new-bg) !important;
+  border-color: transparent !important;
+  color: var(--erp-status-new) !important;
+}
+.ant-tag-orange {
+  background: var(--erp-status-estimated-bg) !important;
+  border-color: transparent !important;
+  color: var(--erp-status-estimated) !important;
+}
+.ant-tag-green {
+  background: var(--erp-green-bg) !important;
+  border-color: transparent !important;
+  color: var(--erp-green) !important;
+}
+.ant-tag-gold {
+  background: var(--erp-yellow-bg) !important;
+  border-color: transparent !important;
+  color: #b38600 !important;
 }

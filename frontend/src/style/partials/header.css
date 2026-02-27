@@ -20,11 +20,26 @@
   z-index: 100;
 }
 
+/* Space header buttons from browser chrome (tabs/bookmarks) and right edge */
+.app-header.ant-layout-header {
+  padding-top: 20px !important;
+  padding-bottom: 20px !important;
+  padding-right: 28px !important;
+  min-height: 80px;
+  align-items: center;
+}
+
 @media only screen and (max-width: 768px) {
   .ant-layout-header {
     height: 64px;
     line-height: 64px;
     padding: 0 15px !important;
+  }
+  .app-header.ant-layout-header {
+    padding-top: 14px !important;
+    padding-bottom: 14px !important;
+    padding-right: 20px !important;
+    min-height: 64px;
   }
 }
 
@@ -84,4 +99,36 @@
 .profileDropdownInfo span {
   font-size: 12px;
   color: var(--text-muted);
+}
+
+/* Responsive: smaller header and profile on mobile */
+@media only screen and (max-width: 575px) {
+  .app-header.ant-layout-header {
+    padding-left: 10px !important;
+    padding-right: 16px !important;
+  }
+  .headerContent {
+    padding: 0 10px;
+  }
+  .headerIcon .last {
+    margin-right: 12px;
+  }
+  .profileDropdown {
+    min-width: 180px;
+  }
+  .profileDropdownInfo p,
+  .profileDropdownInfo span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 160px;
+  }
+  /* Compact upgrade button on very small screens */
+  .app-header .ant-btn:not(.ant-dropdown-trigger) {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  .app-header .ant-btn .anticon + span {
+    margin-left: 4px;
+  }
 }

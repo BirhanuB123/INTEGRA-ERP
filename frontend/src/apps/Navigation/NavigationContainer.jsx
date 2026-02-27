@@ -266,25 +266,11 @@ function Sidebar({ collapsible, isMobile = false }) {
       }}
       theme={'light'}
     >
-      <div
-        className="logo"
-        onClick={() => navigate('/')}
-        style={{
-          cursor: 'pointer',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          padding: '10px'
-        }}
-      >
+      <div className="logo" onClick={() => navigate('/')} role="button" aria-label="Home">
         <img
           src={logo}
-          alt="Logo"
-          style={{
-            height: '40px',
-            width: 'auto',
-            maxWidth: '100%'
-          }}
+          alt="INTEGRA ERP"
+          className="logo-img"
         />
       </div>
       <Menu

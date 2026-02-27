@@ -2,12 +2,36 @@
   max-width: 1150px;
   width: 100%;
   margin: 0 auto;
+  min-width: 0;
+  padding-left: 16px;
+  padding-right: 16px;
+  box-sizing: border-box;
 }
 
 .appContainer {
   max-width: 1050px;
   width: 100%;
   margin: 0 auto;
+  min-width: 0;
+  padding-left: 16px;
+  padding-right: 16px;
+  box-sizing: border-box;
+}
+
+@media (min-width: 576px) {
+  .wideAppContainer,
+  .appContainer {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+@media (min-width: 768px) {
+  .wideAppContainer,
+  .appContainer {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
 }
 
 .smallNavigation {
@@ -19,9 +43,71 @@
 }
 
 @media only screen and (max-width: 768px) {
+  .wideAppContainer,
+  .appContainer {
+    max-width: 100%;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
 
   .smallNavigation,
   .wideNavigation {
     margin-left: 0 !important;
+  }
+}
+
+@media only screen and (max-width: 575px) {
+  .wideAppContainer,
+  .appContainer {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
+/* Main app content area – responsive padding and width */
+.app-main-layout {
+  min-width: 0;
+  flex: 1;
+}
+
+.app-content {
+  margin: 20px auto;
+  overflow-x: hidden;
+  overflow-y: initial;
+  width: 100%;
+  min-width: 0;
+  max-width: 1400px;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+.app-content-mobile {
+  margin: 16px auto;
+  padding: 0 12px;
+  max-width: none;
+}
+
+@media (min-width: 576px) {
+  .app-content {
+    padding: 0 20px;
+    margin: 24px auto;
+  }
+  .app-content-mobile {
+    padding: 0 16px;
+    margin: 20px auto;
+  }
+}
+
+@media (min-width: 768px) {
+  .app-content {
+    padding: 0 24px;
+    margin: 28px auto;
+  }
+}
+
+@media (min-width: 992px) {
+  .app-content-desktop {
+    padding: 0 30px;
+    margin: 30px auto;
   }
 }

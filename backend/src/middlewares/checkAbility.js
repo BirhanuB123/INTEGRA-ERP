@@ -17,15 +17,15 @@ const checkAbility = (entity) => {
             leave: ['owner', 'admin', 'hr_head', 'department_manager'],
 
             // General
-            invoice: ['owner', 'admin', 'finance_head', 'department_manager', 'employee'], // Employees might see their own or shared
-            quote: ['owner', 'admin', 'finance_head', 'department_manager', 'employee'],
+            invoice: ['owner', 'admin', 'finance_head', 'department_manager'],
+            quote: ['owner', 'admin', 'finance_head', 'department_manager'],
             payment: ['owner', 'admin', 'finance_head'],
-            client: ['owner', 'admin', 'hr_head', 'finance_head', 'department_manager', 'employee'],
-            product: ['owner', 'admin', 'hr_head', 'finance_head', 'department_manager', 'employee'],
-            productcategory: ['owner', 'admin', 'hr_head', 'finance_head', 'department_manager', 'employee'],
-            warehouse: ['owner', 'admin', 'hr_head', 'finance_head', 'department_manager', 'employee'],
-            stockmovement: ['owner', 'admin', 'hr_head', 'finance_head', 'department_manager', 'employee'],
-            batch: ['owner', 'admin', 'hr_head', 'finance_head', 'department_manager', 'employee'],
+            client: ['owner', 'admin', 'hr_head', 'finance_head', 'department_manager'],
+            product: ['owner', 'admin', 'hr_head', 'finance_head', 'department_manager'],
+            productcategory: ['owner', 'admin', 'hr_head', 'finance_head', 'department_manager'],
+            warehouse: ['owner', 'admin', 'hr_head', 'finance_head', 'department_manager'],
+            stockmovement: ['owner', 'admin', 'hr_head', 'finance_head', 'department_manager'],
+            batch: ['owner', 'admin', 'hr_head', 'finance_head', 'department_manager'],
         };
 
         const allowedRoles = permissions[entity.toLowerCase()];

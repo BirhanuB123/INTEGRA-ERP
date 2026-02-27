@@ -54,32 +54,16 @@ export default function ErpCrmApp() {
         <Navigation />
 
         {isMobile ? (
-          <Layout style={{ marginLeft: 0 }}>
+          <Layout style={{ marginLeft: 0 }} className="app-main-layout">
             <HeaderContent />
-            <Content
-              style={{
-                margin: '20px auto',
-                overflow: 'initial',
-                width: '100%',
-                padding: '0 15px',
-                maxWidth: 'none',
-              }}
-            >
+            <Content className="app-content app-content-mobile">
               <AppRouter />
             </Content>
           </Layout>
         ) : (
-          <Layout>
+          <Layout className="app-main-layout">
             <HeaderContent />
-            <Content
-              style={{
-                margin: '30px auto',
-                overflow: 'initial',
-                width: '100%',
-                padding: '0 30px',
-                maxWidth: 1400,
-              }}
-            >
+            <Content className="app-content app-content-desktop">
               <AppRouter />
             </Content>
           </Layout>

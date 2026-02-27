@@ -10,10 +10,10 @@ import { selectMoneyFormat } from '@/redux/settings/selectors';
 import { useSelector } from 'react-redux';
 
 const CARD_ICONS = {
-  invoice: { Icon: FileTextOutlined, color: '#6366f1', bg: 'rgba(99, 102, 241, 0.12)' },
-  quote: { Icon: FormOutlined, color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.12)' },
-  paid: { Icon: CheckCircleOutlined, color: '#10b981', bg: 'rgba(16, 185, 129, 0.12)' },
-  unpaid: { Icon: ExclamationCircleOutlined, color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.12)' },
+  invoice: { Icon: FileTextOutlined, color: 'var(--erp-blue)', bg: 'var(--erp-blue-bg)' },
+  quote: { Icon: FormOutlined, color: 'var(--erp-yellow)', bg: 'var(--erp-yellow-bg)' },
+  paid: { Icon: CheckCircleOutlined, color: 'var(--erp-green)', bg: 'var(--erp-green-bg)' },
+  unpaid: { Icon: ExclamationCircleOutlined, color: 'var(--erp-orange)', bg: 'var(--erp-orange-bg)' },
 };
 
 function getIconKey(title) {

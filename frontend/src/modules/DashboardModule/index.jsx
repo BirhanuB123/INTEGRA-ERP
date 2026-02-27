@@ -2,31 +2,30 @@ import { useEffect, useState } from 'react';
 
 import { Tag, Row, Col, Grid } from 'antd';
 import { motion } from 'framer-motion';
+import { useSelector } from 'react-redux';
 import useLanguage from '@/locale/useLanguage';
-
 import { useMoney } from '@/settings';
-
 import { request } from '@/request';
 import useFetch from '@/hooks/useFetch';
 import useOnFetch from '@/hooks/useOnFetch';
-
 import RecentTable from './components/RecentTable';
-
 import SummaryCard from './components/SummaryCard';
 import PreviewCard from './components/PreviewCard';
 import CustomerPreviewCard from './components/CustomerPreviewCard';
-
 import { selectMoneyFormat } from '@/redux/settings/selectors';
-import { useSelector } from 'react-redux';
+import { selectCurrentAdmin } from '@/redux/auth/selectors';
 
 const { useBreakpoint } = Grid;
 
 export default function DashboardModule() {
   const translate = useLanguage();
+  const currentAdmin = useSelector(selectCurrentAdmin);
   const { moneyFormatter } = useMoney();
   const money_format_settings = useSelector(selectMoneyFormat);
   const screens = useBreakpoint();
   const gutter = screens.lg ? [24, 24] : screens.sm ? [16, 16] : [12, 12];
+  const displayName = currentAdmin?.name || currentAdmin?.email || translate('User');
+  const displayRole = currentAdmin?.role ? translate(currentAdmin.role) : translate('admin');
 
   const getStatsData = async ({ entity, currency }) => {
     return await request.summary({
@@ -151,12 +150,17 @@ export default function DashboardModule() {
       <div className="dashboard-container">
         <motion.div initial="hidden" animate="visible" variants={containerVariants}>
           <header className="dashboard-page-header">
-            <h1 className="dashboard-title">{translate('dashboard')}</h1>
-            <p className="dashboard-subtitle">
-              {translate('dashboard_subtitle')}
-            </p>
+            <div className="dashboard-greeting">
+              <h1 className="dashboard-greeting-title">
+                {translate('hello')}, {displayName}
+              </h1>
+              <p className="dashboard-greeting-role">{displayRole}</p>
+            </div>
+            <h2 className="dashboard-title">{translate('dashboard')}</h2>
+            <p className="dashboard-subtitle">{translate('dashboard_subtitle')}</p>
           </header>
 
+          <h3 className="dashboard-overview-title">{translate('overview')}</h3>
           <Row gutter={gutter}>
             <SummaryCard
               title={translate('Invoices')}

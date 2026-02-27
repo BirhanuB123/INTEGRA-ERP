@@ -1,18 +1,36 @@
 :root {
-  --primary-color: #6366f1;
-  --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+  /* Primary & gradients – image palette */
+  --primary-color: #0077b6;
+  --primary-color-light: #48cae4;
+  --primary-gradient: linear-gradient(135deg, #0077b6 0%, #00b4d8 100%);
   --secondary-color: #3b82f6;
   --accent-color: #f43f5e;
+  /* Chart & status palette from reference */
+  --erp-blue: #0077b6;
+  --erp-blue-bg: rgba(0, 119, 182, 0.12);
+  --erp-yellow: #ffc107;
+  --erp-yellow-bg: rgba(255, 193, 7, 0.12);
+  --erp-green: #28a745;
+  --erp-green-bg: rgba(40, 167, 69, 0.12);
+  --erp-orange: #fd7e14;
+  --erp-orange-bg: rgba(253, 126, 20, 0.12);
+  --erp-status-new: #5bc0de;
+  --erp-status-new-bg: rgba(91, 192, 222, 0.2);
+  --erp-status-estimated: #fd7e14;
+  --erp-status-estimated-bg: rgba(253, 126, 20, 0.2);
+  --erp-success: #22c55e;
+  --erp-danger: #dc2626;
+  /* UI */
   --bg-color: #f8fafc;
-  --card-bg: rgba(255, 255, 255, 0.8);
-  --glass-bg: rgba(255, 255, 255, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.3);
+  --card-bg: rgba(255, 255, 255, 0.95);
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(226, 232, 240, 0.6);
   --text-main: #1e293b;
   --text-muted: #64748b;
   --border-radius: 12px;
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 12px -2px rgb(0 0 0 / 0.08), 0 2px 6px -2px rgb(0 0 0 / 0.06);
+  --shadow-lg: 0 10px 25px -5px rgb(0 0 0 / 0.08), 0 4px 10px -4px rgb(0 0 0 / 0.06);
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 

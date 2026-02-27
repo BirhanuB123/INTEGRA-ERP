@@ -87,12 +87,14 @@ export default function HeaderContent() {
 
   return (
     <Header
+      className="app-header"
       style={{
-        padding: isMobile ? '0 15px' : '0 20px',
+        paddingLeft: isMobile ? 15 : 20,
         background: '#ffffff',
         display: 'flex',
         flexDirection: 'row-reverse',
         justifyContent: 'flex-start',
+        flexWrap: 'wrap',
         gap: isMobile ? '10px' : '15px',
       }}
     >

@@ -9,12 +9,13 @@ export default function ErpLayout({ children }) {
   return (
     <ErpContextProvider>
       <Content
-        className="whiteBox shadow layoutPadding"
+        className="whiteBox shadow layoutPadding erp-layout-content"
         style={{
           margin: '20px auto',
           width: '100%',
           maxWidth: '1200px',
           minHeight: '600px',
+          minWidth: 0,
         }}
       >
         {children}

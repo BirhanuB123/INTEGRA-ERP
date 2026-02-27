@@ -1,0 +1,207 @@
+/* ========== Global responsive utilities ========== */
+/* Breakpoints: xs <576px | sm 576–767px | md 768–991px | lg 992–1199px | xl ≥1200px */
+
+/* Prevent horizontal overflow on all devices */
+html {
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  overflow-x: hidden;
+  min-width: 0;
+}
+
+/* Responsive container – use on main content wrappers */
+.responsive-container {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 16px;
+  padding-right: 16px;
+  box-sizing: border-box;
+}
+
+@media (min-width: 576px) {
+  .responsive-container {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+@media (min-width: 768px) {
+  .responsive-container {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
+@media (min-width: 992px) {
+  .responsive-container {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .responsive-container {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+}
+
+/* Touch-friendly tap targets and smooth scrolling on mobile */
+@media (max-width: 991px) {
+  .ant-btn,
+  .ant-input,
+  .ant-select-selector,
+  .ant-picker {
+    min-height: 40px;
+  }
+}
+
+/* Safe area for notched devices */
+@supports (padding: env(safe-area-inset-top)) {
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .safe-area-left {
+    padding-left: env(safe-area-inset-left);
+  }
+  .safe-area-right {
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+/* Show / hide by breakpoint (visibility) */
+.visible-xs { display: none !important; }
+.visible-sm { display: none !important; }
+.visible-md { display: none !important; }
+.visible-lg { display: none !important; }
+.visible-xl { display: none !important; }
+
+@media (max-width: 575px) {
+  .visible-xs { display: block !important; }
+  .hidden-xs { display: none !important; }
+}
+@media (min-width: 576px) and (max-width: 767px) {
+  .visible-sm { display: block !important; }
+  .hidden-sm { display: none !important; }
+}
+@media (min-width: 768px) and (max-width: 991px) {
+  .visible-md { display: block !important; }
+  .hidden-md { display: none !important; }
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+  .visible-lg { display: block !important; }
+  .hidden-lg { display: none !important; }
+}
+@media (min-width: 1200px) {
+  .visible-xl { display: block !important; }
+  .hidden-xl { display: none !important; }
+}
+
+/* Flex wrap for toolbar / action rows */
+.responsive-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+/* DataTable: wrap header actions and reduce padding on small screens */
+.data-table-responsive {
+  width: 100%;
+  min-width: 0;
+}
+
+.data-table-header .ant-page-header-heading-extra {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+@media (max-width: 767px) {
+  .data-table-header .ant-page-header-heading {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .data-table-header .ant-page-header-heading-extra {
+    width: 100%;
+    margin-top: 12px;
+  }
+  .data-table-search {
+    min-width: 140px;
+    flex: 1;
+  }
+}
+
+@media (max-width: 575px) {
+  .data-table-header .ant-page-header-heading-title {
+    font-size: 1.1rem;
+  }
+}
+
+/* Table wrapper – horizontal scroll on small screens */
+.responsive-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  min-width: 0;
+}
+
+.responsive-table-wrapper .ant-table {
+  min-width: 600px;
+}
+
+@media (max-width: 575px) {
+  .responsive-table-wrapper .ant-table {
+    min-width: 500px;
+  }
+}
+
+/* Inner layout content – prevent overflow */
+.erp-layout-content,
+.crud-layout-content {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 767px) {
+  .erp-layout-content,
+  .crud-layout-content {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
+/* Modals and drawers: full width on small screens */
+@media (max-width: 575px) {
+  .ant-modal {
+    max-width: calc(100vw - 16px) !important;
+    margin: 8px auto !important;
+    padding-bottom: 0;
+  }
+  .ant-modal-content {
+    border-radius: 12px;
+  }
+  .ant-drawer-body {
+    padding: 16px !important;
+  }
+}
+
+/* Form items: full width on mobile */
+@media (max-width: 767px) {
+  .ant-form-item-control-input-content .ant-input,
+  .ant-form-item-control-input-content .ant-select,
+  .ant-form-item-control-input-content .ant-picker {
+    width: 100% !important;
+  }
+}
