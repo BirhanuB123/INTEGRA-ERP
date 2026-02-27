@@ -24,13 +24,14 @@ git push -u origin main
 3. Import your GitHub repository (INTEGRA-ERP).
 4. **Important:** set **Root Directory** to `frontend`:
    - Click **Edit** next to “Root Directory”, choose `frontend`, then **Continue**.
-5. **Environment variables** (required for production API):
+5. **Environment variables** (required — without this, login will not work):
    - Add:
      - **Name:** `VITE_BACKEND_SERVER`  
-     - **Value:** your backend URL **with trailing slash**, e.g. `https://your-backend.onrender.com/`
+     - **Value:** your backend URL **with trailing slash**, e.g. `https://integra-erp.onrender.com/`
    - If you use a separate file URL base:
      - **Name:** `VITE_FILE_BASE_URL`  
      - **Value:** (optional) e.g. `https://your-backend.onrender.com/`
+   - After adding or changing env vars, **redeploy** (Deployments → ⋯ → Redeploy).
 6. Click **Deploy**.
 
 Vercel will run `npm run build` in the `frontend` folder and serve the `dist` output. The `vercel.json` in `frontend` handles SPA routing (all routes → `index.html`).
@@ -93,6 +94,7 @@ Use [MongoDB Atlas](https://www.mongodb.com/atlas):
 
 ## Troubleshooting
 
+- **Login button does nothing or "Cannot connect to the server":** You must set `VITE_BACKEND_SERVER` in Vercel. In the Vercel dashboard: your project → **Settings** → **Environment Variables** → add `VITE_BACKEND_SERVER` = `https://integra-erp.onrender.com/` (your Render URL with trailing slash). Then **redeploy** (Deployments → ⋯ → Redeploy). Without this, the app calls the wrong URL and login fails.
 - **Blank page or 404 on refresh:** `frontend/vercel.json` rewrites should send all routes to `index.html`. Ensure Root Directory is `frontend` so Vercel uses that file.
 - **API calls fail / CORS:** In the backend, allow your Vercel origin (e.g. `https://your-app.vercel.app`) in CORS config.
-- **Wrong API URL:** In Vercel, `VITE_BACKEND_SERVER` must be the full backend base URL with trailing slash (e.g. `https://api.onrender.com/`). Rebuild after changing env vars.
+- **Wrong API URL:** In Vercel, `VITE_BACKEND_SERVER` must be the full backend base URL with trailing slash (e.g. `https://integra-erp.onrender.com/`). Redeploy after changing env vars.
