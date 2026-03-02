@@ -12,6 +12,7 @@ import RecentTable from './components/RecentTable';
 import SummaryCard from './components/SummaryCard';
 import PreviewCard from './components/PreviewCard';
 import CustomerPreviewCard from './components/CustomerPreviewCard';
+import DonutChart from './components/DonutChart';
 import { selectMoneyFormat } from '@/redux/settings/selectors';
 import { selectCurrentAdmin } from '@/redux/auth/selectors';
 
@@ -160,7 +161,7 @@ export default function DashboardModule() {
             <p className="dashboard-subtitle">{translate('dashboard_subtitle')}</p>
           </header>
 
-          <h3 className="dashboard-overview-title">{translate('overview')}</h3>
+          <h3 className="dashboard-overview-title">{translate('works_overview')}</h3>
           <Row gutter={gutter}>
             <SummaryCard
               title={translate('Invoices')}
@@ -186,6 +187,33 @@ export default function DashboardModule() {
               isLoading={invoiceLoading}
               data={invoiceResult?.total_undue}
             />
+          </Row>
+          <div className="space30" />
+          <Row gutter={gutter}>
+            <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 12 }}>
+              <DonutChart
+                title={translate('invoice_status')}
+                loading={invoiceLoading}
+                data={
+                  invoiceResult?.performance?.map((item) => ({
+                    name: item?.status,
+                    value: item?.percentage,
+                  })) || []
+                }
+              />
+            </Col>
+            <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 12 }}>
+              <DonutChart
+                title={translate('quote_status')}
+                loading={quoteLoading}
+                data={
+                  quoteResult?.performance?.map((item) => ({
+                    name: item?.status,
+                    value: item?.percentage,
+                  })) || []
+                }
+              />
+            </Col>
           </Row>
           <div className="space30" />
           <Row gutter={gutter}>

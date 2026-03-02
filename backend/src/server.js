@@ -14,7 +14,15 @@ if (major < 20) {
 require('dotenv').config({ path: '.env' });
 require('dotenv').config({ path: '.env.local' });
 
-mongoose.connect(process.env.DATABASE);
+const databaseUrl = process.env.DATABASE ? process.env.DATABASE.trim() : '';
+const mongooseOptions = {
+  serverSelectionTimeoutMS: 10000,
+  ...(databaseUrl.startsWith('mongodb+srv://') && {
+    tls: true,
+    tlsAllowInvalidCertificates: false,
+  }),
+};
+mongoose.connect(databaseUrl, mongooseOptions);
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 

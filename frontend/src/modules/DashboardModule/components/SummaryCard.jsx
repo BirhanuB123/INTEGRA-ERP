@@ -25,7 +25,7 @@ function getIconKey(title) {
   return 'invoice';
 }
 
-export default function AnalyticSummaryCard({ title, tagColor, data, prefix, isLoading = false }) {
+export default function AnalyticSummaryCard({ title, tagColor, data, prefix, isLoading = false, trend, trendUp }) {
   const { moneyFormatter } = useMoney();
   const money_format_settings = useSelector(selectMoneyFormat);
   const key = getIconKey(title);
@@ -57,11 +57,16 @@ export default function AnalyticSummaryCard({ title, tagColor, data, prefix, isL
             {isLoading ? (
               <Spin size="small" />
             ) : (
-              <Tooltip title={formattedValue}>
-                <div className="summary-value summary-card-value" style={{ direction: 'ltr' }}>
-                  {formattedValue}
-                </div>
-              </Tooltip>
+              <>
+                <Tooltip title={formattedValue}>
+                  <div className="summary-value summary-card-value" style={{ direction: 'ltr' }}>
+                    {formattedValue}
+                  </div>
+                </Tooltip>
+                {trend != null && trend !== '' && (
+                  <div className={`summary-card-trend ${trendUp ? 'up' : 'down'}`}>{trend}</div>
+                )}
+              </>
             )}
           </div>
           <div

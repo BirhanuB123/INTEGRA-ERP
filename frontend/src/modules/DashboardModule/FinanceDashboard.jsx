@@ -11,6 +11,7 @@ import { selectCurrentAdmin } from '@/redux/auth/selectors';
 import SummaryCard from './components/SummaryCard';
 import PreviewCard from './components/PreviewCard';
 import RecentTable from './components/RecentTable';
+import DonutChart from './components/DonutChart';
 
 const { useBreakpoint } = Grid;
 
@@ -94,7 +95,7 @@ export default function FinanceDashboard() {
           <p className="dashboard-subtitle">{translate('dashboard_subtitle_finance')}</p>
         </header>
 
-        <h3 className="dashboard-overview-title">{translate('overview')}</h3>
+        <h3 className="dashboard-overview-title">{translate('works_overview')}</h3>
         <Row gutter={gutter}>
           <SummaryCard
             title={translate('Invoices')}
@@ -120,6 +121,33 @@ export default function FinanceDashboard() {
             isLoading={invoiceLoading}
             data={invoiceResult?.total_undue}
           />
+        </Row>
+        <div className="space30" />
+        <Row gutter={gutter}>
+          <Col xs={{ span: 24 }} md={{ span: 12 }}>
+            <DonutChart
+              title={translate('invoice_status')}
+              loading={invoiceLoading}
+              data={
+                invoiceResult?.performance?.map((item) => ({
+                  name: item?.status,
+                  value: item?.percentage,
+                })) || []
+              }
+            />
+          </Col>
+          <Col xs={{ span: 24 }} md={{ span: 12 }}>
+            <DonutChart
+              title={translate('quote_status')}
+              loading={quoteLoading}
+              data={
+                quoteResult?.performance?.map((item) => ({
+                  name: item?.status,
+                  value: item?.percentage,
+                })) || []
+              }
+            />
+          </Col>
         </Row>
         <div className="space30" />
         <Row className="pad20" gutter={[0, 0]}>

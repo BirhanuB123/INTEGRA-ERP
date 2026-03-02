@@ -131,11 +131,12 @@ function Sidebar({ collapsible, isMobile = false }) {
       key: 'staff',
       label: translate('staff_hr'),
       icon: <UserOutlined />,
-      role: ['owner', 'admin', 'hr_head'],
+      role: ['owner', 'admin', 'hr_head', 'employee'],
       children: [
         {
           key: 'employee',
           label: <Link to={'/employee'}>{translate('employees')}</Link>,
+          role: ['owner', 'admin', 'hr_head', 'department_manager'],
         },
         {
           key: 'admin',

@@ -56,6 +56,24 @@
     padding: 0;
 }
 
+/* Donut chart cards (graphical representation) */
+.dashboard-donut-card {
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+}
+.dashboard-donut-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin: 0 0 1rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #f1f5f9;
+}
+.dashboard-donut-card .recharts-legend-item-text {
+    color: var(--text-main);
+}
+
 /* Stat card icon variants – blue, yellow, green (image palette) */
 .summary-icon-container.erp-icon-blue {
     background: var(--erp-blue-bg) !important;

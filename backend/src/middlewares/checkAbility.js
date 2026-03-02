@@ -13,8 +13,8 @@ const checkAbility = (entity) => {
             payroll: ['owner', 'admin', 'hr_head', 'finance_head'],
             payslip: ['owner', 'admin', 'hr_head', 'finance_head'],
             employee: ['owner', 'admin', 'hr_head', 'department_manager'],
-            attendance: ['owner', 'admin', 'hr_head', 'department_manager'],
-            leave: ['owner', 'admin', 'hr_head', 'department_manager'],
+            attendance: ['owner', 'admin', 'hr_head', 'department_manager', 'employee'],
+            leave: ['owner', 'admin', 'hr_head', 'department_manager', 'employee'],
 
             // General
             invoice: ['owner', 'admin', 'finance_head', 'department_manager'],

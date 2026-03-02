@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux';
 import useLanguage from '@/locale/useLanguage';
 import { request } from '@/request';
 import StatCard from './components/StatCard';
+import DonutChart from './components/DonutChart';
 import { selectCurrentAdmin } from '@/redux/auth/selectors';
 
 const { useBreakpoint } = Grid;
@@ -109,7 +110,7 @@ export default function EmployeeDashboard() {
           <p className="dashboard-subtitle">{translate('dashboard_subtitle_employee')}</p>
         </header>
 
-        <h3 className="dashboard-overview-title">{translate('overview')}</h3>
+        <h3 className="dashboard-overview-title">{translate('works_overview')}</h3>
         <Row gutter={gutter}>
           <StatCard
             title={translate('approvals')}
@@ -151,6 +152,24 @@ export default function EmployeeDashboard() {
 
         <div className="space30" />
         <Row gutter={gutter}>
+          <Col xs={{ span: 24 }} md={{ span: 12 }}>
+            <DonutChart
+              title={translate('approval_status')}
+              loading={loading || leaveLoading || attendanceLoading}
+              data={(() => {
+                const p = pendingApprovals ?? 0;
+                const l = leaveCount ?? 0;
+                const a = attendanceCount ?? 0;
+                const total = p + l + a;
+                if (total === 0) return [];
+                return [
+                  { name: 'pending', value: Math.round((p / total) * 100), color: '#0077b6' },
+                  { name: 'leave', value: Math.round((l / total) * 100), color: '#ffc107' },
+                  { name: 'attendance', value: Math.round((a / total) * 100), color: '#28a745' },
+                ].filter((d) => d.value > 0);
+              })()}
+            />
+          </Col>
           <Col xs={{ span: 24 }} md={{ span: 12 }}>
             <Card className="whiteBox shadow premium-card pad20" title={translate('dashboard_quick_links')}>
               <Link to="/approval">{translate('approvals')}</Link>

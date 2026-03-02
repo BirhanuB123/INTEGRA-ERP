@@ -14,6 +14,7 @@ import { useSelector } from 'react-redux';
 import useLanguage from '@/locale/useLanguage';
 import { request } from '@/request';
 import StatCard from './components/StatCard';
+import DonutChart from './components/DonutChart';
 import { selectCurrentAdmin } from '@/redux/auth/selectors';
 
 const { useBreakpoint } = Grid;
@@ -67,7 +68,7 @@ export default function HRDashboard() {
           <p className="dashboard-subtitle">{translate('dashboard_subtitle_hr')}</p>
         </header>
 
-        <h3 className="dashboard-overview-title">{translate('overview')}</h3>
+        <h3 className="dashboard-overview-title">{translate('works_overview')}</h3>
         <Row gutter={gutter}>
           <StatCard
             title={translate('approvals')}
@@ -109,7 +110,25 @@ export default function HRDashboard() {
 
         <div className="space30" />
         <Row gutter={gutter}>
-          <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }}>
+          <Col xs={{ span: 24 }} md={{ span: 12 }}>
+            <DonutChart
+              title={translate('approval_status')}
+              loading={loading}
+              data={(() => {
+                const p = approvalSummary.pending || 0;
+                const a = approvalSummary.approved || 0;
+                const r = approvalSummary.rejected || 0;
+                const total = p + a + r;
+                if (total === 0) return [];
+                return [
+                  { name: 'pending', value: Math.round((p / total) * 100), color: '#0077b6' },
+                  { name: 'approved', value: Math.round((a / total) * 100), color: '#28a745' },
+                  { name: 'rejected', value: Math.round((r / total) * 100), color: '#dc2626' },
+                ].filter((d) => d.value > 0);
+              })()}
+            />
+          </Col>
+          <Col xs={{ span: 24 }} md={{ span: 12 }}>
             <Card className="whiteBox shadow premium-card pad20" title={translate('staff_hr')}>
               <Link to="/employee">{translate('employees')}</Link>
               <br />
