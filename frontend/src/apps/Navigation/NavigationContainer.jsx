@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button, Drawer, Layout, Menu } from 'antd';
 
@@ -15,33 +15,37 @@ import {
   SettingOutlined,
   CustomerServiceOutlined,
   ProductOutlined,
-  ContainerOutlined,
-  FileSyncOutlined,
   DashboardOutlined,
-  TagOutlined,
-  TagsOutlined,
   UserOutlined,
-  CreditCardOutlined,
   MenuOutlined,
   FileOutlined,
   ShopOutlined,
-  FilterOutlined,
   WalletOutlined,
-  ReconciliationOutlined,
-  CheckCircleOutlined,
-  TeamOutlined,
-  HistoryOutlined,
-  ShoppingCartOutlined,
-  FileDoneOutlined,
-  BarcodeOutlined,
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  RightOutlined,
+  QuestionCircleOutlined,
 } from '@ant-design/icons';
 
 const { Sider } = Layout;
 
+const SIDEBAR_WIDTH_KEY = 'integra-sidebar-width';
+const MIN_SIDEBAR_WIDTH = 200;
+const MAX_SIDEBAR_WIDTH = 320;
+const DEFAULT_SIDEBAR_WIDTH = 256;
+
+function getStoredSidebarWidth() {
+  try {
+    const w = parseInt(localStorage.getItem(SIDEBAR_WIDTH_KEY), 10);
+    if (Number.isFinite(w) && w >= MIN_SIDEBAR_WIDTH && w <= MAX_SIDEBAR_WIDTH) return w;
+  } catch (_) {}
+  return DEFAULT_SIDEBAR_WIDTH;
+}
+
 export default function Navigation() {
   const { isMobile } = useResponsive();
 
-  return isMobile ? <MobileSidebar /> : <Sidebar collapsible={false} />;
+  return isMobile ? <MobileSidebar /> : <Sidebar collapsible />;
 }
 
 function Sidebar({ collapsible, isMobile = false }) {
@@ -53,9 +57,43 @@ function Sidebar({ collapsible, isMobile = false }) {
   const currentAdmin = useSelector(selectCurrentAdmin);
   const { role } = currentAdmin;
 
-  const [showLogoApp, setLogoApp] = useState(isNavMenuClose);
+  const [sidebarWidth, setSidebarWidth] = useState(getStoredSidebarWidth);
+  const [isResizing, setIsResizing] = useState(false);
   const [currentPath, setCurrentPath] = useState(location.pathname.slice(1) || 'dashboard');
   const [openKeys, setOpenKeys] = useState([]);
+
+  useEffect(() => {
+    if (!collapsible || isMobile) return;
+    localStorage.setItem(SIDEBAR_WIDTH_KEY, String(sidebarWidth));
+  }, [sidebarWidth, collapsible, isMobile]);
+
+  const startResize = useCallback(
+    (e) => {
+      if (!collapsible || isMobile || isNavMenuClose) return;
+      e.preventDefault();
+      setIsResizing(true);
+    },
+    [collapsible, isMobile, isNavMenuClose]
+  );
+
+  useEffect(() => {
+    if (!isResizing) return;
+    const onMove = (e) => {
+      const next = Math.min(MAX_SIDEBAR_WIDTH, Math.max(MIN_SIDEBAR_WIDTH, e.clientX));
+      setSidebarWidth(next);
+    };
+    const onUp = () => setIsResizing(false);
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+    return () => {
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    };
+  }, [isResizing]);
 
   const translate = useLanguage();
   const navigate = useNavigate();
@@ -228,64 +266,91 @@ function Sidebar({ collapsible, isMobile = false }) {
     }
   }, [location]);
 
-  useEffect(() => {
-    if (isNavMenuClose) {
-      setLogoApp(isNavMenuClose);
-    }
-    const timer = setTimeout(() => {
-      if (!isNavMenuClose) {
-        setLogoApp(isNavMenuClose);
-      }
-    }, 200);
-    return () => clearTimeout(timer);
-  }, [isNavMenuClose]);
-
   const onOpenChange = (keys) => {
     setOpenKeys(keys);
   };
+
   const onCollapse = () => {
     navMenu.collapse();
   };
 
-  return (
-    <Sider
-      collapsible={collapsible}
-      collapsed={collapsible ? isNavMenuClose : collapsible}
-      onCollapse={onCollapse}
-      className="navigation"
-      width={256}
-      style={{
-        overflow: 'auto',
-        height: '100vh',
+  const effectiveWidth = collapsible && isNavMenuClose ? 80 : sidebarWidth;
 
-        position: isMobile ? 'absolute' : 'relative',
-        bottom: '20px',
-        ...(!isMobile && {
-          ['left']: '20px',
-          top: '20px',
-        }),
-      }}
-      theme={'light'}
-    >
-      <div className="logo" onClick={() => navigate('/')} role="button" aria-label="Home">
-        <img
-          src={logo}
-          alt="INTEGRA ERP"
-          className="logo-img"
-        />
-      </div>
-      <Menu
-        items={items}
-        mode="inline"
-        theme={'light'}
-        selectedKeys={[currentPath]}
-        openKeys={openKeys}
-        onOpenChange={onOpenChange}
+  return (
+    <div className="sidebar-wrapper-resizable">
+      <Sider
+        collapsible={collapsible}
+        collapsed={collapsible ? isNavMenuClose : false}
+        onCollapse={onCollapse}
+        trigger={null}
+        className="navigation navigation-dark"
+        width={effectiveWidth}
+        collapsedWidth={80}
         style={{
-          width: isMobile ? '100%' : 256,
+          overflow: 'hidden',
+          height: '100vh',
+          position: isMobile ? 'absolute' : 'relative',
+          flex: `0 0 ${effectiveWidth}px`,
+          maxWidth: effectiveWidth,
+          minWidth: effectiveWidth,
         }}
-      />
-    </Sider>
+        theme="dark"
+      >
+        <div className="navigation-inner">
+          <div className="sidebar-header" onClick={() => !isNavMenuClose && navigate('/')} role="button" aria-label="Home">
+            <div className="sidebar-logo-wrap">
+              <img src={logo} alt="INTEGRA ERP" className="sidebar-logo-img" />
+            </div>
+            {!isNavMenuClose && <span className="sidebar-app-name">INTEGRA ERP</span>}
+            {collapsible && !isMobile && (
+              <Button
+                type="text"
+                className="sidebar-collapse-btn"
+                icon={isNavMenuClose ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onCollapse();
+                }}
+                aria-label={isNavMenuClose ? 'Expand menu' : 'Collapse menu'}
+              />
+            )}
+          </div>
+          <div className="sidebar-menu-wrap">
+            <Menu
+              items={items}
+              mode="inline"
+              theme="dark"
+              selectedKeys={[currentPath]}
+              openKeys={isNavMenuClose ? [] : openKeys}
+              onOpenChange={onOpenChange}
+              inlineIndent={16}
+              style={{ width: isMobile ? '100%' : effectiveWidth, borderRight: 'none' }}
+            />
+          </div>
+          {!isNavMenuClose && (
+            <div className="sidebar-footer">
+              <Link to="/about" className="sidebar-footer-link">
+                <QuestionCircleOutlined />
+                <span>Help Center</span>
+                <RightOutlined className="sidebar-footer-arrow" />
+              </Link>
+              <Link to="/settings" className="sidebar-footer-link">
+                <SettingOutlined />
+                <span>{translate('general_settings')}</span>
+              </Link>
+            </div>
+          )}
+        </div>
+      </Sider>
+      {!isMobile && collapsible && !isNavMenuClose && (
+        <div
+          className={`sidebar-resize-handle ${isResizing ? 'active' : ''}`}
+          onMouseDown={startResize}
+          role="separator"
+          aria-label="Resize sidebar"
+        />
+      )}
+    </div>
   );
 }
 

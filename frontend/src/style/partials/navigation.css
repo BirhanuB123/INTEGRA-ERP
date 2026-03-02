@@ -1,3 +1,28 @@
+/* Wrapper for sidebar + resize handle */
+.sidebar-wrapper-resizable {
+  position: relative;
+  display: flex;
+  flex-shrink: 0;
+  height: 100vh;
+}
+
+/* Resize handle – drag to change sidebar width */
+.sidebar-resize-handle {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  cursor: col-resize;
+  z-index: 10;
+  transition: background 0.15s ease;
+}
+.sidebar-resize-handle:hover,
+.sidebar-resize-handle.active {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Base navigation (legacy / mobile) */
 .navigation {
   position: sticky;
   height: 100vh;
@@ -13,7 +38,155 @@
   transition: var(--transition);
 }
 
-/* Sidebar logo – clearly visible and well set */
+/* Dark sidebar – flexible, rounded, moveable */
+.navigation.navigation-dark {
+  background: #1e293b;
+  border-right: none;
+  border-radius: 0 0 0 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.15);
+}
+
+.navigation.navigation-dark .ant-layout-sider-children {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.navigation-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.sidebar-header {
+  flex-shrink: 0;
+  min-height: 64px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sidebar-header:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.sidebar-logo-wrap {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.sidebar-logo-img {
+  height: 24px;
+  width: auto;
+  max-width: 24px;
+  object-fit: contain;
+}
+
+.sidebar-app-name {
+  flex: 1;
+  font-weight: 600;
+  font-size: 15px;
+  color: #fff;
+  letter-spacing: 0.02em;
+}
+
+.sidebar-collapse-btn {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+.sidebar-collapse-btn:hover {
+  color: #fff !important;
+}
+
+.sidebar-menu-wrap {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 8px 0;
+}
+
+/* Dark menu overrides */
+.navigation-dark .ant-menu {
+  background: transparent !important;
+}
+.navigation-dark .ant-menu-item,
+.navigation-dark .ant-menu-submenu-title {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+.navigation-dark .ant-menu-item:hover,
+.navigation-dark .ant-menu-submenu-title:hover {
+  color: #fff !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+.navigation-dark .ant-menu-item-selected {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #fff !important;
+  border-radius: 8px;
+  margin: 2px 8px;
+  width: calc(100% - 16px);
+}
+.navigation-dark .ant-menu-sub .ant-menu-item {
+  margin: 2px 8px 2px 24px;
+  width: calc(100% - 32px);
+  border-radius: 6px;
+}
+.navigation-dark .ant-menu-submenu-title {
+  margin: 2px 8px;
+  border-radius: 8px;
+}
+.navigation-dark .ant-menu-inline .ant-menu-item::after {
+  display: none;
+}
+
+.sidebar-footer {
+  flex-shrink: 0;
+  padding: 12px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sidebar-footer-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-size: 14px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.sidebar-footer-link:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+.sidebar-footer-link .anticon {
+  font-size: 16px;
+}
+.sidebar-footer-link span {
+  flex: 1;
+}
+.sidebar-footer-arrow {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+/* Legacy logo (non-dark sidebar) */
 .logo {
   min-height: 72px;
   margin: 20px 16px 24px;
