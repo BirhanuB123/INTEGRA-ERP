@@ -45,6 +45,12 @@ function getStoredSidebarWidth() {
 export default function Navigation() {
   const { isMobile } = useResponsive();
 
+  useEffect(() => {
+    if (isMobile) {
+      document.documentElement.style.setProperty('--sidebar-width', '0px');
+    }
+  }, [isMobile]);
+
   return isMobile ? <MobileSidebar /> : <Sidebar collapsible />;
 }
 
@@ -276,8 +282,12 @@ function Sidebar({ collapsible, isMobile = false }) {
 
   const effectiveWidth = collapsible && isNavMenuClose ? 80 : sidebarWidth;
 
+  useEffect(() => {
+    document.documentElement.style.setProperty('--sidebar-width', `${effectiveWidth}px`);
+  }, [effectiveWidth]);
+
   return (
-    <div className="sidebar-wrapper-resizable">
+    <div className="sidebar-wrapper-resizable" style={{ width: effectiveWidth }}>
       <Sider
         collapsible={collapsible}
         collapsed={collapsible ? isNavMenuClose : false}

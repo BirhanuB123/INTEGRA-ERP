@@ -64,10 +64,11 @@
   }
 }
 
-/* Main app content area – responsive padding and width */
+/* Main app content area – responsive padding and width; margin-left for fixed sidebar */
 .app-main-layout {
   min-width: 0;
   flex: 1;
+  margin-left: var(--sidebar-width, 256px);
 }
 
 .app-content {

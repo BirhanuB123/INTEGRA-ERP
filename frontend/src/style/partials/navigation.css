@@ -1,9 +1,13 @@
-/* Wrapper for sidebar + resize handle */
+/* Wrapper for sidebar + resize handle – fixed so it does not scroll with the page */
 .sidebar-wrapper-resizable {
-  position: relative;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  height: 100vh;
   display: flex;
   flex-shrink: 0;
-  height: 100vh;
+  z-index: 1000;
 }
 
 /* Resize handle – drag to change sidebar width */
