@@ -4,6 +4,7 @@ import { Layout, Result, Button, Spin, Divider, Typography } from 'antd';
 import { request } from '@/request';
 import PayrollTable from './PayrollTable';
 import useLanguage from '@/locale/useLanguage';
+import useMoney from '@/settings/useMoney';
 import { ErpLayout } from '@/layout';
 
 const { Content } = Layout;
@@ -12,6 +13,7 @@ const { Title } = Typography;
 export default function PayrollRead() {
     const { id } = useParams();
     const translate = useLanguage();
+    const { moneyFormatter } = useMoney();
     const [payroll, setPayroll] = useState(null);
     const [payslips, setPayslips] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -23,8 +25,11 @@ export default function PayrollRead() {
                 if (payrollRes.success) {
                     setPayroll(payrollRes.result);
 
-                    // Fetch associated payslips
-                    const payslipsRes = await request.list({ entity: 'payslip', options: { payroll: id } });
+                    // Fetch associated payslips (filter by payroll id)
+                    const payslipsRes = await request.list({
+                        entity: 'payslip',
+                        options: { filter: 'payroll', equal: id, items: 500 },
+                    });
                     if (payslipsRes.success) {
                         setPayslips(payslipsRes.result);
                     }
@@ -66,13 +71,15 @@ export default function PayrollRead() {
                 <Divider />
                 <PayrollTable payslips={payslips} />
 
-                <div style={{ marginTop: '30px', display: 'flex', justifyContent: 'flex-end' }}>
-                    <div style={{ marginRight: '50px' }}>
-                        <Title level={5}>Total Gross: {payroll.totalGrossSalary?.toFixed(2)}</Title>
-                        <Title level={5}>Total Tax: {payroll.totalTax?.toFixed(2)}</Title>
+                <div style={{ marginTop: '30px', display: 'flex', justifyContent: 'flex-end', flexWrap: 'wrap', gap: '24px' }}>
+                    <div>
+                        <Title level={5}>Total Gross Salary: {moneyFormatter({ amount: payroll.totalGrossSalary ?? 0 })}</Title>
+                        <Title level={5}>11% Pension (Company): {moneyFormatter({ amount: payroll.totalPensionCompany ?? 0 })}</Title>
+                        <Title level={5}>7% Pension (Employee): {moneyFormatter({ amount: payroll.totalPensionEmployee ?? 0 })}</Title>
+                        <Title level={5}>Total Income Tax: {moneyFormatter({ amount: payroll.totalTax ?? 0 })}</Title>
                     </div>
                     <div>
-                        <Title level={4} type="success">Total Net Pay: {payroll.totalNetPay?.toFixed(2)}</Title>
+                        <Title level={4} type="success">Total Net Pay: {moneyFormatter({ amount: payroll.totalNetPay ?? 0 })}</Title>
                     </div>
                 </div>
             </Content>

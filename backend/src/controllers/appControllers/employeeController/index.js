@@ -311,6 +311,47 @@ methods.search = async (req, res) => {
     }
 };
 
+// Get current employee's own profile (salary, etc.) - only for role 'employee'
+methods.myProfile = async (req, res) => {
+    try {
+        const Employee = mongoose.model('Employee');
+        const { role, email: adminEmail } = req.admin;
+
+        if (role !== 'employee') {
+            return res.status(403).json({
+                success: false,
+                message: 'Only employees can access their own profile.',
+            });
+        }
+
+        const employee = await Employee.findOne({
+            removed: false,
+            email: adminEmail,
+        })
+            .select('name position department salary taxableAllowance nonTaxableAllowance leaveBalance')
+            .lean()
+            .exec();
+
+        if (!employee) {
+            return res.status(404).json({
+                success: false,
+                message: 'Employee profile not found for your account.',
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            result: employee,
+            message: 'Successfully found your profile',
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
 methods.summary = async (req, res) => {
     try {
         const Employee = mongoose.model('Employee');

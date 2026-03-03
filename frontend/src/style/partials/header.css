@@ -63,6 +63,18 @@
   margin-right: 24px;
 }
 
+/* Notification bell dropdown */
+.header-notification-dropdown .notification-dropdown {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f0f0f0;
+}
+
+.header-notification-dropdown .notification-item:hover {
+  background: #f5f5f5;
+}
+
 .headerContent {
   padding: 0 40px;
   width: 100%;

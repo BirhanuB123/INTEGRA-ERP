@@ -17,8 +17,12 @@ router.route('/approval/approve/:id').post(catchErrors(approvalController['appro
 router.route('/approval/reject/:id').post(catchErrors(approvalController['reject']));
 router.route('/approval/history').get(catchErrors(approvalController['history'])).post(catchErrors(approvalController['history']));
 router.route('/approval/summary').get(catchErrors(approvalController['summary'])).post(catchErrors(approvalController['summary']));
+router.route('/approval/notifications').get(catchErrors(approvalController['notifications']));
 router.route('/approval/read/:id').get(catchErrors(approvalController['read']));
 console.log('Manual approval routes registered.');
+
+const employeeController = require('@/controllers/appControllers/employeeController');
+router.route('/employee/myProfile').get(checkAbility('employee'), catchErrors(employeeController['myProfile']));
 
 const routerApp = (entity, controller) => {
   if (!controller) {

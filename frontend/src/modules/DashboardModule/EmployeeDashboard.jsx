@@ -7,10 +7,12 @@ import {
   CalendarOutlined,
   FileDoneOutlined,
   UserOutlined,
+  DollarOutlined,
 } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import useLanguage from '@/locale/useLanguage';
 import { request } from '@/request';
+import useMoney from '@/settings/useMoney';
 import StatCard from './components/StatCard';
 import DonutChart from './components/DonutChart';
 import { selectCurrentAdmin } from '@/redux/auth/selectors';
@@ -24,13 +26,17 @@ export default function EmployeeDashboard() {
   const gutter = screens.lg ? [24, 24] : screens.sm ? [16, 16] : [12, 12];
   const displayName = currentAdmin?.name || currentAdmin?.email || translate('User');
   const displayRole = currentAdmin?.role ? translate(currentAdmin.role) : translate('employee');
+  const { moneyFormatter } = useMoney();
+  const isEmployee = currentAdmin?.role === 'employee';
 
   const [pendingApprovals, setPendingApprovals] = useState(0);
   const [leaveCount, setLeaveCount] = useState(null);
   const [attendanceCount, setAttendanceCount] = useState(null);
+  const [myProfile, setMyProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [leaveLoading, setLeaveLoading] = useState(true);
   const [attendanceLoading, setAttendanceLoading] = useState(true);
+  const [salaryLoading, setSalaryLoading] = useState(false);
 
   // Employee's own approval requests (use list - backend filters by requestedBy for non-owner)
   useEffect(() => {
@@ -87,6 +93,25 @@ export default function EmployeeDashboard() {
     fetch();
   }, []);
 
+  // My salary / profile (only for employee role – backend returns own record only)
+  useEffect(() => {
+    if (!isEmployee) return;
+    const fetch = async () => {
+      setSalaryLoading(true);
+      try {
+        const res = await request.get({ entity: 'employee', options: { endpoint: 'myProfile' } });
+        if (res?.success && res?.result) {
+          setMyProfile(res.result);
+        }
+      } catch (_) {
+        // ignore
+      } finally {
+        setSalaryLoading(false);
+      }
+    };
+    fetch();
+  }, [isEmployee]);
+
   const containerVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
@@ -112,6 +137,23 @@ export default function EmployeeDashboard() {
 
         <h3 className="dashboard-overview-title">{translate('works_overview')}</h3>
         <Row gutter={gutter}>
+          {isEmployee && (
+            <StatCard
+              title={translate('salary')}
+              prefix=""
+              value={
+                salaryLoading
+                  ? null
+                  : myProfile?.salary != null && myProfile.salary !== ''
+                  ? moneyFormatter({ amount: Number(myProfile.salary) })
+                  : '—'
+              }
+              icon={DollarOutlined}
+              linkTo={null}
+              isLoading={salaryLoading}
+              iconVariant="green"
+            />
+          )}
           <StatCard
             title={translate('approvals')}
             prefix={translate('pending')}

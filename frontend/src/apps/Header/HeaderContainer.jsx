@@ -12,6 +12,7 @@ import useLanguage from '@/locale/useLanguage';
 import useResponsive from '@/hooks/useResponsive';
 
 import UpgradeButton from './UpgradeButton';
+import NotificationBell from './NotificationBell';
 
 export default function HeaderContent() {
   const currentAdmin = useSelector(selectCurrentAdmin);
@@ -98,6 +99,8 @@ export default function HeaderContent() {
         gap: isMobile ? '10px' : '15px',
       }}
     >
+      <NotificationBell />
+
       <Dropdown
         menu={{
           items,

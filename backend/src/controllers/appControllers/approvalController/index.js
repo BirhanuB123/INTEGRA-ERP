@@ -397,6 +397,135 @@ const history = async (req, res) => {
     }
 };
 
+// Role-based notifications for header (approvals and other items by responsibility)
+const notifications = async (req, res) => {
+    try {
+        const Approval = mongoose.model('Approval');
+        const userRole = req.admin.role;
+        const items = [];
+        let totalCount = 0;
+
+        if (userRole === 'hr_head') {
+            const pending = await Approval.countDocuments({
+                removed: false,
+                status: 'pending',
+                approvalType: 'hr_approval',
+            });
+            if (pending > 0) {
+                items.push({
+                    type: 'approval',
+                    label: 'Pending HR approvals',
+                    count: pending,
+                    link: '/approval',
+                });
+                totalCount += pending;
+            }
+        } else if (userRole === 'finance_head') {
+            const pending = await Approval.countDocuments({
+                removed: false,
+                status: 'pending',
+                approvalType: 'finance_approval',
+            });
+            if (pending > 0) {
+                items.push({
+                    type: 'approval',
+                    label: 'Pending finance approvals',
+                    count: pending,
+                    link: '/approval',
+                });
+                totalCount += pending;
+            }
+        } else if (userRole === 'owner' || userRole === 'admin') {
+            const hrPending = await Approval.countDocuments({
+                removed: false,
+                status: 'pending',
+                approvalType: 'hr_approval',
+            });
+            const financePending = await Approval.countDocuments({
+                removed: false,
+                status: 'pending',
+                approvalType: 'finance_approval',
+            });
+            const generalPending = await Approval.countDocuments({
+                removed: false,
+                status: 'pending',
+                approvalType: 'general_approval',
+            });
+            if (hrPending > 0) {
+                items.push({
+                    type: 'approval',
+                    label: 'Pending HR approvals',
+                    count: hrPending,
+                    link: '/approval',
+                });
+                totalCount += hrPending;
+            }
+            if (financePending > 0) {
+                items.push({
+                    type: 'approval',
+                    label: 'Pending finance approvals',
+                    count: financePending,
+                    link: '/approval',
+                });
+                totalCount += financePending;
+            }
+            if (generalPending > 0) {
+                items.push({
+                    type: 'approval',
+                    label: 'Pending general approvals',
+                    count: generalPending,
+                    link: '/approval',
+                });
+                totalCount += generalPending;
+            }
+        } else if (userRole === 'employee') {
+            const myPending = await Approval.countDocuments({
+                removed: false,
+                status: 'pending',
+                requestedBy: req.admin._id,
+            });
+            if (myPending > 0) {
+                items.push({
+                    type: 'approval',
+                    label: 'Your requests pending approval',
+                    count: myPending,
+                    link: '/leave',
+                });
+                totalCount += myPending;
+            }
+        } else if (userRole === 'department_manager') {
+            const pending = await Approval.countDocuments({
+                removed: false,
+                status: 'pending',
+                approvalType: 'hr_approval',
+            });
+            if (pending > 0) {
+                items.push({
+                    type: 'approval',
+                    label: 'Pending HR approvals',
+                    count: pending,
+                    link: '/approval',
+                });
+                totalCount += pending;
+            }
+        }
+
+        return res.status(200).json({
+            success: true,
+            result: {
+                totalCount,
+                items,
+            },
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: error.message,
+            result: { totalCount: 0, items: [] },
+        });
+    }
+};
+
 // Get approval summary/statistics
 const summary = async (req, res) => {
     try {
@@ -465,4 +594,5 @@ module.exports = {
     history,
     summary,
     read,
+    notifications,
 };

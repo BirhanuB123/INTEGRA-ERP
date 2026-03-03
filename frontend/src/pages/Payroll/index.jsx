@@ -3,10 +3,10 @@ import DynamicForm from '@/forms/DynamicForm';
 import { fields } from './config';
 import useLanguage from '@/locale/useLanguage';
 import { useNavigate } from 'react-router-dom';
-import { EyeOutlined } from '@ant-design/icons';
 
 export default function Payroll() {
     const translate = useLanguage();
+    const navigate = useNavigate();
     const entity = 'payroll';
     const searchConfig = {
         displayLabels: ['month', 'year'],
@@ -30,6 +30,8 @@ export default function Payroll() {
         fields,
         searchConfig,
         deleteModalLabels,
+        // Open full payroll view (payslip table) instead of side panel
+        handleRead: (record) => navigate(`/payroll/read/${record._id}`),
     };
     return (
         <CrudModule
