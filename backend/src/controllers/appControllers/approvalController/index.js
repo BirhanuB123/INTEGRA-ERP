@@ -2,6 +2,30 @@ const mongoose = require('mongoose');
 
 const Approval = mongoose.model('Approval');
 
+// Attach Leave summary (days, dates) to approval records for display in dashboard
+async function enrichApprovalsWithLeaveDetails(approvals) {
+    const Leave = mongoose.model('Leave');
+    const plain = approvals.map((a) => (a.toObject ? a.toObject() : { ...a }));
+    for (const approval of plain) {
+        if (approval.entityType === 'Leave' && approval.entityId) {
+            try {
+                const leave = await Leave.findById(approval.entityId).lean().exec();
+                if (leave) {
+                    approval.entityDetails = {
+                        daysCount: leave.daysCount,
+                        startDate: leave.startDate,
+                        endDate: leave.endDate,
+                        type: leave.type,
+                    };
+                }
+            } catch (err) {
+                // ignore per-row errors
+            }
+        }
+    }
+    return plain;
+}
+
 // Create a new approval request
 const create = async (req, res) => {
     try {
@@ -73,9 +97,11 @@ const list = async (req, res) => {
             .sort({ created: -1 })
             .populate('requestedBy', 'name surname');
 
+        const result = await enrichApprovalsWithLeaveDetails(approvals);
+
         return res.status(200).json({
             success: true,
-            result: approvals,
+            result,
             pagination: {
                 page,
                 pages: Math.ceil(total / limit),
@@ -112,10 +138,12 @@ const myApprovals = async (req, res) => {
             .sort({ created: -1 })
             .populate('requestedBy', 'name surname');
 
+        const result = await enrichApprovalsWithLeaveDetails(approvals);
+
         return res.status(200).json({
             success: true,
-            result: approvals,
-            count: approvals.length,
+            result,
+            count: result.length,
         });
     } catch (error) {
         return res.status(500).json({
@@ -129,7 +157,7 @@ const myApprovals = async (req, res) => {
 const approve = async (req, res) => {
     try {
         const { id } = req.params;
-        const { comments } = req.body;
+        const { comments, approvedDaysCount } = req.body;
         const approver = req.admin;
 
         const approval = await Approval.findById(id);
@@ -193,6 +221,21 @@ const approve = async (req, res) => {
             entity.approvalStatus = 'approved';
             entity.approvedBy = approver._id;
             entity.approvalDate = new Date();
+
+            // Leave model uses status, not approvalStatus
+            if (approval.entityType === 'Leave') {
+                entity.status = 'approved';
+                // HR can approve with fewer days than requested
+                const days = approvedDaysCount != null && !isNaN(Number(approvedDaysCount)) && Number(approvedDaysCount) >= 1
+                    ? Math.min(Math.floor(Number(approvedDaysCount)), entity.daysCount)
+                    : entity.daysCount;
+                if (days !== entity.daysCount) {
+                    entity.daysCount = days;
+                    const end = new Date(entity.startDate);
+                    end.setDate(end.getDate() + days - 1);
+                    entity.endDate = end;
+                }
+            }
 
             if (approval.entityType === 'Invoice') {
                 entity.approved = true;
@@ -304,6 +347,9 @@ const reject = async (req, res) => {
 
         if (entity) {
             entity.approvalStatus = 'rejected';
+            if (approval.entityType === 'Leave') {
+                entity.status = 'rejected';
+            }
             entity.rejectionReason = comments || 'No reason provided';
             await entity.save();
         }

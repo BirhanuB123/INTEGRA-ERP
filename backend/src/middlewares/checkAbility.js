@@ -12,7 +12,7 @@ const checkAbility = (entity) => {
             // HR specific
             payroll: ['owner', 'admin', 'hr_head', 'finance_head'],
             payslip: ['owner', 'admin', 'hr_head', 'finance_head'],
-            employee: ['owner', 'admin', 'hr_head', 'department_manager'],
+            employee: ['owner', 'admin', 'hr_head', 'department_manager', 'employee'],
             attendance: ['owner', 'admin', 'hr_head', 'department_manager', 'employee'],
             leave: ['owner', 'admin', 'hr_head', 'department_manager', 'employee'],
 

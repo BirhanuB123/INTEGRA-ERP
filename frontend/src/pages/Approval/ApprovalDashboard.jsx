@@ -6,6 +6,7 @@ import {
     Space,
     Modal,
     Input,
+    InputNumber,
     message,
     Tabs,
     Badge,
@@ -40,9 +41,13 @@ export default function ApprovalDashboard() {
     const [selectedApproval, setSelectedApproval] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [comments, setComments] = useState('');
+    const [approvedDaysCount, setApprovedDaysCount] = useState(null);
+    const [leaveDetails, setLeaveDetails] = useState(null);
     const [actionType, setActionType] = useState('');
     const [summary, setSummary] = useState({ pending: 0, approved: 0, rejected: 0, total: 0 });
     const [activeTab, setActiveTab] = useState('pending');
+    const [viewModalVisible, setViewModalVisible] = useState(false);
+    const [viewApproval, setViewApproval] = useState(null);
 
     useEffect(() => {
         fetchMyApprovals();
@@ -77,6 +82,8 @@ export default function ApprovalDashboard() {
     const handleApprove = (record) => {
         setSelectedApproval(record);
         setActionType('approve');
+        setLeaveDetails(null);
+        setApprovedDaysCount(null);
         setModalVisible(true);
     };
 
@@ -86,16 +93,45 @@ export default function ApprovalDashboard() {
         setModalVisible(true);
     };
 
+    const handleView = (record) => {
+        setViewApproval(record);
+        setViewModalVisible(true);
+    };
+
+    // Fetch leave details when approving a Leave request so HR can set approved days
+    useEffect(() => {
+        if (!modalVisible || !selectedApproval || selectedApproval.entityType !== 'Leave' || actionType !== 'approve') {
+            return;
+        }
+        let cancelled = false;
+        request
+            .read({ entity: 'leave', id: selectedApproval.entityId })
+            .then((res) => {
+                if (!cancelled && res?.result) {
+                    setLeaveDetails(res.result);
+                    setApprovedDaysCount(res.result.daysCount);
+                }
+            })
+            .catch(() => {
+                if (!cancelled) setLeaveDetails(null);
+            });
+        return () => { cancelled = true; };
+    }, [modalVisible, selectedApproval, actionType]);
+
     const handleSubmitAction = async () => {
         if (!selectedApproval) return;
 
         setLoading(true);
         try {
             const endpoint = actionType === 'approve' ? 'approve' : 'reject';
+            const jsonData = { comments };
+            if (actionType === 'approve' && selectedApproval.entityType === 'Leave' && approvedDaysCount != null) {
+                jsonData.approvedDaysCount = approvedDaysCount;
+            }
             const response = await request.post({
                 entity: 'approval',
                 id: selectedApproval._id,
-                jsonData: { comments },
+                jsonData,
                 options: { endpoint },
             });
 
@@ -103,6 +139,8 @@ export default function ApprovalDashboard() {
                 message.success(`Request ${actionType}d successfully`);
                 setModalVisible(false);
                 setComments('');
+                setApprovedDaysCount(null);
+                setLeaveDetails(null);
                 fetchMyApprovals();
                 fetchSummary();
             } else {
@@ -171,6 +209,24 @@ export default function ApprovalDashboard() {
             key: 'requestedBy',
         },
         {
+            title: 'Requested (Leave)',
+            key: 'entityDetails',
+            render: (_, record) => {
+                if (record.entityType !== 'Leave' || !record.entityDetails) return '—';
+                const d = record.entityDetails;
+                const days = d.daysCount != null ? `${d.daysCount} days` : '';
+                const dates =
+                    d.startDate && d.endDate
+                        ? ` (${dayjs(d.startDate).format('YYYY-MM-DD')} – ${dayjs(d.endDate).format('YYYY-MM-DD')})`
+                        : '';
+                return days ? (
+                    <span title={`${days}${dates}`}>
+                        <strong>{d.daysCount}</strong> days{dates && <span style={{ color: '#666' }}>{dates}</span>}
+                    </span>
+                ) : '—';
+            },
+        },
+        {
             title: 'Created',
             dataIndex: 'created',
             key: 'created',
@@ -207,7 +263,7 @@ export default function ApprovalDashboard() {
                             </Button>
                         </>
                     )}
-                    <Button icon={<EyeOutlined />} size="small">
+                    <Button icon={<EyeOutlined />} size="small" onClick={() => handleView(record)}>
                         View
                     </Button>
                 </Space>
@@ -336,6 +392,8 @@ export default function ApprovalDashboard() {
                 onCancel={() => {
                     setModalVisible(false);
                     setComments('');
+                    setApprovedDaysCount(null);
+                    setLeaveDetails(null);
                 }}
                 okText={actionType === 'approve' ? 'Approve' : 'Reject'}
                 okButtonProps={{ danger: actionType === 'reject' }}
@@ -355,6 +413,31 @@ export default function ApprovalDashboard() {
                         <div className="approval-modal-field">
                             <strong>Priority:</strong> {getPriorityTag(selectedApproval.priority)}
                         </div>
+                        {selectedApproval.entityType === 'Leave' && leaveDetails && actionType === 'approve' && (
+                            <div className="approval-modal-field" style={{ marginTop: 12 }}>
+                                <strong>Leave requested:</strong> {leaveDetails.daysCount} days
+                                {leaveDetails.startDate && leaveDetails.endDate && (
+                                    <span>
+                                        {' '}
+                                        ({dayjs(leaveDetails.startDate).format('YYYY-MM-DD')} –{' '}
+                                        {dayjs(leaveDetails.endDate).format('YYYY-MM-DD')})
+                                    </span>
+                                )}
+                                <div style={{ marginTop: 8 }}>
+                                    <strong>Approve with days:</strong>
+                                    <InputNumber
+                                        min={1}
+                                        max={leaveDetails.daysCount}
+                                        value={approvedDaysCount}
+                                        onChange={setApprovedDaysCount}
+                                        style={{ marginLeft: 8, width: 80 }}
+                                    />
+                                    <span style={{ marginLeft: 8, color: '#666' }}>
+                                        (e.g. approve 10 days instead of {leaveDetails.daysCount})
+                                    </span>
+                                </div>
+                            </div>
+                        )}
                         {selectedApproval.metadata && Object.keys(selectedApproval.metadata).length > 0 && (
                             <div className="approval-modal-field">
                                 <strong>Details:</strong>
@@ -373,6 +456,77 @@ export default function ApprovalDashboard() {
                                 style={{ marginTop: 8 }}
                             />
                         </div>
+                    </div>
+                )}
+            </Modal>
+
+            <Modal
+                title="View Request Details"
+                open={viewModalVisible}
+                onCancel={() => { setViewModalVisible(false); setViewApproval(null); }}
+                footer={
+                    viewApproval?.status === 'pending'
+                        ? [
+                            <Button key="reject" danger icon={<CloseOutlined />} onClick={() => { setViewModalVisible(false); handleReject(viewApproval); setViewApproval(null); }}>
+                                Reject
+                            </Button>,
+                            <Button key="approve" type="primary" icon={<CheckOutlined />} onClick={() => { setViewModalVisible(false); handleApprove(viewApproval); setViewApproval(null); }}>
+                                Approve
+                            </Button>,
+                        ]
+                        : null
+                }
+                className="approval-view-modal"
+            >
+                {viewApproval && (
+                    <div className="approval-modal-body">
+                        <div className="approval-modal-field">
+                            <strong>Entity Type:</strong> <Tag>{viewApproval.entityType}</Tag>
+                        </div>
+                        <div className="approval-modal-field">
+                            <strong>Approval Type:</strong> {getApprovalTypeTag(viewApproval.approvalType)}
+                        </div>
+                        <div className="approval-modal-field">
+                            <strong>Requested By:</strong> {viewApproval.requestedBy?.name}
+                        </div>
+                        <div className="approval-modal-field">
+                            <strong>Priority:</strong> {getPriorityTag(viewApproval.priority)}
+                        </div>
+                        <div className="approval-modal-field">
+                            <strong>Status:</strong> {getStatusTag(viewApproval.status)}
+                        </div>
+                        <div className="approval-modal-field">
+                            <strong>Created:</strong> {dayjs(viewApproval.created).format('YYYY-MM-DD HH:mm')}
+                        </div>
+                        {viewApproval.entityType === 'Leave' && viewApproval.entityDetails && (
+                            <div className="approval-modal-field" style={{ marginTop: 12, padding: 12, background: '#fafafa', borderRadius: 8 }}>
+                                <strong>Leave requested:</strong>
+                                <div style={{ marginTop: 6 }}>
+                                    <strong>{viewApproval.entityDetails.daysCount}</strong> days
+                                    {viewApproval.entityDetails.startDate && viewApproval.entityDetails.endDate && (
+                                        <span>
+                                            {' '}
+                                            ({dayjs(viewApproval.entityDetails.startDate).format('YYYY-MM-DD')} –{' '}
+                                            {dayjs(viewApproval.entityDetails.endDate).format('YYYY-MM-DD')})
+                                        </span>
+                                    )}
+                                    {viewApproval.entityDetails.type && (
+                                        <span> · Type: {String(viewApproval.entityDetails.type)}</span>
+                                    )}
+                                </div>
+                                {viewApproval.status === 'pending' && (
+                                    <div style={{ marginTop: 8, color: '#666', fontSize: 12 }}>
+                                        Use &quot;Approve&quot; to approve as-is or with fewer days (e.g. approve 5 days if 10 requested).
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                        {viewApproval.metadata && Object.keys(viewApproval.metadata).length > 0 && (
+                            <div className="approval-modal-field">
+                                <strong>Details:</strong>
+                                <pre className="approval-modal-pre">{JSON.stringify(viewApproval.metadata, null, 2)}</pre>
+                            </div>
+                        )}
                     </div>
                 )}
             </Modal>
