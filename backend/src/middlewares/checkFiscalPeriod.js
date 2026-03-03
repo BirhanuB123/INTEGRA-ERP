@@ -7,10 +7,6 @@ const checkFiscalPeriod = async (req, res, next) => {
         // 1. Identify valid date for the transaction
         let transactionDate = req.body.date || new Date();
 
-        // If it's an update, we might need to check the original date too
-        // But usually checking the provided body date is sufficient for "moving" a transaction
-        // into a closed period.
-
         // 2. Find if any closed period covers this date
         const closedPeriod = await FiscalPeriod.findOne({
             startDate: { $lte: transactionDate },

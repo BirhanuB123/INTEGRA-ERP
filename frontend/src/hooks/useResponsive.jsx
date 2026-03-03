@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useSyncExternalStore } from 'react';
 import isBrowser from '@/utils/isBrowser';
-const subscribers = new Set();
-let info;
-let responsiveConfig = {
+
+const responsiveConfig = {
   xs: 0,
   sm: 576,
   isMobile: 768,
@@ -10,59 +9,63 @@ let responsiveConfig = {
   lg: 992,
   xl: 1200,
 };
-function handleResize() {
-  const oldInfo = info;
-  calculate();
-  if (oldInfo === info) return;
-  for (const subscriber of subscribers) {
-    subscriber();
+
+const SERVER_SNAPSHOT = { xs: true, sm: false, isMobile: true, md: false, lg: false, xl: false };
+
+let cachedWidth = -1;
+let cachedSnapshot = null;
+
+function getSnapshot() {
+  if (!isBrowser || typeof window.innerWidth !== 'number') {
+    return SERVER_SNAPSHOT;
   }
-}
-let listening = false;
-function calculate() {
   const width = window.innerWidth;
-  const newInfo = {};
-  let shouldUpdate = false;
-  for (const key of Object.keys(responsiveConfig)) {
-    newInfo[key] = width >= responsiveConfig[key];
-    if (newInfo[key] !== info[key]) {
-      shouldUpdate = true;
-    }
-  }
-  if (shouldUpdate) {
-    info = newInfo;
-  }
+  if (width === cachedWidth && cachedSnapshot) return cachedSnapshot;
+  cachedWidth = width;
+  cachedSnapshot = {
+    xs: width >= responsiveConfig.xs,
+    sm: width >= responsiveConfig.sm,
+    isMobile: width >= responsiveConfig.isMobile,
+    md: width >= responsiveConfig.md,
+    lg: width >= responsiveConfig.lg,
+    xl: width >= responsiveConfig.xl,
+  };
+  return cachedSnapshot;
 }
+
+function getServerSnapshot() {
+  return SERVER_SNAPSHOT;
+}
+
+const subscribers = new Set();
+function subscribe(callback) {
+  subscribers.add(callback);
+  return () => subscribers.delete(callback);
+}
+
+function useResponsiveStore() {
+  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+}
+
+// Notify all subscribers when window is resized (invalidate cache and trigger re-read)
+if (isBrowser && typeof window !== 'undefined') {
+  let raf = null;
+  window.addEventListener('resize', () => {
+    cachedWidth = -1;
+    if (raf) cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => {
+      raf = null;
+      subscribers.forEach((cb) => cb());
+    });
+  });
+}
+
 export function configResponsive(config) {
-  responsiveConfig = config;
-  if (info) calculate();
+  Object.assign(responsiveConfig, config);
 }
+
 export default function useResponsive() {
-  if (isBrowser && !listening) {
-    info = {};
-    calculate();
-    window.addEventListener('resize', handleResize);
-    listening = true;
-  }
-  const [state, setState] = useState(info);
-  useEffect(() => {
-    if (!isBrowser) return;
-    // In React 18's StrictMode, useEffect perform twice, resize listener is remove, so handleResize is never perform.
-    // https://github.com/alibaba/hooks/issues/1910
-    if (!listening) {
-      window.addEventListener('resize', handleResize);
-    }
-    const subscriber = () => {
-      setState(info);
-    };
-    subscribers.add(subscriber);
-    return () => {
-      subscribers.delete(subscriber);
-      if (subscribers.size === 0) {
-        window.removeEventListener('resize', handleResize);
-        listening = false;
-      }
-    };
-  }, []);
-  return { screenSize: state, isMobile: !state.md };
+  const screenSize = useResponsiveStore();
+  const isMobile = !screenSize.md;
+  return { screenSize, isMobile };
 }

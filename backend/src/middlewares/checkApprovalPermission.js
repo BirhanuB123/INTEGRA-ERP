@@ -7,10 +7,6 @@ const checkApprovalPermission = (req, res, next) => {
         return next();
     }
 
-    // STRICT GOVERNANCE RULES:
-    // 1. Employee related cases -> HR Head only
-    // 2. Total Payment / Financial cases -> Finance Head only
-
     if (userRole === 'hr_head') {
         if (approvalType === 'hr_approval') {
             return next();
