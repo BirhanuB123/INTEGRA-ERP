@@ -1,6 +1,7 @@
 .sidePanel {
-  border-right: 1px solid #edf0f5;
-  background: #fff;
+  border-right: 1px solid rgba(14, 116, 144, 0.12);
+  background: linear-gradient(180deg, #fafbfc 0%, #ffffff 100%);
+  box-shadow: 2px 0 16px rgba(0, 0, 0, 0.03);
 }
 
 .sidePanelContent {
