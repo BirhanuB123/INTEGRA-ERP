@@ -25,12 +25,11 @@
 }
 
 .ant-card {
-  border-radius: 16px;
-  border: 1px solid rgba(226, 232, 240, 0.8) !important;
+  border-radius: 14px;
+  border: 1px solid rgba(214, 211, 209, 0.5) !important;
   box-shadow: var(--shadow-sm);
   transition: var(--transition);
   background: var(--card-bg) !important;
-  backdrop-filter: blur(10px);
 }
 
 .ant-card:hover {
@@ -70,7 +69,7 @@
 .ant-input-focused,
 .ant-select-focused .ant-select-selector {
   border-color: var(--primary-color) !important;
-  box-shadow: 0 0 0 2px rgba(0, 119, 182, 0.2) !important;
+  box-shadow: 0 0 0 3px var(--primary-soft) !important;
 }
 
 .headerIcon .ant-dropdown-menu {

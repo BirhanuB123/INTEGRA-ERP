@@ -29,9 +29,9 @@ export default function HeaderContent() {
           className="last"
           src={currentAdmin?.photo ? FILE_BASE_URL + currentAdmin?.photo : undefined}
           style={{
-            color: '#f56a00',
-            backgroundColor: currentAdmin?.photo ? 'none' : '#fde3cf',
-            boxShadow: 'rgba(150, 190, 238, 0.35) 0px 0px 6px 1px',
+            color: 'var(--primary-color)',
+            backgroundColor: currentAdmin?.photo ? 'transparent' : 'var(--primary-soft)',
+            boxShadow: '0 2px 8px rgba(14, 116, 144, 0.2)',
           }}
         >
           {currentAdmin?.name?.charAt(0)?.toUpperCase()}
@@ -90,13 +90,12 @@ export default function HeaderContent() {
     <Header
       className="app-header"
       style={{
-        paddingLeft: isMobile ? 15 : 20,
-        background: '#ffffff',
+        paddingLeft: isMobile ? 16 : 24,
         display: 'flex',
         flexDirection: 'row-reverse',
         justifyContent: 'flex-start',
         flexWrap: 'wrap',
-        gap: isMobile ? '10px' : '15px',
+        gap: isMobile ? 10 : 16,
       }}
     >
       <NotificationBell />
@@ -114,9 +113,9 @@ export default function HeaderContent() {
           className="last"
           src={currentAdmin?.photo ? FILE_BASE_URL + currentAdmin?.photo : undefined}
           style={{
-            color: '#f56a00',
-            backgroundColor: currentAdmin?.photo ? 'none' : '#fde3cf',
-            boxShadow: 'rgba(150, 190, 238, 0.35) 0px 0px 10px 2px',
+            color: 'var(--primary-color)',
+            backgroundColor: currentAdmin?.photo ? 'transparent' : 'var(--primary-soft)',
+            boxShadow: '0 2px 10px rgba(14, 116, 144, 0.25)',
             float: 'right',
             cursor: 'pointer',
           }}

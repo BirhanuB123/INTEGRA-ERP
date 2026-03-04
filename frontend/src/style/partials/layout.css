@@ -82,14 +82,15 @@
 }
 
 .app-content {
-  margin: 20px auto;
+  margin: 24px auto;
   overflow-x: hidden;
   overflow-y: initial;
   width: 100%;
   min-width: 0;
-  max-width: 1400px;
-  padding: 0 16px;
+  max-width: 1440px;
+  padding: 0 20px;
   box-sizing: border-box;
+  background: transparent;
 }
 
 .app-content-mobile {

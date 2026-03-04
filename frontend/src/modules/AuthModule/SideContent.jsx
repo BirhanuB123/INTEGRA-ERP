@@ -11,10 +11,10 @@ export default function SideContent() {
     <div className="side-content-wrapper">
       <img
         src={logo}
-        alt="INTEGRA ERP SOLUTIONS"
-        style={{ margin: '0 0 20px', display: 'inline-block', maxWidth: '180px', filter: 'brightness(0) invert(1)' }}
-        height={60}
-        width={'auto'}
+        alt="INTEGRA ERP"
+        style={{ margin: '0 0 24px', display: 'inline-block', maxWidth: '160px' }}
+        height={52}
+        width="auto"
       />
 
       <div className="space20" />

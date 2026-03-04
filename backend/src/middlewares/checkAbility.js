@@ -18,7 +18,7 @@ const checkAbility = (entity) => {
 
             // General
             invoice: ['owner', 'admin', 'finance_head', 'department_manager'],
-            quote: ['owner', 'admin', 'finance_head', 'department_manager'],
+            quote: ['owner', 'admin', 'finance_head', ''],
             payment: ['owner', 'admin', 'finance_head'],
             client: ['owner', 'admin', 'hr_head', 'finance_head', 'department_manager'],
             product: ['owner', 'admin', 'hr_head', 'finance_head', 'department_manager'],

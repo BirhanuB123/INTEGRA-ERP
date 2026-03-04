@@ -33,8 +33,7 @@ const AuthModule = ({ authContent, AUTH_TITLE, isForRegistre = false }) => {
 
           <Title level={1} className="auth-header-title">{translate(AUTH_TITLE)}</Title>
           <span className="auth-header-subtitle">Welcome back! Please enter your details.</span>
-
-          <Divider style={{ margin: '12px 0 30px' }} />
+          <Divider style={{ margin: '10px 0 28px', borderColor: 'var(--glass-border)' }} />
           <div className="site-layout-content">{authContent}</div>
         </div>
       </div>

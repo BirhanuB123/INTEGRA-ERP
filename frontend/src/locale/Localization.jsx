@@ -6,9 +6,10 @@ export default function Localization({ children }) {
     <ConfigProvider
       theme={{
         token: {
-          colorPrimary: '#339393',
-          colorLink: '#1640D6',
-          borderRadius: 0,
+          colorPrimary: '#0e7490',
+          colorLink: '#0e7490',
+          borderRadius: 10,
+          fontFamily: "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
         },
       }}
     >
