@@ -194,6 +194,10 @@
 }
 .sidebar-footer-link span {
   flex: 1;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .sidebar-footer-arrow {
   font-size: 12px;
