@@ -8,6 +8,7 @@ const checkFiscalPeriod = require('@/middlewares/checkFiscalPeriod');
 const checkAbility = require('@/middlewares/checkAbility');
 
 // Add approval routes FIRST
+const globalSearchController = require('@/controllers/appControllers/globalSearchController');
 const approvalController = require('@/controllers/appControllers/approvalController');
 console.log('Registering manual approval routes...');
 router.route('/approval/create').post(catchErrors(approvalController['create']));
@@ -20,6 +21,8 @@ router.route('/approval/summary').get(catchErrors(approvalController['summary'])
 router.route('/approval/notifications').get(catchErrors(approvalController['notifications']));
 router.route('/approval/read/:id').get(catchErrors(approvalController['read']));
 console.log('Manual approval routes registered.');
+
+router.route('/global/search').get(catchErrors(globalSearchController.search));
 
 const employeeController = require('@/controllers/appControllers/employeeController');
 router.route('/employee/myProfile').get(checkAbility('employee'), catchErrors(employeeController['myProfile']));

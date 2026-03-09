@@ -10,9 +10,8 @@ import { FILE_BASE_URL } from '@/config/serverApiConfig';
 
 import useLanguage from '@/locale/useLanguage';
 import useResponsive from '@/hooks/useResponsive';
-
-import UpgradeButton from './UpgradeButton';
 import NotificationBell from './NotificationBell';
+import GlobalSearchBar from './GlobalSearchBar';
 
 export default function HeaderContent() {
   const currentAdmin = useSelector(selectCurrentAdmin);
@@ -91,44 +90,45 @@ export default function HeaderContent() {
       className="app-header"
       style={{
         paddingLeft: isMobile ? 16 : 24,
+        paddingRight: isMobile ? 16 : 32,
         display: 'flex',
-        flexDirection: 'row-reverse',
-        justifyContent: 'flex-start',
+        flexDirection: 'row',
+        justifyContent: isMobile ? 'space-between' : 'flex-start',
+        alignItems: 'center',
         flexWrap: 'wrap',
-        gap: isMobile ? 10 : 16,
+        gap: isMobile ? 12 : 24,
       }}
     >
-      <NotificationBell />
+      <div style={{ flexGrow: 1, minWidth: isMobile ? '100%' : '300px', maxWidth: isMobile ? '100%' : '500px', order: isMobile ? 3 : 1 }}>
+        <GlobalSearchBar />
+      </div>
 
-      <Dropdown
-        menu={{
-          items,
-        }}
-        trigger={['click']}
-        placement="bottomRight"
-        stye={{ width: '280px', float: 'right' }}
-      >
-        {/* <Badge dot> */}
-        <Avatar
-          className="last"
-          src={currentAdmin?.photo ? FILE_BASE_URL + currentAdmin?.photo : undefined}
-          style={{
-            color: 'var(--primary-color)',
-            backgroundColor: currentAdmin?.photo ? 'transparent' : 'var(--primary-soft)',
-            boxShadow: '0 2px 10px rgba(14, 116, 144, 0.25)',
-            float: 'right',
-            cursor: 'pointer',
+      <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 12 : 16, order: isMobile ? 2 : 2, marginLeft: isMobile ? 0 : 'auto' }}>
+        <NotificationBell />
+
+        <Dropdown
+          menu={{
+            items,
           }}
-          size="large"
+          trigger={['click']}
+          placement="bottomRight"
+          overlayStyle={{ minWidth: '220px' }}
         >
-          {currentAdmin?.name?.charAt(0)?.toUpperCase()}
-        </Avatar>
-        {/* </Badge> */}
-      </Dropdown>
-
-      {/* <AppsButton /> */}
-
-      <UpgradeButton />
+          <Avatar
+            className="last"
+            src={currentAdmin?.photo ? FILE_BASE_URL + currentAdmin?.photo : undefined}
+            style={{
+              color: 'var(--primary-color)',
+              backgroundColor: currentAdmin?.photo ? 'transparent' : 'var(--primary-soft)',
+              boxShadow: '0 2px 10px rgba(14, 116, 144, 0.25)',
+              cursor: 'pointer',
+            }}
+            size={isMobile ? 'middle' : 'large'}
+          >
+            {currentAdmin?.name?.charAt(0)?.toUpperCase()}
+          </Avatar>
+        </Dropdown>
+      </div>
     </Header>
   );
 }

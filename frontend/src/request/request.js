@@ -136,7 +136,9 @@ const request = {
       includeToken();
       let query = '?';
       for (var key in options) {
-        query += key + '=' + options[key] + '&';
+        if (Object.prototype.hasOwnProperty.call(options, key)) {
+          query += key + '=' + encodeURIComponent(options[key]) + '&';
+        }
       }
       query = query.slice(0, -1);
       // headersInstance.cancelToken = source.token;

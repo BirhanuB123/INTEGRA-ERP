@@ -512,6 +512,8 @@ const lang = {
   offers: 'Offers',
   proforma_invoices: 'quote',
   search: 'search',
+  search_everything: 'Search everything...',
+  no_results: 'No results',
   add_new_employee: 'Add New Employee',
   employee: 'Employee',
   hr_head: 'HR Head',

@@ -2,19 +2,19 @@
   {
     "settingCategory": "company_settings",
     "settingKey": "company_name",
-    "settingValue": "COMPANY Name",
+    "settingValue": "Integra-ERP",
     "valueType": "string"
   },
   {
     "settingCategory": "company_settings",
     "settingKey": "company_logo",
-    "settingValue": "public/uploads/setting/company-logo.png",
+    "settingValue": "public/uploads/setting/integra-erp-logo.svg",
     "valueType": "image"
   },
   {
     "settingCategory": "company_settings",
     "settingKey": "company_icon",
-    "settingValue": "public/uploads/setting/company-logo.png",
+    "settingValue": "public/uploads/setting/integra-erp-logo.svg",
     "valueType": "image"
   },
   {
