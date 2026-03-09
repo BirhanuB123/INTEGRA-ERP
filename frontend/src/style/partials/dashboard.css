@@ -32,6 +32,7 @@
 .dashboard-greeting {
     margin-bottom: 1.25rem;
 }
+
 .dashboard-greeting-title {
     font-size: 1.6rem;
     font-weight: 800;
@@ -39,6 +40,7 @@
     margin: 0 0 0.2rem 0;
     letter-spacing: -0.02em;
 }
+
 .dashboard-greeting-role {
     color: var(--text-muted);
     font-size: 0.9rem;
@@ -55,20 +57,24 @@
     letter-spacing: -0.01em;
 }
 
-/* Donut chart cards (graphical representation) */
 .dashboard-donut-card {
     min-height: 280px;
     display: flex;
     flex-direction: column;
 }
+
 .dashboard-donut-title {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--text-main);
-    margin: 0 0 1rem 0;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #ffffff;
+    background: #9ca3af;
+    margin: -24px -24px 24px -24px;
+    padding: 12px 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: none;
 }
+
 .dashboard-donut-card .recharts-legend-item-text {
     color: var(--text-main);
     font-weight: 500;
@@ -79,30 +85,37 @@
     background: var(--erp-blue-bg) !important;
     color: var(--erp-blue) !important;
 }
+
 .premium-card:hover .summary-icon-container.erp-icon-blue {
     background: var(--erp-blue) !important;
     color: #fff !important;
 }
+
 .summary-icon-container.erp-icon-yellow {
     background: var(--erp-yellow-bg) !important;
     color: var(--erp-yellow) !important;
 }
+
 .premium-card:hover .summary-icon-container.erp-icon-yellow {
     background: var(--erp-yellow) !important;
     color: #fff !important;
 }
+
 .summary-icon-container.erp-icon-green {
     background: var(--erp-green-bg) !important;
     color: var(--erp-green) !important;
 }
+
 .premium-card:hover .summary-icon-container.erp-icon-green {
     background: var(--erp-green) !important;
     color: #fff !important;
 }
+
 .summary-icon-container.erp-icon-orange {
     background: var(--erp-orange-bg) !important;
     color: var(--erp-orange) !important;
 }
+
 .premium-card:hover .summary-icon-container.erp-icon-orange {
     background: var(--erp-orange) !important;
     color: #fff !important;
@@ -117,9 +130,11 @@
     align-items: center;
     gap: 4px;
 }
+
 .summary-card-trend.up {
     color: var(--erp-green);
 }
+
 .summary-card-trend.down {
     color: var(--erp-danger);
 }
@@ -132,18 +147,22 @@
     font-size: 0.8rem;
     font-weight: 600;
 }
+
 .erp-status-pill.new {
     background: var(--erp-status-new-bg);
     color: var(--erp-status-new);
 }
+
 .erp-status-pill.estimated {
     background: var(--erp-status-estimated-bg);
     color: var(--erp-status-estimated);
 }
+
 .erp-status-pill.approved {
     background: var(--erp-green-bg);
     color: var(--erp-green);
 }
+
 .erp-status-pill.pending {
     background: var(--erp-yellow-bg);
     color: #b38600;
@@ -155,6 +174,7 @@
     border-color: var(--erp-orange) !important;
     color: #fff !important;
 }
+
 .ant-btn-erp-secondary:hover {
     background: #e96b00 !important;
     border-color: #e96b00 !important;
@@ -163,17 +183,15 @@
 }
 
 .dashboard-section-title {
-    margin: 0 0 0.85rem 0;
-    padding: 0 0 0.6rem 0;
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--text-main);
-    border-bottom: 2px solid rgba(214, 211, 209, 0.5);
-    background: var(--primary-gradient);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    letter-spacing: -0.01em;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #ffffff;
+    background: #9ca3af;
+    margin: -20px -20px 20px -20px;
+    padding: 12px 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: none;
 }
 
 .dashboard-stats-box {
@@ -184,38 +202,28 @@
     min-height: 380px;
 }
 
-/* Premium Card Styles */
+/* Premium Card Styles (Image Match) */
 .premium-card {
-    background: var(--card-bg);
-    border-radius: 14px;
-    border: 1px solid rgba(214, 211, 209, 0.5);
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-    transition: var(--transition);
+    background: #ffffff;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-radius: 0;
+    border: 1px solid #e5e7eb;
+    box-shadow: none;
+    transition: none;
     overflow: hidden;
     height: 100%;
     position: relative;
 }
 
 .premium-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-    border-color: rgba(14, 116, 144, 0.2);
+    transform: none;
+    box-shadow: none;
+    border-color: #d1d5db;
 }
 
 .premium-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: var(--primary-gradient);
-    opacity: 0;
-    transition: opacity 0.25s ease;
-}
-
-.premium-card:hover::before {
-    opacity: 1;
+    display: none;
 }
 
 /* Summary Cards (Stats) */
@@ -227,22 +235,24 @@
 }
 
 .summary-icon-container {
-    width: 56px;
-    height: 56px;
-    border-radius: 12px;
+    width: 60px;
+    height: 60px;
+    border-radius: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
-    background: var(--erp-blue-bg);
-    color: var(--primary-color);
-    transition: all 0.3s ease;
+    font-size: 26px;
+    background: #f1f5f9;
+    color: #2dd4bf;
+    transition: none;
+    box-shadow: none;
 }
 
 .premium-card:hover .summary-icon-container {
-    background: var(--primary-color) !important;
+    background: #2dd4bf !important;
     color: #fff;
-    transform: rotate(10deg) scale(1.1);
+    transform: none;
+    box-shadow: none;
 }
 
 .summary-info {
@@ -330,12 +340,15 @@
 }
 
 .preview-card-title {
-    color: #334155;
-    font-size: 1.1rem;
-    font-weight: 700;
-    margin: 0 0 1.5rem 0;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #ffffff;
+    background: #9ca3af;
+    margin: -24px -24px 24px -24px;
+    padding: 12px 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: none;
 }
 
 .preview-stat-item {
@@ -541,7 +554,7 @@
     -webkit-overflow-scrolling: touch;
 }
 
-.approval-table .ant-table-thead > tr > th {
+.approval-table .ant-table-thead>tr>th {
     background: #f8fafc !important;
     color: #475569;
     font-weight: 600;
@@ -577,12 +590,15 @@
     .dashboard-container {
         padding: 0 4px;
     }
+
     .dashboard-stats-box {
         min-height: 380px;
     }
+
     .dashboard-recent-card {
         min-height: 340px;
     }
+
     .dashboard-section-title {
         font-size: 1.05rem;
     }
@@ -593,66 +609,85 @@
     .dashboard-page-header {
         margin-bottom: 1.5rem;
     }
+
     .dashboard-title {
         font-size: 1.65rem;
     }
+
     .dashboard-subtitle {
         font-size: 0.9rem;
     }
+
     .dashboard-stats-box {
         min-height: 340px;
     }
+
     .dashboard-recent-card {
         min-height: 300px;
     }
+
     .summary-card-content {
         padding: 18px 20px;
     }
+
     .summary-icon-container {
         width: 48px;
         height: 48px;
         font-size: 22px;
     }
+
     .summary-card-value {
         font-size: 1.2rem;
     }
+
     .preview-card-title {
         font-size: 1rem;
         margin-bottom: 1.25rem;
     }
+
     .preview-stat-item {
         margin-bottom: 16px;
     }
+
     .customer-card-header {
         padding: 16px 20px;
     }
+
     .customer-card-title {
         font-size: 1rem;
     }
+
     .customer-stat {
         padding: 18px 20px;
     }
-    .recent-activity-card .ant-table-tbody > tr > td {
+
+    .recent-activity-card .ant-table-tbody>tr>td {
         padding: 12px 14px;
     }
+
     /* Approval Dashboard – tablet */
     .approval-stat-card .ant-card-body {
         padding: 20px;
     }
+
     .approval-stat-icon-wrap {
         width: 46px;
         height: 46px;
         font-size: 22px;
     }
+
     .approval-tabs .ant-tabs-nav {
         padding: 0 16px;
     }
+
     .approval-tabs .ant-tabs-tab {
         padding: 12px 4px;
     }
+
     .approval-tab-label {
         font-size: 0.9rem;
     }
+
     .approval-table {
         padding: 0 16px 20px;
     }
@@ -663,105 +698,135 @@
     .dashboard-page-header {
         margin-bottom: 1.25rem;
     }
+
     .dashboard-title {
         font-size: 1.5rem;
     }
+
     .dashboard-subtitle {
         font-size: 0.85rem;
     }
+
     .dashboard-section-title {
         font-size: 1rem;
         margin-bottom: 0.75rem;
         padding-bottom: 0.5rem;
     }
+
     .dashboard-stats-box {
         min-height: 300px;
     }
+
     .dashboard-recent-card {
         min-height: 280px;
     }
+
     .summary-card-content {
         padding: 16px 18px;
         gap: 12px;
     }
+
     .summary-icon-container {
         width: 44px;
         height: 44px;
         font-size: 20px;
         border-radius: 10px;
     }
+
     .summary-card-prefix {
         font-size: 0.7rem;
     }
+
     .summary-card-title {
         font-size: 0.9rem;
     }
+
     .summary-card-value {
         font-size: 1.1rem;
     }
+
     .preview-card-inner {
         padding: 0 2px;
     }
+
     .preview-card-title {
         font-size: 0.95rem;
         margin-bottom: 1rem;
     }
+
     .preview-stat-header {
         font-size: 0.8rem;
     }
+
     .preview-stat-item {
         margin-bottom: 14px;
     }
+
     .customer-card-header {
         padding: 14px 18px;
     }
+
     .customer-stat {
         padding: 16px 18px;
     }
+
     .customer-stat-value {
         font-size: 1.5rem;
     }
+
     .customer-stat-label {
         font-size: 0.85rem;
     }
-    .recent-activity-card .ant-table-wrapper .ant-table-thead > tr > th {
+
+    .recent-activity-card .ant-table-wrapper .ant-table-thead>tr>th {
         padding: 10px 12px;
         font-size: 0.8rem;
     }
-    .recent-activity-card .ant-table-tbody > tr > td {
+
+    .recent-activity-card .ant-table-tbody>tr>td {
         padding: 10px 12px;
         font-size: 0.85rem;
     }
+
     /* Approval Dashboard – small tablet */
     .approval-stats-row {
         margin-bottom: 16px;
     }
+
     .approval-stat-card .ant-card-body {
         padding: 18px;
     }
+
     .approval-stat-content {
         gap: 14px;
     }
+
     .approval-stat-icon-wrap {
         width: 44px;
         height: 44px;
         font-size: 20px;
     }
+
     .approval-stat-content .ant-statistic-title {
         font-size: 0.8rem;
     }
+
     .approval-stat-content .ant-statistic-content-value {
         font-size: 1.35rem !important;
     }
+
     .approval-tabs .ant-tabs-nav {
         padding: 0 12px;
     }
+
     .approval-tabs .ant-tabs-tab {
         padding: 10px 2px;
     }
+
     .approval-tab-label {
         font-size: 0.85rem;
     }
+
     .approval-table {
         padding: 0 12px 16px;
     }
@@ -773,113 +838,145 @@
         max-width: 100%;
         padding: 0 2px;
     }
+
     .dashboard-page-header {
         margin-bottom: 1rem;
     }
+
     .dashboard-title {
         font-size: 1.35rem;
     }
+
     .dashboard-subtitle {
         font-size: 0.8rem;
     }
+
     .dashboard-section-title {
         font-size: 0.95rem;
         margin-bottom: 0.5rem;
     }
+
     .dashboard-stats-box {
         min-height: 260px;
     }
+
     .dashboard-recent-card {
         min-height: 260px;
     }
+
     .summary-card-content {
         padding: 14px 16px;
         gap: 10px;
     }
+
     .summary-icon-container {
         width: 40px;
         height: 40px;
         font-size: 18px;
         border-radius: 10px;
     }
+
     .summary-card-prefix {
         font-size: 0.65rem;
     }
+
     .summary-card-title {
         font-size: 0.85rem;
         margin: 0 0 6px 0;
     }
+
     .summary-card-value {
         font-size: 1rem;
     }
+
     .preview-card-title {
         font-size: 0.9rem;
         margin-bottom: 0.75rem;
     }
+
     .preview-stat-item {
         margin-bottom: 12px;
     }
+
     .customer-card-header {
         padding: 12px 16px;
     }
+
     .customer-card-title {
         font-size: 0.9rem;
     }
+
     .customer-stat {
         padding: 14px 16px;
     }
+
     .customer-stat-value {
         font-size: 1.35rem;
     }
-    .recent-activity-card .ant-table-wrapper .ant-table-thead > tr > th {
+
+    .recent-activity-card .ant-table-wrapper .ant-table-thead>tr>th {
         padding: 8px 10px;
         font-size: 0.75rem;
     }
-    .recent-activity-card .ant-table-tbody > tr > td {
+
+    .recent-activity-card .ant-table-tbody>tr>td {
         padding: 8px 10px;
         font-size: 0.8rem;
     }
+
     /* Reduce hover lift on touch devices to avoid layout shift */
     .premium-card:hover {
         transform: translateY(-2px);
     }
+
     .approval-stat-card:hover {
         transform: translateY(-2px);
     }
+
     /* Approval Dashboard – phone */
     .approval-stats-row {
         margin-bottom: 12px;
     }
+
     .approval-stat-card .ant-card-body {
         padding: 16px;
     }
+
     .approval-stat-content {
         flex-wrap: wrap;
         gap: 12px;
     }
+
     .approval-stat-icon-wrap {
         width: 40px;
         height: 40px;
         font-size: 18px;
     }
+
     .approval-stat-content .ant-statistic-title {
         font-size: 0.75rem;
     }
+
     .approval-stat-content .ant-statistic-content-value {
         font-size: 1.2rem !important;
     }
+
     .approval-tabs .ant-tabs-nav {
         padding: 0 8px;
     }
+
     .approval-tabs .ant-tabs-tab {
         padding: 8px 2px;
     }
+
     .approval-tab-label {
         font-size: 0.8rem;
     }
+
     .approval-table {
         padding: 0 8px 12px;
     }
+
     .approval-modal-pre {
         padding: 8px;
         font-size: 0.8rem;
