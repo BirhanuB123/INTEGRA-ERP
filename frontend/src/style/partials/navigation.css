@@ -13,17 +13,18 @@
 /* Resize handle – drag to change sidebar width */
 .sidebar-resize-handle {
   position: absolute;
-  right: 0;
+  right: -3px; /* Hang slightly off the edge so it's easier to grab */
   top: 0;
   bottom: 0;
   width: 6px;
   cursor: col-resize;
   z-index: 10;
-  transition: background 0.15s ease;
+  background: transparent;
+  transition: background 0.2s ease;
 }
 .sidebar-resize-handle:hover,
 .sidebar-resize-handle.active {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(45, 212, 191, 0.5); /* Use primary color for handle */
 }
 
 /* Base navigation (legacy / mobile) */
@@ -42,15 +43,15 @@
   transition: var(--transition);
 }
 
-/* Dark sidebar – warm slate, clear hierarchy */
+/* Dark sidebar – image match */
 .navigation.navigation-dark {
-  background: linear-gradient(180deg, #0f172a 0%, #1e293b 50%, #334155 100%);
-  border-right: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 0 20px 20px 0;
+  background: #0f2038; /* Navy blue */
+  border-right: none;
+  border-radius: 0;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  box-shadow: 8px 0 32px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.04);
+  box-shadow: none;
 }
 
 .navigation.navigation-dark .ant-layout-sider-children {
@@ -89,8 +90,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 14px;
-  background: linear-gradient(135deg, rgba(14, 116, 144, 0.35) 0%, rgba(6, 182, 212, 0.25) 100%);
+  border-radius: 8px;
+  background: rgba(45, 212, 191, 0.1);
+  box-shadow: none;
   overflow: hidden;
   box-shadow: 0 2px 12px rgba(14, 116, 144, 0.2);
 }
@@ -104,10 +106,11 @@
 
 .sidebar-app-name {
   flex: 1;
-  font-weight: 700;
-  font-size: 15px;
-  color: #f8fafc;
-  letter-spacing: -0.02em;
+  font-weight: 800;
+  font-size: 16px;
+  color: #2dd4bf;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 .sidebar-collapse-btn {
@@ -124,26 +127,53 @@
   padding: 8px 0;
 }
 
+/* Custom minimal scrollbar for the sidebar */
+.navigation::-webkit-scrollbar,
+.sidebar-menu-wrap::-webkit-scrollbar {
+  width: 6px;
+}
+
+.navigation::-webkit-scrollbar-track,
+.sidebar-menu-wrap::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.navigation::-webkit-scrollbar-thumb,
+.sidebar-menu-wrap::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+}
+
+.navigation::-webkit-scrollbar-thumb:hover,
+.sidebar-menu-wrap::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
 /* Dark menu overrides */
 .navigation-dark .ant-menu {
   background: transparent !important;
 }
 .navigation-dark .ant-menu-item,
 .navigation-dark .ant-menu-submenu-title {
-  color: rgba(255, 255, 255, 0.85) !important;
+  color: rgba(255, 255, 255, 0.6) !important;
+  transition: all 0.2s ease !important;
+  border-radius: 0 !important;
 }
 .navigation-dark .ant-menu-item:hover,
 .navigation-dark .ant-menu-submenu-title:hover {
   color: #fff !important;
-  background: rgba(255, 255, 255, 0.07) !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  transform: none;
 }
 .navigation-dark .ant-menu-item-selected {
-  background: linear-gradient(135deg, rgba(14, 116, 144, 0.95) 0%, rgba(6, 182, 212, 0.9) 100%) !important;
-  color: #fff !important;
-  border-radius: 12px;
-  margin: 3px 12px;
-  width: calc(100% - 24px);
-  box-shadow: 0 4px 12px rgba(14, 116, 144, 0.4);
+  background: transparent !important;
+  color: #2dd4bf !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+  width: 100% !important;
+  box-shadow: none !important;
+  transform: none !important;
+  border-left: 4px solid #2dd4bf !important;
 }
 .navigation-dark .ant-menu-sub .ant-menu-item {
   margin: 3px 10px 3px 26px;
@@ -170,8 +200,8 @@
 .sidebar-footer-link {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
+  gap: 12px;
+  padding: 10px 14px;
   border-radius: 10px;
   color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
@@ -184,14 +214,20 @@
   color: #fff;
 }
 .sidebar-footer-link .anticon {
-  font-size: 16px;
+  font-size: 18px;
+  display: flex;
 }
 .sidebar-footer-link span {
   flex: 1;
+  text-align: left;
+  /* Instead of truncating, allow it to wrap gently or show entirely */
+  white-space: normal;
+  line-height: 1.2;
 }
 .sidebar-footer-arrow {
-  font-size: 12px;
-  opacity: 0.7;
+  font-size: 11px;
+  opacity: 0.6;
+  margin-left: auto;
 }
 
 /* Legacy logo (non-dark sidebar) */

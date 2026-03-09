@@ -307,10 +307,18 @@ function Sidebar({ collapsible, isMobile = false }) {
         theme="dark"
       >
         <div className="navigation-inner">
-          <div className="sidebar-header" onClick={() => !isNavMenuClose && navigate('/')} role="button" aria-label="Home">
-            <div className="sidebar-logo-wrap">
-              <img src={logo} alt="INTEGRA ERP" className="sidebar-logo-img" />
-            </div>
+          <div 
+            className={`sidebar-header ${isNavMenuClose ? 'collapsed' : ''}`} 
+            onClick={() => !isNavMenuClose && navigate('/')} 
+            role="button" 
+            aria-label="Home"
+            style={{ justifyContent: isNavMenuClose ? 'center' : 'flex-start', padding: isNavMenuClose ? '20px 0' : '20px 18px' }}
+          >
+            {!isNavMenuClose && (
+              <div className="sidebar-logo-wrap">
+                <img src={logo} alt="INTEGRA ERP" className="sidebar-logo-img" />
+              </div>
+            )}
             {!isNavMenuClose && <span className="sidebar-app-name">INTEGRA ERP</span>}
             {collapsible && !isMobile && (
               <Button
