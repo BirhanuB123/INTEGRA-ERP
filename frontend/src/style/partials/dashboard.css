@@ -7,7 +7,12 @@
 }
 
 .dashboard-page-header {
-    margin-bottom: 1.75rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem 1.75rem;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 249, 0.98) 100%);
+    border-radius: 20px;
+    border: 1px solid rgba(14, 116, 144, 0.1);
+    box-shadow: 0 4px 24px rgba(14, 116, 144, 0.06);
 }
 
 .dashboard-title {
@@ -30,15 +35,16 @@
 }
 
 .dashboard-greeting {
-    margin-bottom: 1.25rem;
+    margin-bottom: 1rem;
 }
 
 .dashboard-greeting-title {
-    font-size: 1.6rem;
+    font-size: 1.65rem;
     font-weight: 800;
     color: var(--text-main);
-    margin: 0 0 0.2rem 0;
+    margin: 0 0 0.25rem 0;
     letter-spacing: -0.02em;
+    line-height: 1.2;
 }
 
 .dashboard-greeting-role {
@@ -49,18 +55,20 @@
 }
 
 .dashboard-overview-title {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     font-weight: 700;
     color: var(--text-main);
-    margin: 0 0 1rem 0;
-    padding: 0;
+    margin: 0 0 1.25rem 0;
+    padding: 0 0 0.5rem 1rem;
     letter-spacing: -0.01em;
+    border-left: 4px solid var(--primary-color);
 }
 
 .dashboard-donut-card {
     min-height: 280px;
     display: flex;
     flex-direction: column;
+    border-radius: 18px;
 }
 
 .dashboard-donut-title {
@@ -196,10 +204,12 @@
 
 .dashboard-stats-box {
     min-height: 400px;
+    border-radius: 18px;
 }
 
 .dashboard-recent-card {
     min-height: 380px;
+    border-radius: 18px;
 }
 
 /* Premium Card Styles (Image Match) */
@@ -228,7 +238,7 @@
 
 /* Summary Cards (Stats) */
 .summary-card-content {
-    padding: 24px;
+    padding: 26px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -313,14 +323,14 @@
 
 /* Recent Activity / Tables */
 .recent-activity-card .ant-table-wrapper .ant-table-thead>tr>th {
-    background: transparent;
+    background: rgba(240, 249, 255, 0.5);
     color: var(--text-muted);
     font-weight: 600;
-    border-bottom: 2px solid rgba(214, 211, 209, 0.4);
+    border-bottom: 2px solid rgba(14, 116, 144, 0.12);
 }
 
 .recent-activity-card .ant-table-tbody>tr>td {
-    border-bottom: 1px solid rgba(214, 211, 209, 0.35);
+    border-bottom: 1px solid rgba(14, 116, 144, 0.08);
     padding: 14px 16px;
 }
 
@@ -376,14 +386,14 @@
 
 /* Customer Card */
 .customer-card-header {
-    padding: 20px 24px;
-    border-bottom: 1px solid rgba(214, 211, 209, 0.4);
-    background: linear-gradient(180deg, var(--bg-color) 0%, var(--card-bg) 100%);
+    padding: 22px 26px;
+    border-bottom: 1px solid rgba(14, 116, 144, 0.1);
+    background: linear-gradient(180deg, rgba(240, 249, 255, 0.6) 0%, rgba(255, 255, 255, 0.95) 100%);
 }
 
 .customer-card-title {
     margin: 0;
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     font-weight: 700;
     color: #1e293b;
     display: flex;
@@ -608,6 +618,7 @@
 @media (max-width: 991px) {
     .dashboard-page-header {
         margin-bottom: 1.5rem;
+        padding: 1.25rem 1.5rem;
     }
 
     .dashboard-title {
@@ -697,6 +708,7 @@
 @media (max-width: 767px) {
     .dashboard-page-header {
         margin-bottom: 1.25rem;
+        padding: 1rem 1.25rem;
     }
 
     .dashboard-title {
@@ -841,6 +853,7 @@
 
     .dashboard-page-header {
         margin-bottom: 1rem;
+        padding: 0.875rem 1rem;
     }
 
     .dashboard-title {

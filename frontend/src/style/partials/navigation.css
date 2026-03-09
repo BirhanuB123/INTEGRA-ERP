@@ -68,18 +68,18 @@
 
 .sidebar-header {
   flex-shrink: 0;
-  min-height: 68px;
-  padding: 18px 16px;
+  min-height: 72px;
+  padding: 20px 18px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   cursor: pointer;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   transition: background 0.2s ease;
 }
 
 .sidebar-header:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .sidebar-logo-wrap {
@@ -93,6 +93,7 @@
   background: rgba(45, 212, 191, 0.1);
   box-shadow: none;
   overflow: hidden;
+  box-shadow: 0 2px 12px rgba(14, 116, 144, 0.2);
 }
 
 .sidebar-logo-img {
@@ -152,13 +153,13 @@
   border-left: 4px solid #2dd4bf !important;
 }
 .navigation-dark .ant-menu-sub .ant-menu-item {
-  margin: 2px 8px 2px 24px;
-  width: calc(100% - 32px);
-  border-radius: 6px;
+  margin: 3px 10px 3px 26px;
+  width: calc(100% - 36px);
+  border-radius: 10px;
 }
 .navigation-dark .ant-menu-submenu-title {
-  margin: 2px 8px;
-  border-radius: 8px;
+  margin: 3px 10px;
+  border-radius: 10px;
 }
 .navigation-dark .ant-menu-inline .ant-menu-item::after {
   display: none;
