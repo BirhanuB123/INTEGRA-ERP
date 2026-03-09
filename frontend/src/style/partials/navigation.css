@@ -126,6 +126,28 @@
   padding: 8px 0;
 }
 
+/* Custom minimal scrollbar for the sidebar */
+.navigation::-webkit-scrollbar,
+.sidebar-menu-wrap::-webkit-scrollbar {
+  width: 6px;
+}
+
+.navigation::-webkit-scrollbar-track,
+.sidebar-menu-wrap::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.navigation::-webkit-scrollbar-thumb,
+.sidebar-menu-wrap::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+}
+
+.navigation::-webkit-scrollbar-thumb:hover,
+.sidebar-menu-wrap::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
 /* Dark menu overrides */
 .navigation-dark .ant-menu {
   background: transparent !important;
@@ -196,13 +218,13 @@
 .sidebar-footer-link span {
   flex: 1;
   text-align: left;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  /* Instead of truncating, allow it to wrap gently or show entirely */
+  white-space: normal;
+  line-height: 1.2;
 }
 .sidebar-footer-arrow {
-  font-size: 12px;
-  opacity: 0.7;
+  font-size: 11px;
+  opacity: 0.6;
 }
 
 /* Legacy logo (non-dark sidebar) */
