@@ -13,17 +13,18 @@
 /* Resize handle – drag to change sidebar width */
 .sidebar-resize-handle {
   position: absolute;
-  right: 0;
+  right: -3px; /* Hang slightly off the edge so it's easier to grab */
   top: 0;
   bottom: 0;
   width: 6px;
   cursor: col-resize;
   z-index: 10;
-  transition: background 0.15s ease;
+  background: transparent;
+  transition: background 0.2s ease;
 }
 .sidebar-resize-handle:hover,
 .sidebar-resize-handle.active {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(45, 212, 191, 0.5); /* Use primary color for handle */
 }
 
 /* Base navigation (legacy / mobile) */
@@ -199,8 +200,8 @@
 .sidebar-footer-link {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
+  gap: 12px;
+  padding: 10px 14px;
   border-radius: 10px;
   color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
@@ -213,7 +214,8 @@
   color: #fff;
 }
 .sidebar-footer-link .anticon {
-  font-size: 16px;
+  font-size: 18px;
+  display: flex;
 }
 .sidebar-footer-link span {
   flex: 1;
@@ -225,6 +227,7 @@
 .sidebar-footer-arrow {
   font-size: 11px;
   opacity: 0.6;
+  margin-left: auto;
 }
 
 /* Legacy logo (non-dark sidebar) */
