@@ -75,7 +75,8 @@ export default function ReadItem({ config, selectedItem }) {
 
   const { moneyFormatter } = useMoney();
   const { send, isLoading: mailInProgress } = useMail({ entity });
-  const { isLoading: convertInProgress, isSuccess: convertSuccess } = useSelector(selectConvertedItem);
+  const convertedState = useSelector(selectConvertedItem) ?? {};
+  const { isLoading: convertInProgress, isSuccess: convertSuccess } = convertedState;
 
   const { result: currentResult } = useSelector(selectCurrentItem);
 

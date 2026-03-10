@@ -40,6 +40,7 @@ function AddNewItem({ config }) {
 }
 
 export default function DataTable({ config, extra = [], initialOptions = { page: 1, items: 10 } }) {
+  const dispatch = useDispatch();
   const translate = useLanguage();
   let { entity, dataTableColumns, disableAdd = false, searchConfig } = config;
 
@@ -148,8 +149,6 @@ export default function DataTable({ config, extra = [], initialOptions = { page:
       ),
     },
   ];
-
-  const dispatch = useDispatch();
 
   const handelDataTableLoad = (pagination) => {
     const options = { page: pagination.current || 1, items: pagination.pageSize || 10 };

@@ -41,12 +41,6 @@ export default function ErpCrmApp() {
 
   const { isSuccess: settingIsloaded } = useSelector(selectSettings);
 
-  // useEffect(() => {
-  //   const { loadDefaultLang } = storePersist.get('firstVisit');
-  //   if (appSettings.idurar_app_language && !loadDefaultLang) {
-  //     window.localStorage.setItem('firstVisit', JSON.stringify({ loadDefaultLang: true }));
-  //   }
-  // }, [appSettings]);
 
   if (settingIsloaded)
     return (

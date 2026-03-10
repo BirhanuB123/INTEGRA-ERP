@@ -15,25 +15,30 @@ export default function ReadInvoiceModule({ config }) {
   const { id } = useParams();
 
   useLayoutEffect(() => {
-    dispatch(erp.read({ entity: config.entity, id }));
-  }, [id]);
+    if (id) dispatch(erp.read({ entity: config.entity, id }));
+  }, [id, config.entity, dispatch]);
 
-  const { result: currentResult, isSuccess, isLoading = true } = useSelector(selectReadItem);
+  const { result: currentResult, isSuccess, isLoading } = useSelector(selectReadItem);
 
-  if (isLoading) {
+  const resultMatchesId = currentResult && String(currentResult._id) === String(id);
+  const isWaitingForResult = isLoading || (id && (!currentResult || !resultMatchesId));
+  const showNotFound = !isWaitingForResult && (!isSuccess || !currentResult);
+
+  if (isWaitingForResult) {
     return (
       <ErpLayout>
         <PageLoader />
       </ErpLayout>
     );
-  } else
-    return (
-      <ErpLayout>
-        {isSuccess ? (
-          <ReadItem config={config} selectedItem={currentResult} />
-        ) : (
-          <NotFound entity={config.entity} />
-        )}
-      </ErpLayout>
-    );
+  }
+
+  return (
+    <ErpLayout>
+      {!showNotFound && currentResult ? (
+        <ReadItem config={config} selectedItem={currentResult} />
+      ) : (
+        <NotFound entity={config.entity} />
+      )}
+    </ErpLayout>
+  );
 }
