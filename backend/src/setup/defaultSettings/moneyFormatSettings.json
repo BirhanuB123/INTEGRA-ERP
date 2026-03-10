@@ -2,19 +2,19 @@
   {
     "settingCategory": "money_format_settings",
     "settingKey": "default_currency_code",
-    "settingValue": "ETB",
+    "settingValue": "USD",
     "valueType": "string"
   },
   {
     "settingCategory": "money_format_settings",
     "settingKey": "currency_name",
-    "settingValue": "Ethiopian Birr",
+    "settingValue": "US Dollars",
     "valueType": "string"
   },
   {
     "settingCategory": "money_format_settings",
     "settingKey": "currency_symbol",
-    "settingValue": "ETB",
+    "settingValue": "$",
     "valueType": "string"
   },
   {
