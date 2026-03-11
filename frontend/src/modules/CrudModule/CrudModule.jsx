@@ -48,6 +48,9 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
     editBox.open();
   };
 
+  const canEditEntity =
+    currentAdmin?.role !== 'employee' &&
+    !(currentAdmin?.role === 'finance_head' && config?.entity === 'employee');
   const show = isReadBoxOpen || isEditBoxOpen ? { opacity: 1 } : { opacity: 0 };
   return (
     <>
@@ -56,7 +59,7 @@ function SidePanelTopContent({ config, formElements, withUpload }) {
           <p style={{ marginBottom: '10px' }}>{labels}</p>
         </Col>
         <Col span={14}>
-          {currentAdmin?.role !== 'employee' && (
+          {canEditEntity && (
             <>
               <Button
                 onClick={removeItem}
@@ -96,6 +99,9 @@ function FixHeaderPanel({ config }) {
   const currentAdmin = useSelector(selectCurrentAdmin);
 
   const { collapsedBox } = crudContextAction;
+  const canEditEntity =
+    currentAdmin?.role !== 'employee' &&
+    !(currentAdmin?.role === 'finance_head' && config?.entity === 'employee');
 
   const addNewItem = () => {
     collapsedBox.close();
@@ -107,7 +113,7 @@ function FixHeaderPanel({ config }) {
         <SearchItem config={config} />
       </Col>
       <Col className="gutter-row" span={3}>
-        {currentAdmin?.role !== 'employee' && (
+        {canEditEntity && (
           <Button onClick={addNewItem} block={true} icon={<PlusOutlined />}></Button>
         )}
       </Col>

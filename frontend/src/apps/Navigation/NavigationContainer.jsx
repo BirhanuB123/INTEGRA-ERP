@@ -114,6 +114,7 @@ function Sidebar({ collapsible, isMobile = false }) {
       key: 'inventory',
       label: translate('inventory'),
       icon: <ProductOutlined />,
+      role: ['owner', 'admin', 'department_manager'],
       children: [
         {
           key: 'product',
@@ -141,6 +142,7 @@ function Sidebar({ collapsible, isMobile = false }) {
       key: 'crm',
       label: translate('crm'),
       icon: <CustomerServiceOutlined />,
+      role: ['owner', 'admin', 'department_manager'],
       children: [
         {
           key: 'customer',
@@ -156,6 +158,7 @@ function Sidebar({ collapsible, isMobile = false }) {
       key: 'sales',
       label: translate('sales'),
       icon: <ShopOutlined />,
+      role: ['owner', 'admin', 'department_manager'],
       children: [
         {
           key: 'invoice',
@@ -175,12 +178,12 @@ function Sidebar({ collapsible, isMobile = false }) {
       key: 'staff',
       label: translate('staff_hr'),
       icon: <UserOutlined />,
-      role: ['owner', 'admin', 'hr_head', 'employee'],
+      role: ['owner', 'admin', 'hr_head', 'finance_head', 'employee'],
       children: [
         {
           key: 'employee',
           label: <Link to={'/employee'}>{translate('employees')}</Link>,
-          role: ['owner', 'admin', 'hr_head', 'department_manager'],
+          role: ['owner', 'admin', 'hr_head', 'department_manager', 'finance_head'],
         },
         {
           key: 'admin',
@@ -352,10 +355,12 @@ function Sidebar({ collapsible, isMobile = false }) {
                 <span>Help Center</span>
                 <RightOutlined className="sidebar-footer-arrow" />
               </Link>
-              <Link to="/settings" className="sidebar-footer-link">
-                <SettingOutlined />
-                <span>{translate('general_settings')}</span>
-              </Link>
+              {role !== 'employee' && (
+                <Link to="/settings" className="sidebar-footer-link">
+                  <SettingOutlined />
+                  <span>{translate('general_settings')}</span>
+                </Link>
+              )}
             </div>
           )}
         </div>

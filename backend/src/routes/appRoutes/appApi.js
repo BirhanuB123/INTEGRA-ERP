@@ -27,6 +27,11 @@ router.route('/global/search').get(catchErrors(globalSearchController.search));
 const employeeController = require('@/controllers/appControllers/employeeController');
 router.route('/employee/myProfile').get(checkAbility('employee'), catchErrors(employeeController['myProfile']));
 
+const payrollController = require('@/controllers/appControllers/payrollController');
+router
+  .route('/payroll/import')
+  .post(checkAbility('payroll'), checkFiscalPeriod, catchErrors(payrollController['importFromSheet']));
+
 const routerApp = (entity, controller) => {
   if (!controller) {
     console.warn(`No controller found for entity: ${entity}`);

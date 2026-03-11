@@ -1,9 +1,13 @@
 const mongoose = require('mongoose');
 const createCRUDController = require('@/controllers/middlewaresControllers/createCRUDController');
 const { payrollEngine } = require('./payrollEngine');
+const summary = require('./summary');
+const importFromSheet = require('./importFromSheet');
 
 function customController() {
     const methods = createCRUDController('Payroll');
+    methods.summary = summary;
+    methods.importFromSheet = importFromSheet;
     const Employee = mongoose.model('Employee');
     const Payslip = mongoose.model('Payslip');
 

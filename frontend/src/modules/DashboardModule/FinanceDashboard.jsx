@@ -6,12 +6,14 @@ import useLanguage from '@/locale/useLanguage';
 import { useMoney } from '@/settings';
 import { request } from '@/request';
 import useOnFetch from '@/hooks/useOnFetch';
-import { selectMoneyFormat } from '@/redux/settings/selectors';
+import { selectMoneyFormat, selectCompanySettings } from '@/redux/settings/selectors';
 import { selectCurrentAdmin } from '@/redux/auth/selectors';
 import SummaryCard from './components/SummaryCard';
+import StatCard from './components/StatCard';
 import PreviewCard from './components/PreviewCard';
 import RecentTable from './components/RecentTable';
 import DonutChart from './components/DonutChart';
+import { ClockCircleOutlined, CheckCircleOutlined, TeamOutlined } from '@ant-design/icons';
 
 const { useBreakpoint } = Grid;
 
@@ -20,7 +22,9 @@ export default function FinanceDashboard() {
   const currentAdmin = useSelector(selectCurrentAdmin);
   const { moneyFormatter } = useMoney();
   const money_format_settings = useSelector(selectMoneyFormat);
+  const company_settings = useSelector(selectCompanySettings);
   const screens = useBreakpoint();
+  const hasCompany = company_settings && Object.keys(company_settings).length > 0;
   const gutter = screens.lg ? [24, 24] : screens.sm ? [16, 16] : [12, 12];
   const displayName = currentAdmin?.name || currentAdmin?.email || translate('User');
   const displayRole = currentAdmin?.role ? translate(currentAdmin.role) : 'Finance';
@@ -32,6 +36,10 @@ export default function FinanceDashboard() {
   const { result: invoiceResult, isLoading: invoiceLoading, onFetch: fetchInvoicesStats } = useOnFetch();
   const { result: quoteResult, isLoading: quoteLoading, onFetch: fetchQuotesStats } = useOnFetch();
   const { result: paymentResult, isLoading: paymentLoading, onFetch: fetchPaymentsStats } = useOnFetch();
+  const { result: purchaseOrderResult, isLoading: purchaseOrderLoading, onFetch: fetchPurchaseOrderStats } = useOnFetch();
+  const { result: payrollResult, isLoading: payrollLoading, onFetch: fetchPayrollStats } = useOnFetch();
+  const [approvalSummary, setApprovalSummary] = useState({ pending: 0, approved: 0, rejected: 0 });
+  const [approvalLoading, setApprovalLoading] = useState(false);
 
   useEffect(() => {
     const currency = money_format_settings?.default_currency_code || null;
@@ -39,8 +47,27 @@ export default function FinanceDashboard() {
       fetchInvoicesStats(getStatsData({ entity: 'invoice', currency }));
       fetchQuotesStats(getStatsData({ entity: 'quote', currency }));
       fetchPaymentsStats(getStatsData({ entity: 'payment', currency }));
+      if (hasCompany) {
+        fetchPurchaseOrderStats(request.summary({ entity: 'purchaseorder' }));
+        fetchPayrollStats(request.summary({ entity: 'payroll' }));
+      }
     }
-  }, [money_format_settings?.default_currency_code]);
+  }, [money_format_settings?.default_currency_code, hasCompany]);
+
+  useEffect(() => {
+    const fetchApprovalSummary = async () => {
+      setApprovalLoading(true);
+      try {
+        const res = await request.summary({ entity: 'approval' });
+        if (res?.result) setApprovalSummary(res.result);
+      } catch (_) {
+        // ignore
+      } finally {
+        setApprovalLoading(false);
+      }
+    };
+    fetchApprovalSummary();
+  }, []);
 
   const dataTableColumns = [
     { title: translate('number'), dataIndex: 'number' },
@@ -95,6 +122,37 @@ export default function FinanceDashboard() {
           <p className="dashboard-subtitle">{translate('dashboard_subtitle_finance')}</p>
         </header>
 
+        <h3 className="dashboard-overview-title">{translate('approvals')} & {translate('employees')}</h3>
+        <Row gutter={gutter}>
+          <StatCard
+            title={translate('approvals')}
+            prefix={translate('pending')}
+            value={approvalSummary.pending}
+            icon={ClockCircleOutlined}
+            linkTo="/approval"
+            isLoading={approvalLoading}
+            iconVariant="blue"
+          />
+          <StatCard
+            title={translate('approvals')}
+            prefix={translate('approved')}
+            value={approvalSummary.approved}
+            icon={CheckCircleOutlined}
+            linkTo="/approval"
+            isLoading={approvalLoading}
+            iconVariant="green"
+          />
+          <StatCard
+            title={translate('employees')}
+            prefix=""
+            value=""
+            icon={TeamOutlined}
+            linkTo="/employee"
+            isLoading={false}
+            iconVariant="orange"
+          />
+        </Row>
+
         <h3 className="dashboard-overview-title">{translate('works_overview')}</h3>
         <Row gutter={gutter}>
           <SummaryCard
@@ -122,6 +180,32 @@ export default function FinanceDashboard() {
             data={invoiceResult?.total_undue}
           />
         </Row>
+        {hasCompany && (
+          <>
+            <div className="space30" />
+            <h3 className="dashboard-overview-title">{translate('company_income_outcome')}</h3>
+            <Row gutter={gutter}>
+              <SummaryCard
+                title={translate('income')}
+                prefix={translate('company')}
+                isLoading={paymentLoading}
+                data={paymentResult?.total}
+              />
+              <SummaryCard
+                title={translate('outcome')}
+                prefix={translate('company')}
+                isLoading={purchaseOrderLoading}
+                data={purchaseOrderResult?.total}
+              />
+              <SummaryCard
+                title={translate('payroll')}
+                prefix={translate('company')}
+                isLoading={payrollLoading}
+                data={payrollResult?.total}
+              />
+            </Row>
+          </>
+        )}
         <div className="space30" />
         <Row gutter={gutter}>
           <Col xs={{ span: 24 }} md={{ span: 12 }}>

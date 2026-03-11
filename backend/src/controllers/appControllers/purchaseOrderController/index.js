@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
 const createCRUDController = require('@/controllers/middlewaresControllers/createCRUDController');
+const summary = require('./summary');
 
 function customController() {
     const methods = createCRUDController('PurchaseOrder');
+    methods.summary = summary;
     const Approval = mongoose.model('Approval');
 
     // Override create to handle spending thresholds

@@ -9,10 +9,16 @@ const CARD_ICONS = {
   quote: { stroke: '#f59e0b', fill: 'url(#colorQuote)', topBorder: '#f59e0b' }, // Amber/Orange
   paid: { stroke: '#ef4444', fill: 'url(#colorPaid)', topBorder: '#ef4444' }, // Red/Rose
   unpaid: { stroke: '#a855f7', fill: 'url(#colorUnpaid)', topBorder: '#a855f7' }, // Purple
+  income: { stroke: '#10b981', fill: 'url(#colorIncome)', topBorder: '#10b981' }, // Green
+  outcome: { stroke: '#f97316', fill: 'url(#colorOutcome)', topBorder: '#f97316' }, // Orange
+  payroll: { stroke: '#6366f1', fill: 'url(#colorPayroll)', topBorder: '#6366f1' }, // Indigo
 };
 
 function getIconKey(title) {
   const t = (title || '').toLowerCase();
+  if (t.includes('payroll')) return 'payroll';
+  if (t.includes('income')) return 'income';
+  if (t.includes('outcome')) return 'outcome';
   if (t.includes('invoice')) return 'invoice';
   if (t.includes('quote')) return 'quote';
   if (t.includes('paid') && !t.includes('un')) return 'paid';

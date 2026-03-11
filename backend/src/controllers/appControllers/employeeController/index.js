@@ -59,6 +59,14 @@ methods.create = async (req, res) => {
 const originalUpdate = methods.update;
 methods.update = async (req, res) => {
     try {
+        const { role } = req.admin;
+        if (role === 'finance_head') {
+            return res.status(403).json({
+                success: false,
+                message: 'Finance Head can only approve salary changes via the Approvals page, not edit employee records directly.',
+            });
+        }
+
         const Employee = mongoose.model('Employee');
         const Approval = mongoose.model('Approval');
 
@@ -126,6 +134,18 @@ methods.update = async (req, res) => {
             message: error.message,
         });
     }
+};
+
+// Finance Head: read-only access to employees (approve salaries via Approvals only)
+const originalRemove = methods.delete;
+methods.delete = async (req, res) => {
+    if (req.admin?.role === 'finance_head') {
+        return res.status(403).json({
+            success: false,
+            message: 'Finance Head cannot delete employees. Contact HR or Admin.',
+        });
+    }
+    return originalRemove(req, res);
 };
 
 // Override read to restrict employee access
