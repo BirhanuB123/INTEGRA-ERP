@@ -18,9 +18,9 @@ export default function DonutChart({ data = [], title, loading = false, colors =
 
   if (loading) {
     return (
-      <div className="dashboard-donut-card whiteBox shadow premium-card pad20" style={{ minHeight: 280 }}>
+      <div className="dashboard-donut-card whiteBox shadow premium-card pad20" style={{ minHeight: 260 }}>
         <h3 className="dashboard-donut-title">{title}</h3>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 220 }}>
+        <div className="dashboard-donut-placeholder">
           <Spin />
         </div>
       </div>
@@ -29,9 +29,9 @@ export default function DonutChart({ data = [], title, loading = false, colors =
 
   if (!chartData.length) {
     return (
-      <div className="dashboard-donut-card whiteBox shadow premium-card pad20" style={{ minHeight: 280 }}>
+      <div className="dashboard-donut-card whiteBox shadow premium-card pad20" style={{ minHeight: 260 }}>
         <h3 className="dashboard-donut-title">{title}</h3>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 220, color: 'var(--text-muted)' }}>
+        <div className="dashboard-donut-placeholder dashboard-donut-placeholder--empty">
           {translate('No data')}
         </div>
       </div>

@@ -151,14 +151,10 @@ export default function DashboardModule() {
       <div className="dashboard-container">
         <motion.div initial="hidden" animate="visible" variants={containerVariants}>
           <header className="dashboard-page-header">
-            <div className="dashboard-greeting">
-              <h1 className="dashboard-greeting-title">
-                {translate('hello')}, {displayName}
-              </h1>
-              <p className="dashboard-greeting-role">{displayRole}</p>
-            </div>
-            <h2 className="dashboard-title">{translate('dashboard')}</h2>
-            <p className="dashboard-subtitle">{translate('dashboard_subtitle')}</p>
+            <h1 className="dashboard-greeting-title">
+              {translate('hello')}, {displayName}
+            </h1>
+            <p className="dashboard-greeting-role">{displayRole}</p>
           </header>
 
           <h3 className="dashboard-overview-title">{translate('works_overview')}</h3>
